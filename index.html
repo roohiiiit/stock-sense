@@ -395,7 +395,10 @@
             </div>
 
             <div class="pt-1">
-              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-password">Password <span class="text-red-500">*</span></label>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-password">Password <span class="text-red-500">*</span></label>
+                <span class="text-[11px] font-semibold text-slate-500" id="signup-strength-badge">Strong required</span>
+              </div>
               <div class="relative flex items-center">
                 <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
                 <input class="input-field pl-10 pr-10" id="signup-password" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordStrength()" required/>
@@ -410,7 +413,30 @@
                   <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-3"></div>
                   <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-4"></div>
                 </div>
-                <p class="text-[11px] text-slate-500 mt-1 font-medium" id="signup-password-feedback">Minimum 8 chars (letters, numbers, symbols)</p>
+                <div class="mt-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200/70" id="signup-rules-box">
+                  <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-[11px]">
+                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-len">
+                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-len">radio_button_unchecked</span>
+                      <span>8+ Characters</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-upper">
+                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-upper">radio_button_unchecked</span>
+                      <span>Uppercase (A-Z)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-lower">
+                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-lower">radio_button_unchecked</span>
+                      <span>Lowercase (a-z)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-num">
+                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-num">radio_button_unchecked</span>
+                      <span>Number (0-9)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors col-span-2" id="sp-rule-sym">
+                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-sym">radio_button_unchecked</span>
+                      <span>Special Symbol (!@#$%...)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -557,14 +583,40 @@
                     <span class="material-symbols-outlined text-[18px]" id="fp-new-eye-icon">visibility</span>
                   </button>
                 </div>
-                <div class="pt-2 space-y-1">
-                  <div class="grid grid-cols-3 gap-1.5 h-1.5 w-full">
+                <div class="pt-2 space-y-1.5">
+                  <div class="grid grid-cols-4 gap-1.5 h-1.5 w-full">
                     <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-1"></div>
                     <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-2"></div>
                     <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-3"></div>
+                    <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-4"></div>
                   </div>
-                  <div class="flex justify-end text-[11px] font-medium pt-0.5">
-                    <span class="text-slate-400" id="fp-strength-label">Too Short</span>
+                  <div class="flex justify-between items-center text-[11px] font-medium pt-0.5">
+                    <span class="text-slate-500 font-semibold" id="fp-strength-label">Strong password required</span>
+                    <span class="text-slate-400" id="fp-rules-counter">0/5 met</span>
+                  </div>
+                  <div class="mt-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200/70" id="fp-rules-box">
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[11px]">
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="fp-rule-len">
+                        <span class="material-symbols-outlined text-[15px]" id="fp-icon-len">radio_button_unchecked</span>
+                        <span>8+ Chars</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="fp-rule-upper">
+                        <span class="material-symbols-outlined text-[15px]" id="fp-icon-upper">radio_button_unchecked</span>
+                        <span>Uppercase</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="fp-rule-lower">
+                        <span class="material-symbols-outlined text-[15px]" id="fp-icon-lower">radio_button_unchecked</span>
+                        <span>Lowercase</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="fp-rule-num">
+                        <span class="material-symbols-outlined text-[15px]" id="fp-icon-num">radio_button_unchecked</span>
+                        <span>Number</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors col-span-2" id="fp-rule-sym">
+                        <span class="material-symbols-outlined text-[15px]" id="fp-icon-sym">radio_button_unchecked</span>
+                        <span>Symbol (!@#$...)</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -631,15 +683,51 @@
 <span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>
 </a>
 <a id="tab-operations" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('receipts')">Operations</a>
-<a id="tab-stock" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('stock')">Stock</a>
+<a id="tab-stock" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer flex items-center gap-1.5" onclick="switchDashboardView('stock')">
+  <span>Stock</span>
+  <span id="nav-stock-alert-pill" class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">0</span>
+</a>
 <a id="tab-history" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('history')">Move History</a>
 </nav>
 </div>
 <!-- Right Header Tools: Breadcrumb / Profile Dropdown -->
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 sm:gap-4">
 <span id="header-breadcrumb" class="hidden sm:inline-block text-xs font-medium text-slate-400 uppercase tracking-wider">
           Dashboard
         </span>
+
+<!-- Low Stock Notification Bell -->
+<div class="relative" id="alert-menu-container">
+  <button id="alert-bell-btn" type="button" class="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer flex items-center justify-center" onclick="toggleAlertDropdown(event)" title="Low Stock Alerts" aria-label="Low Stock Alerts">
+    <span class="material-symbols-outlined text-[22px]">notifications</span>
+    <span id="alert-bell-badge" class="hidden absolute top-1 right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-xs">0</span>
+  </button>
+  
+  <!-- Alert Dropdown -->
+  <div id="alert-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 py-3 z-50 transform origin-top-right transition-all">
+    <div class="px-4 pb-2.5 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-[16px]">warning</span>
+        </div>
+        <h4 class="font-bold text-sm text-slate-900">Low Stock Alerts</h4>
+      </div>
+      <span id="alert-dropdown-badge" class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0 alerts</span>
+    </div>
+    <div id="alert-dropdown-list" class="max-h-64 overflow-y-auto divide-y divide-slate-100 px-2 py-1">
+      <div class="py-4 text-center text-xs text-slate-400">Loading stock alerts...</div>
+    </div>
+    <div class="pt-2 px-4 border-t border-slate-100 flex items-center justify-between text-xs">
+      <button type="button" class="font-bold text-primary hover:text-primary-dark transition-colors cursor-pointer" onclick="switchDashboardView('stock'); document.getElementById('alert-dropdown').classList.add('hidden');">
+        View All Stock →
+      </button>
+      <button type="button" class="font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer" onclick="document.getElementById('alert-dropdown').classList.add('hidden');">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Profile trigger & dropdown container -->
 <div class="relative" id="profile-menu-container">
 <button aria-expanded="false" aria-haspopup="true" class="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" id="profile-button" type="button">
@@ -766,8 +854,39 @@
 </div>
 </section>
 </div>
+
+<!-- LOW STOCK ALERTS SECTION -->
+<section class="mt-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)]" id="dash-low-stock-card">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-600">
+        <span class="material-symbols-outlined text-[22px]">warning</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 class="text-base font-bold text-slate-900">Low Stock Alerts</h3>
+          <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200" id="dash-low-stock-badge">0 Alerts</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-0.5">Critical inventory items at or below safety reorder threshold (≤ 10 Units)</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button type="button" class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer" onclick="switchDashboardView('stock'); setStockFilter('low_stock');">
+        View in Stock Table
+      </button>
+      <button type="button" class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-1 shadow-xs" onclick="switchDashboardView('receipts'); openNewOperationModal();">
+        <span class="material-symbols-outlined text-[16px]">add</span> Replenish Stock
+      </button>
+    </div>
+  </div>
+  
+  <div id="dash-low-stock-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div class="py-6 text-center text-xs text-slate-400 col-span-full">Loading stock alerts...</div>
+  </div>
+</section>
+
 <!-- CLEAN MINIMAL RECENT ACTIVITY SECTION (Calm, grounded preview below the 2 cards) -->
-<div class="mt-10 bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<div class="mt-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
 <div class="flex items-center justify-between mb-4">
 <div>
 <h3 class="text-base font-semibold text-slate-900">Recent Movements</h3>
@@ -1592,16 +1711,46 @@ Draft
           </div>
           <p class="text-xs text-slate-500 mt-1">Real-time warehouse quantities, on-hand ledger, incoming receipts & outgoing commitments</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Filter tabs -->
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200/80 text-xs font-semibold">
+            <button id="stock-filter-all-btn" class="px-3 py-1.5 rounded-md bg-white text-slate-900 shadow-xs font-bold cursor-pointer transition-all" onclick="setStockFilter('all')">All Products</button>
+            <button id="stock-filter-low-btn" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer transition-all flex items-center gap-1.5" onclick="setStockFilter('low_stock')">
+              <span>⚠️ Low Stock</span>
+              <span id="stock-filter-low-count" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">0</span>
+            </button>
+          </div>
+
           <div class="relative flex items-center">
-            <div class="flex items-center bg-white border border-slate-200 rounded-lg shadow-sm px-3 h-10 w-64">
+            <div class="flex items-center bg-white border border-slate-200 rounded-lg shadow-sm px-3 h-10 w-48 sm:w-60">
               <span class="material-symbols-outlined text-slate-400 text-[18px] mr-2">search</span>
-              <input class="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 border-0 focus:ring-0 p-0 h-full" id="stockSearchInput" placeholder="Search product or SKU..." type="text" oninput="loadStock(this.value)"/>
+              <input class="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 border-0 focus:ring-0 p-0 h-full" id="stockSearchInput" placeholder="Search product or SKU..." type="text" oninput="handleStockSearch(this.value)"/>
             </div>
           </div>
           <button class="flex items-center gap-1.5 h-10 px-4 bg-primary text-white rounded-lg text-sm shadow-sm hover:bg-primary/90 font-bold cursor-pointer transition-all" onclick="switchDashboardView('receipts'); openNewOperationModal();">
             <span class="material-symbols-outlined text-[18px]">add</span>
             <span>Receive Stock</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- LOW STOCK ALERT BANNER -->
+      <div id="stock-alert-banner" class="hidden mb-6 p-4 rounded-xl bg-amber-50/90 border border-amber-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
+            <span class="material-symbols-outlined text-[20px]">warning</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-amber-900" id="stock-alert-banner-title">Low Stock Alert: Multiple items need replenishment</p>
+            <p class="text-xs text-amber-700" id="stock-alert-banner-desc">Inventory quantities are below the minimum threshold (≤ 10 Units).</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+          <button type="button" id="stock-filter-toggle-btn" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer" onclick="toggleStockLowFilter()">
+            Show Low Stock Only
+          </button>
+          <button type="button" class="px-3 py-1.5 rounded-lg bg-white border border-amber-300 text-amber-800 text-xs font-bold hover:bg-amber-100/60 transition-colors cursor-pointer" onclick="switchDashboardView('receipts'); openNewOperationModal();">
+            + Restock Item
           </button>
         </div>
       </div>
@@ -1620,6 +1769,7 @@ Draft
                 <th class="px-6 py-3 font-semibold uppercase text-right">Outgoing</th>
                 <th class="px-6 py-3 font-semibold uppercase text-right">Forecasted</th>
                 <th class="px-6 py-3 font-semibold uppercase text-center">Status</th>
+                <th class="px-6 py-3 font-semibold uppercase text-right">Actions</th>
               </tr>
             </thead>
             <tbody id="stockTableBody" class="divide-y divide-surface-container-low font-body-sm text-body-sm text-on-surface">
@@ -2169,12 +2319,41 @@ Draft
       }
     }
 
+    function evalPasswordRules(val) {
+      return {
+        len: val.length >= 8,
+        upper: /[A-Z]/.test(val),
+        lower: /[a-z]/.test(val),
+        num: /[0-9]/.test(val),
+        sym: /[^A-Za-z0-9\s]/.test(val)
+      };
+    }
+
     function signupCheckPasswordStrength() {
       const val = document.getElementById('signup-password').value;
-      let score = 0;
-      if (val.length >= 8) score++;
-      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
-      if (/[^A-Za-z0-9]/.test(val)) score++;
+      const rules = evalPasswordRules(val);
+      const metCount = Object.values(rules).filter(Boolean).length;
+
+      const updateRuleEl = (id, iconId, met) => {
+        const el = document.getElementById(id);
+        const icon = document.getElementById(iconId);
+        if (!el || !icon) return;
+        if (met) {
+          el.className = 'flex items-center gap-1.5 text-emerald-600 font-semibold transition-colors';
+          icon.textContent = 'check_circle';
+          icon.className = 'material-symbols-outlined text-[15px] text-emerald-600';
+        } else {
+          el.className = 'flex items-center gap-1.5 text-slate-400 font-normal transition-colors';
+          icon.textContent = 'radio_button_unchecked';
+          icon.className = 'material-symbols-outlined text-[15px] text-slate-400';
+        }
+      };
+
+      updateRuleEl('sp-rule-len', 'sp-icon-len', rules.len);
+      updateRuleEl('sp-rule-upper', 'sp-icon-upper', rules.upper);
+      updateRuleEl('sp-rule-lower', 'sp-icon-lower', rules.lower);
+      updateRuleEl('sp-rule-num', 'sp-icon-num', rules.num);
+      updateRuleEl('sp-rule-sym', 'sp-icon-sym', rules.sym);
 
       const bars = [
         document.getElementById('signup-bar-1'),
@@ -2182,35 +2361,21 @@ Draft
         document.getElementById('signup-bar-3'),
         document.getElementById('signup-bar-4')
       ];
-      const feedback = document.getElementById('signup-password-feedback');
+      const badge = document.getElementById('signup-strength-badge');
 
-      const oldColors = bars.map(b => b.className);
       bars.forEach(b => b.className = 'h-full w-1/4 bg-slate-200 transition-all duration-300');
 
       if (val.length === 0) {
-        feedback.textContent = "Minimum 8 chars (letters, numbers, symbols)";
-        feedback.className = "text-[11px] text-slate-500 mt-1 font-medium";
-      } else if (score === 0) {
+        if (badge) { badge.textContent = "Strong required"; badge.className = "text-[11px] font-semibold text-slate-400"; }
+      } else if (metCount <= 2) {
         bars[0].classList.replace('bg-slate-200', 'bg-red-500');
-        feedback.textContent = "Weak — please add numbers and symbols";
-        feedback.className = "text-[11px] text-red-500 mt-1 font-medium";
-      } else if (score === 1 || score === 2) {
-        for(let i=0; i<=score; i++) bars[i].classList.replace('bg-slate-200', 'bg-amber-500');
-        feedback.textContent = "Medium — add special character";
-        feedback.className = "text-[11px] text-amber-600 mt-1 font-medium";
+        if (badge) { badge.textContent = `Weak (${metCount}/5)`; badge.className = "text-[11px] font-bold text-red-500"; }
+      } else if (metCount === 3 || metCount === 4) {
+        for (let i = 0; i < metCount - 1; i++) bars[i].classList.replace('bg-slate-200', 'bg-amber-500');
+        if (badge) { badge.textContent = `Medium (${metCount}/5)`; badge.className = "text-[11px] font-bold text-amber-600"; }
       } else {
         bars.forEach(b => b.classList.replace('bg-slate-200', 'bg-green-500'));
-        feedback.textContent = "Strong password";
-        feedback.className = "text-[11px] text-green-600 mt-1 font-medium";
-      }
-      
-      if (!reduceMotion) {
-        bars.forEach((b, i) => {
-          if (!b.className.includes('bg-slate-200') && oldColors[i] !== b.className) {
-            b.style.transform = 'scaleY(1.4)';
-            setTimeout(() => b.style.transform = 'scaleY(1)', 200);
-          }
-        });
+        if (badge) { badge.textContent = "Strong (5/5 ✓)"; badge.className = "text-[11px] font-bold text-emerald-600"; }
       }
       
       signupCheckPasswordMatch();
@@ -2247,7 +2412,20 @@ Draft
       const alert = document.getElementById('signup-alert');
       const alertMsg = document.getElementById('signup-alert-msg');
 
-      if (p1 !== p2 || p1.length < 8) return;
+      const rules = evalPasswordRules(p1);
+      const metCount = Object.values(rules).filter(Boolean).length;
+
+      if (metCount < 5) {
+        if (alertMsg) alertMsg.textContent = 'Password must meet all 5 requirements: 8+ characters, uppercase, lowercase, number, and special symbol.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      if (p1 !== p2) {
+        if (alertMsg) alertMsg.textContent = 'Passwords do not match. Please verify.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
 
       const btn = document.getElementById('signup-btn-submit');
       const spinner = document.getElementById('signup-spinner');
@@ -2590,21 +2768,55 @@ Draft
     }
 
     function fpEvaluatePassword(val) {
-      let score = 0;
-      if (val.length >= 8) score++;
-      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
-      if (/[^A-Za-z0-9]/.test(val)) score++;
-      
-      const bars = [document.getElementById('fp-bar-1'), document.getElementById('fp-bar-2'), document.getElementById('fp-bar-3')];
+      const rules = evalPasswordRules(val);
+      const metCount = Object.values(rules).filter(Boolean).length;
+
+      const updateFpRule = (id, iconId, met) => {
+        const el = document.getElementById(id);
+        const icon = document.getElementById(iconId);
+        if (!el || !icon) return;
+        if (met) {
+          el.className = 'flex items-center gap-1.5 text-emerald-600 font-semibold transition-colors';
+          icon.textContent = 'check_circle';
+          icon.className = 'material-symbols-outlined text-[15px] text-emerald-600';
+        } else {
+          el.className = 'flex items-center gap-1.5 text-slate-400 font-normal transition-colors';
+          icon.textContent = 'radio_button_unchecked';
+          icon.className = 'material-symbols-outlined text-[15px] text-slate-400';
+        }
+      };
+
+      updateFpRule('fp-rule-len', 'fp-icon-len', rules.len);
+      updateFpRule('fp-rule-upper', 'fp-icon-upper', rules.upper);
+      updateFpRule('fp-rule-lower', 'fp-icon-lower', rules.lower);
+      updateFpRule('fp-rule-num', 'fp-icon-num', rules.num);
+      updateFpRule('fp-rule-sym', 'fp-icon-sym', rules.sym);
+
+      const bars = [
+        document.getElementById('fp-bar-1'),
+        document.getElementById('fp-bar-2'),
+        document.getElementById('fp-bar-3'),
+        document.getElementById('fp-bar-4')
+      ];
       const lbl = document.getElementById('fp-strength-label');
-      
+      const counter = document.getElementById('fp-rules-counter');
+
       bars.forEach(b => b.className = 'rounded-full h-1.5 transition-colors duration-300 bg-slate-200');
-      
-      if(val.length === 0) { lbl.textContent = 'Too Short'; lbl.className = 'text-slate-400'; }
-      else if(score === 0 || score === 1) { bars[0].classList.replace('bg-slate-200', 'bg-red-500'); lbl.textContent = 'Weak'; lbl.className = 'text-red-500'; }
-      else if(score === 2) { bars[0].classList.replace('bg-slate-200', 'bg-amber-500'); bars[1].classList.replace('bg-slate-200', 'bg-amber-500'); lbl.textContent = 'Medium'; lbl.className = 'text-amber-500 font-semibold'; }
-      else { bars.forEach(b => b.classList.replace('bg-slate-200', 'bg-green-500')); lbl.textContent = 'Strong'; lbl.className = 'text-green-600 font-bold'; }
-      
+      if (counter) counter.textContent = `${metCount}/5 met`;
+
+      if (val.length === 0) {
+        if (lbl) { lbl.textContent = 'Strong password required'; lbl.className = 'text-slate-500 font-semibold'; }
+      } else if (metCount <= 2) {
+        bars[0].classList.replace('bg-slate-200', 'bg-red-500');
+        if (lbl) { lbl.textContent = `Weak (${metCount}/5)`; lbl.className = 'text-red-500 font-bold'; }
+      } else if (metCount === 3 || metCount === 4) {
+        for (let i = 0; i < metCount - 1; i++) bars[i].classList.replace('bg-slate-200', 'bg-amber-500');
+        if (lbl) { lbl.textContent = `Medium (${metCount}/5)`; lbl.className = 'text-amber-500 font-semibold'; }
+      } else {
+        bars.forEach(b => b.classList.replace('bg-slate-200', 'bg-green-500'));
+        if (lbl) { lbl.textContent = 'Strong (5/5 ✓)'; lbl.className = 'text-green-600 font-bold'; }
+      }
+
       fpCheckMatch();
     }
     
@@ -2613,16 +2825,27 @@ Draft
       const p2 = document.getElementById('fp-confirm-password').value;
       const badge = document.getElementById('fp-match-badge');
       const btn = document.getElementById('fp-btn-3');
-      
-      if(!p2) { badge.classList.add('hidden'); btn.disabled = true; return; }
-      badge.classList.remove('hidden');
-      
-      if(p1 === p2 && p1.length >= 8) {
-        badge.textContent = 'Matches'; badge.className = 'text-xs font-semibold text-green-600';
-        btn.disabled = false;
+      const rules = evalPasswordRules(p1);
+      const isStrong = Object.values(rules).every(Boolean);
+
+      if (!p2) {
+        if (badge) badge.classList.add('hidden');
+        if (btn) btn.disabled = true;
+        return;
+      }
+      if (badge) badge.classList.remove('hidden');
+
+      if (p1 === p2) {
+        if (isStrong) {
+          if (badge) { badge.textContent = '✓ Strong & Matches'; badge.className = 'text-xs font-semibold text-green-600'; }
+          if (btn) btn.disabled = false;
+        } else {
+          if (badge) { badge.textContent = 'Matches, but needs all 5 rules'; badge.className = 'text-xs font-semibold text-amber-600'; }
+          if (btn) btn.disabled = true;
+        }
       } else {
-        badge.textContent = 'Mismatch or too short'; badge.className = 'text-xs font-semibold text-red-500';
-        btn.disabled = true;
+        if (badge) { badge.textContent = '✕ Passwords do not match'; badge.className = 'text-xs font-semibold text-red-500'; }
+        if (btn) btn.disabled = true;
       }
     }
 
@@ -2633,6 +2856,12 @@ Draft
       const text = document.getElementById('fp-text-3');
       const newPassword = document.getElementById('fp-new-password').value;
       
+      const rules = evalPasswordRules(newPassword);
+      if (!Object.values(rules).every(Boolean)) {
+        alert('Please ensure your new password satisfies all 5 strength requirements: 8+ characters, uppercase, lowercase, number, and special symbol.');
+        return;
+      }
+
       btn.disabled = true;
       spinner.classList.remove('hidden');
       text.textContent = 'Resetting...';
@@ -2690,14 +2919,31 @@ Draft
       tabs.forEach(tab => {
         if (tab) {
           tab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer';
-          tab.innerHTML = tab.textContent.trim();
+          if (tab === stockTab) {
+            const count = window.currentLowStockCount || 0;
+            const badgeHtml = count > 0 
+              ? `<span id="nav-stock-alert-pill" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">${count}</span>` 
+              : `<span id="nav-stock-alert-pill" class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">0</span>`;
+            tab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer flex items-center gap-1.5';
+            tab.innerHTML = `<span>Stock</span>${badgeHtml}`;
+          } else {
+            tab.innerHTML = tab.textContent.trim();
+          }
         }
       });
 
       function setActive(tab, label) {
         if (!tab) return;
-        tab.className = 'relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none group cursor-pointer';
-        tab.innerHTML = `<span>${label}</span><span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>`;
+        tab.className = 'relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none group cursor-pointer flex items-center gap-1.5';
+        if (label === 'Stock') {
+          const count = window.currentLowStockCount || 0;
+          const badgeHtml = count > 0 
+            ? `<span id="nav-stock-alert-pill" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">${count}</span>` 
+            : `<span id="nav-stock-alert-pill" class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">0</span>`;
+          tab.innerHTML = `<span>${label}</span>${badgeHtml}<span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>`;
+        } else {
+          tab.innerHTML = `<span>${label}</span><span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>`;
+        }
       }
 
       if (viewId === 'dashboard') {
@@ -2876,6 +3122,180 @@ Draft
       });
     }
 
+    let currentStockFilter = 'all';
+    let currentStockSearch = '';
+    window.currentLowStockCount = 0;
+    window.cachedStockAlerts = [];
+
+    function toggleAlertDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('alert-dropdown');
+      if (dropdown) dropdown.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const alertContainer = document.getElementById('alert-menu-container');
+      const alertDropdown = document.getElementById('alert-dropdown');
+      if (alertDropdown && alertContainer && !alertContainer.contains(e.target)) {
+        alertDropdown.classList.add('hidden');
+      }
+    });
+
+    function updateGlobalStockAlerts(lowStockData) {
+      if (!lowStockData) return;
+      const total = lowStockData.totalAlerts || 0;
+      window.currentLowStockCount = total;
+      window.cachedStockAlerts = lowStockData.items || [];
+
+      // Header bell notification badge
+      const bellBadge = document.getElementById('alert-bell-badge');
+      if (bellBadge) {
+        bellBadge.textContent = total;
+        if (total > 0) bellBadge.classList.remove('hidden');
+        else bellBadge.classList.add('hidden');
+      }
+
+      // Stock tab in nav
+      const stockPill = document.getElementById('nav-stock-alert-pill');
+      if (stockPill) {
+        stockPill.textContent = total;
+        if (total > 0) stockPill.classList.remove('hidden');
+        else stockPill.classList.add('hidden');
+      }
+
+      // Stock tab in mobile nav
+      const mobilePill = document.getElementById('mobile-stock-alert-pill');
+      if (mobilePill) {
+        mobilePill.textContent = `${total} low stock`;
+        if (total > 0) mobilePill.classList.remove('hidden');
+        else mobilePill.classList.add('hidden');
+      }
+
+      // Stock page banner & filter button count
+      const banner = document.getElementById('stock-alert-banner');
+      const bannerTitle = document.getElementById('stock-alert-banner-title');
+      const bannerDesc = document.getElementById('stock-alert-banner-desc');
+      const filterLowCount = document.getElementById('stock-filter-low-count');
+
+      if (filterLowCount) filterLowCount.textContent = total;
+
+      if (banner) {
+        if (total > 0) {
+          banner.classList.remove('hidden');
+          if (bannerTitle) bannerTitle.textContent = `Low Stock Alert: ${total} item${total > 1 ? 's' : ''} require replenishment`;
+          if (bannerDesc) {
+            const crit = lowStockData.criticalCount || 0;
+            const warn = lowStockData.warningCount || 0;
+            bannerDesc.textContent = `${crit} depleted/out of stock and ${warn} approaching minimum safety buffer (≤ 10 Units).`;
+          }
+        } else {
+          banner.classList.add('hidden');
+        }
+      }
+
+      // Dropdown inside bell
+      const dropdownBadge = document.getElementById('alert-dropdown-badge');
+      const dropdownList = document.getElementById('alert-dropdown-list');
+      if (dropdownBadge) dropdownBadge.textContent = `${total} alert${total !== 1 ? 's' : ''}`;
+
+      if (dropdownList) {
+        if (!lowStockData.items || lowStockData.items.length === 0) {
+          dropdownList.innerHTML = '<div class="py-4 text-center text-xs text-slate-400">All products are healthy and adequately stocked!</div>';
+        } else {
+          dropdownList.innerHTML = '';
+          lowStockData.items.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'py-2.5 px-2 hover:bg-slate-50 rounded-lg flex items-center justify-between gap-3 transition-colors';
+            const isOut = item.on_hand === 0;
+            row.innerHTML = `
+              <div class="flex items-start gap-2 min-w-0">
+                <span class="w-2 h-2 rounded-full mt-1.5 shrink-0 ${isOut ? 'bg-rose-500 animate-pulse' : 'bg-amber-500'}"></span>
+                <div class="min-w-0">
+                  <p class="text-xs font-bold text-slate-800 truncate">${item.product_name}</p>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-500">
+                    <span class="font-mono text-indigo-600 font-semibold">${item.sku}</span>
+                    <span>•</span>
+                    <span class="${isOut ? 'text-rose-600 font-bold' : 'text-amber-600 font-bold'}">${item.on_hand} ${item.unit} left</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="shrink-0 px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors cursor-pointer" onclick="triggerRestock('${item.sku}', '${item.product_name.replace(/'/g, "\\'")}', '${item.unit}'); document.getElementById('alert-dropdown').classList.add('hidden');">
+                Receive
+              </button>
+            `;
+            dropdownList.appendChild(row);
+          });
+        }
+      }
+    }
+
+    function renderDashboardLowStock(lowStockData) {
+      const badge = document.getElementById('dash-low-stock-badge');
+      const grid = document.getElementById('dash-low-stock-grid');
+      if (!grid) return;
+
+      const total = lowStockData?.totalAlerts || 0;
+      if (badge) badge.textContent = `${total} Alert${total !== 1 ? 's' : ''}`;
+
+      if (!lowStockData || !lowStockData.items || lowStockData.items.length === 0) {
+        grid.innerHTML = `
+          <div class="py-6 text-center col-span-full bg-slate-50 rounded-xl border border-slate-100">
+            <span class="material-symbols-outlined text-emerald-500 text-[28px] mb-1">check_circle</span>
+            <p class="text-xs font-semibold text-slate-700">Healthy Stock Levels</p>
+            <p class="text-[11px] text-slate-400">All products meet or exceed safety reorder thresholds.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = '';
+      const displayItems = lowStockData.items.slice(0, 6);
+      displayItems.forEach(item => {
+        const card = document.createElement('div');
+        const isOut = item.on_hand === 0;
+        card.className = `p-4 rounded-xl border transition-all ${
+          isOut 
+            ? 'bg-rose-50/40 border-rose-200/80 hover:border-rose-300 hover:shadow-xs' 
+            : 'bg-amber-50/30 border-amber-200/80 hover:border-amber-300 hover:shadow-xs'
+        } flex flex-col justify-between`;
+
+        const statusBadge = isOut
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">Out of Stock</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Low Stock (${item.on_hand} Units)</span>`;
+
+        const incomingText = item.incoming > 0
+          ? `<span class="text-indigo-600 font-medium">+${item.incoming} incoming</span>`
+          : `<span class="text-slate-400">No incoming PO</span>`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <h4 class="text-xs font-bold text-slate-900 leading-snug line-clamp-1" title="${item.product_name}">${item.product_name}</h4>
+              ${statusBadge}
+            </div>
+            <div class="flex items-center gap-2 text-[11px] text-slate-500 mb-2">
+              <span class="font-mono text-indigo-600 font-bold">${item.sku}</span>
+              <span>•</span>
+              <span>${item.location}</span>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+            <span class="text-[11px]">${incomingText}</span>
+            <button type="button" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-1 shadow-xs" onclick="triggerRestock('${item.sku}', '${item.product_name.replace(/'/g, "\\'")}', '${item.unit}')">
+              <span class="material-symbols-outlined text-[13px]">add</span> Restock
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function triggerRestock(sku, name, unit = 'Units') {
+      currentOperationType = 'receipt';
+      switchDashboardView('receipts');
+      openNewOperationModal({ product_name: name, sku, qty: 25, unit });
+    }
+
     async function loadDashboardStats() {
       try {
         const res = await fetch('/api/dashboard/stats');
@@ -2897,6 +3317,11 @@ Draft
         if (data.deliveries) {
           if (delCount) delCount.textContent = `${data.deliveries.toDeliver} to Deliver`;
           if (delTotal) delTotal.textContent = `${data.deliveries.totalOperations} operations`;
+        }
+
+        if (data.lowStock) {
+          renderDashboardLowStock(data.lowStock);
+          updateGlobalStockAlerts(data.lowStock);
         }
 
         if (data.recentMovements && data.recentMovements.length > 0) {
@@ -3140,7 +3565,7 @@ Draft
     }
 
     // Modal Operations
-    function openNewOperationModal() {
+    function openNewOperationModal(prefillItem = null) {
       const modal = document.getElementById('newReceiptModal');
       if (!modal) return;
 
@@ -3188,7 +3613,7 @@ Draft
         }
       }
 
-      if (partnerInput) partnerInput.value = '';
+      if (partnerInput) partnerInput.value = (prefillItem && prefillItem.vendor) ? prefillItem.vendor : '';
       if (sourceInput) sourceInput.value = '';
       const dateInput = document.getElementById('modalDateInput');
       if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
@@ -3196,7 +3621,16 @@ Draft
       if (notesInput) notesInput.value = '';
 
       resetModalLines();
-      addModalProductLine('Office Chair Ergonomic', 'FUR-001', 10, 'Units');
+      if (prefillItem) {
+        addModalProductLine(
+          prefillItem.product_name || prefillItem.name || 'Warehouse Material',
+          prefillItem.sku || 'SKU-GEN',
+          prefillItem.qty || 25,
+          prefillItem.unit || 'Units'
+        );
+      } else {
+        addModalProductLine('Office Chair Ergonomic', 'FUR-001', 10, 'Units');
+      }
 
       modal.classList.remove('hidden');
     }
@@ -3490,36 +3924,81 @@ Draft
       }
     }
 
+    function handleStockSearch(val) {
+      currentStockSearch = val;
+      loadStock(currentStockSearch, currentStockFilter);
+    }
+
+    function setStockFilter(filter) {
+      currentStockFilter = filter;
+      const allBtn = document.getElementById('stock-filter-all-btn');
+      const lowBtn = document.getElementById('stock-filter-low-btn');
+
+      if (allBtn && lowBtn) {
+        if (filter === 'all') {
+          allBtn.className = 'px-3 py-1.5 rounded-md bg-white text-slate-900 shadow-xs font-bold cursor-pointer transition-all';
+          lowBtn.className = 'px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer transition-all flex items-center gap-1.5';
+        } else {
+          lowBtn.className = 'px-3 py-1.5 rounded-md bg-amber-600 text-white shadow-xs font-bold cursor-pointer transition-all flex items-center gap-1.5';
+          allBtn.className = 'px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer transition-all';
+        }
+      }
+      loadStock(currentStockSearch, currentStockFilter);
+    }
+
+    function toggleStockLowFilter() {
+      if (currentStockFilter === 'low_stock') {
+        setStockFilter('all');
+      } else {
+        setStockFilter('low_stock');
+      }
+    }
+
     // Stock & Inventory
-    async function loadStock(search = '') {
+    async function loadStock(search = '', filter = currentStockFilter) {
       try {
-        let url = '/api/stock?';
-        if (search) url += `search=${encodeURIComponent(search)}`;
+        let url = `/api/stock?`;
+        if (search) url += `search=${encodeURIComponent(search)}&`;
+        if (filter && filter !== 'all') url += `filter=${encodeURIComponent(filter)}&`;
         const res = await fetch(url);
         if (!res.ok) return;
-        const { data } = await res.json();
+        const resData = await res.json();
+        const data = resData.data || [];
 
         const badge = document.getElementById('stock-count-badge');
-        if (badge) badge.textContent = `${data.length} products`;
+        if (badge) badge.textContent = `${resData.count || data.length} products`;
+
+        if (resData.lowStockCount !== undefined) {
+          updateGlobalStockAlerts({
+            totalAlerts: resData.lowStockCount,
+            criticalCount: resData.outOfStockCount,
+            warningCount: resData.lowStockCount - resData.outOfStockCount,
+            items: data.filter(i => i.is_low_stock)
+          });
+        }
 
         const tbody = document.getElementById('stockTableBody');
         if (!tbody) return;
         tbody.innerHTML = '';
 
         if (data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">No stock products found matching search.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400">No stock products found matching criteria.</td></tr>`;
           return;
         }
 
         data.forEach(item => {
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-slate-50/70 transition-colors';
-          const onHandColor = item.on_hand > 0 ? 'text-emerald-700 font-bold' : 'text-slate-400';
-          const statusBadge = item.on_hand > 5 
-            ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">In Stock</span>`
-            : item.on_hand > 0 
-              ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Low Stock</span>`
-              : `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Out of Stock</span>`;
+          const onHandColor = item.on_hand > 0 ? (item.on_hand <= 10 ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold') : 'text-rose-600 font-bold';
+          
+          const isOut = item.on_hand === 0;
+          const isLow = item.on_hand <= (item.min_threshold || 10);
+
+          const statusBadge = isOut 
+            ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1 w-fit mx-auto"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span> Out of Stock</span>`
+            : isLow
+              ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit mx-auto"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> Low Stock</span>`
+              : `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 w-fit mx-auto"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> In Stock</span>`;
 
           tr.innerHTML = `
             <td class="px-6 py-3.5">
@@ -3533,6 +4012,11 @@ Draft
             <td class="px-6 py-3.5 text-right font-mono text-amber-600">-${item.outgoing}</td>
             <td class="px-6 py-3.5 text-right font-mono font-bold text-slate-800">${item.forecasted}</td>
             <td class="px-6 py-3.5 text-center">${statusBadge}</td>
+            <td class="px-6 py-3.5 text-right">
+              <button type="button" class="px-2.5 py-1 text-xs font-bold rounded-lg ${isLow ? 'bg-amber-100 hover:bg-amber-200 text-amber-900' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'} transition-colors cursor-pointer" onclick="triggerRestock('${item.sku}', '${item.product_name.replace(/'/g, "\\'")}', '${item.unit}')">
+                Restock
+              </button>
+            </td>
           `;
           tbody.appendChild(tr);
         });

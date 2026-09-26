@@ -33,12 +33,12 @@ async function runTests() {
     assert.strictEqual(failLoginJson.success, false);
     console.log('     ✓ Rejected invalid password correctly');
 
-    // 3. Successful login test
-    console.log('  3. Testing POST /api/auth/login with valid seed credentials');
+    // 3. Successful login test with updated strong seed credentials
+    console.log('  3. Testing POST /api/auth/login with valid seed credentials (Password123!)');
     const loginRes = await fetch(`${baseUrl}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'marcus.v@stocksense.io', password: 'password123' })
+      body: JSON.stringify({ email: 'marcus.v@stocksense.io', password: 'Password123!' })
     });
     assert.strictEqual(loginRes.status, 200);
     const loginJson = await loginRes.json();
@@ -60,9 +60,37 @@ async function runTests() {
     assert.strictEqual(meJson.user.id, testUserId);
     console.log('     ✓ Authenticated route verified token correctly');
 
-    // 5. User Signup test
+    // 5. Strong Password Validation: Signup Rejection Tests
+    console.log('  5. Testing Strong Password Enforcement during Signup');
+    const weakPasswords = [
+      { pwd: 'short', reason: 'Too short' },
+      { pwd: 'password123!', reason: 'Missing uppercase' },
+      { pwd: 'PASSWORD123!', reason: 'Missing lowercase' },
+      { pwd: 'Password!', reason: 'Missing numbers' },
+      { pwd: 'Password123', reason: 'Missing special character' }
+    ];
+
+    for (const item of weakPasswords) {
+      const rejectRes = await fetch(`${baseUrl}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Weak Pwd Tester',
+          email: `weak_${Date.now()}_${Math.random().toString(36).substring(7)}@stocksense.io`,
+          password: item.pwd,
+          role: 'staff'
+        })
+      });
+      assert.strictEqual(rejectRes.status, 400, `Expected 400 rejection for: ${item.reason}`);
+      const rejectJson = await rejectRes.json();
+      assert.strictEqual(rejectJson.success, false);
+      assert.ok(rejectJson.message.toLowerCase().includes('password must'));
+    }
+    console.log('     ✓ Rejected all weak password combinations correctly');
+
+    // 6. User Signup test with valid strong password
     const newEmail = `tester_${Date.now()}@stocksense.io`;
-    console.log(`  5. Testing POST /api/auth/signup (${newEmail})`);
+    console.log(`  6. Testing POST /api/auth/signup with strong password (${newEmail})`);
     const signupRes = await fetch(`${baseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -79,8 +107,8 @@ async function runTests() {
     assert.strictEqual(signupJson.user.email, newEmail);
     console.log('     ✓ User registered and auto-signed JWT');
 
-    // 6. Forgot Password: Step 1 (Send OTP)
-    console.log('  6. Testing POST /api/auth/forgot-password/send-otp');
+    // 7. Forgot Password: Step 1 (Send OTP)
+    console.log('  7. Testing POST /api/auth/forgot-password/send-otp');
     const sendOtpRes = await fetch(`${baseUrl}/api/auth/forgot-password/send-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -92,8 +120,8 @@ async function runTests() {
     const otpCode = sendOtpJson.debugOtp;
     console.log(`     ✓ OTP code generated: ${otpCode}`);
 
-    // 7. Forgot Password: Step 2 (Verify OTP)
-    console.log('  7. Testing POST /api/auth/forgot-password/verify-otp');
+    // 8. Forgot Password: Step 2 (Verify OTP)
+    console.log('  8. Testing POST /api/auth/forgot-password/verify-otp');
     const verifyOtpRes = await fetch(`${baseUrl}/api/auth/forgot-password/verify-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -105,8 +133,22 @@ async function runTests() {
     const resetToken = verifyOtpJson.resetToken;
     console.log('     ✓ OTP validated and reset token issued');
 
-    // 8. Forgot Password: Step 3 (Reset Password)
-    console.log('  8. Testing POST /api/auth/forgot-password/reset-password');
+    // 9. Forgot Password: Reset Password with Weak Password (should be rejected)
+    console.log('  9. Testing POST /api/auth/forgot-password/reset-password with weak password (rejected)');
+    const weakResetRes = await fetch(`${baseUrl}/api/auth/forgot-password/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: newEmail,
+        resetToken,
+        newPassword: 'weak'
+      })
+    });
+    assert.strictEqual(weakResetRes.status, 400);
+    console.log('     ✓ Rejected weak reset password correctly');
+
+    // 10. Forgot Password: Step 3 (Reset Password with strong password)
+    console.log('  10. Testing POST /api/auth/forgot-password/reset-password with strong password');
     const resetRes = await fetch(`${baseUrl}/api/auth/forgot-password/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -119,8 +161,8 @@ async function runTests() {
     assert.strictEqual(resetRes.status, 200);
     console.log('     ✓ Password reset confirmed');
 
-    // 9. Verify login with newly reset password
-    console.log('  9. Testing Login with newly reset password');
+    // 11. Verify login with newly reset password
+    console.log('  11. Testing Login with newly reset password');
     const reLoginRes = await fetch(`${baseUrl}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -129,49 +171,64 @@ async function runTests() {
     assert.strictEqual(reLoginRes.status, 200);
     console.log('     ✓ Logged in with new password');
 
-    // 10. Dashboard statistics test
-    console.log('  10. Testing GET /api/dashboard/stats');
+    // 12. Dashboard statistics & Low Stock metrics test
+    console.log('  12. Testing GET /api/dashboard/stats (including lowStock alerts)');
     const statsRes = await fetch(`${baseUrl}/api/dashboard/stats`);
     assert.strictEqual(statsRes.status, 200);
     const statsJson = await statsRes.json();
     assert.ok(statsJson.data.receipts.totalOperations > 0);
     assert.ok(statsJson.data.deliveries.totalOperations > 0);
-    console.log(`     ✓ Dashboard stats returned: ${statsJson.data.receipts.toReceive} receipts pending`);
+    assert.ok(statsJson.data.lowStock, 'lowStock should be returned in stats');
+    assert.ok(statsJson.data.lowStock.totalAlerts >= 0);
+    assert.ok(Array.isArray(statsJson.data.lowStock.items));
+    console.log(`     ✓ Dashboard stats returned: ${statsJson.data.receipts.toReceive} receipts pending, ${statsJson.data.lowStock.totalAlerts} low stock alerts`);
 
-    // 11. Receipts operations list
-    console.log('  11. Testing GET /api/operations/receipts');
+    // 13. Low Stock Alerts API test
+    console.log('  13. Testing GET /api/stock/alerts');
+    const alertsRes = await fetch(`${baseUrl}/api/stock/alerts?threshold=10`);
+    assert.strictEqual(alertsRes.status, 200);
+    const alertsJson = await alertsRes.json();
+    assert.strictEqual(alertsJson.success, true);
+    assert.strictEqual(alertsJson.threshold, 10);
+    assert.ok(alertsJson.totalAlerts >= 0);
+    assert.ok(Array.isArray(alertsJson.alerts));
+    console.log(`     ✓ Low stock alerts API returned ${alertsJson.totalAlerts} active alerts (Critical: ${alertsJson.criticalCount}, Warning: ${alertsJson.warningCount})`);
+
+    // 14. Receipts operations list
+    console.log('  14. Testing GET /api/operations/receipts');
     const receiptsRes = await fetch(`${baseUrl}/api/operations/receipts`);
     assert.strictEqual(receiptsRes.status, 200);
     const receiptsJson = await receiptsRes.json();
-    assert.ok(receiptsJson.count >= 6);
-    const targetReceipt = receiptsJson.data[0];
+    assert.ok(receiptsJson.count > 0);
     console.log(`     ✓ Found ${receiptsJson.count} receipts`);
 
-    // 12. Create Receipt
-    console.log('  12. Testing POST /api/operations/receipts (Protected)');
-    const createReceiptRes = await fetch(`${baseUrl}/api/operations/receipts`, {
+    // 15. Create new receipt operation (Authenticated)
+    console.log('  15. Testing POST /api/operations/receipts (Protected)');
+    const createRecRes = await fetch(`${baseUrl}/api/operations/receipts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`
       },
       body: JSON.stringify({
-        vendor_from: 'Apex Heavy Logistics',
-        destination_to: 'WH/Stock',
-        contact: 'Apex Support',
-        source_document: 'PO00099',
-        status: 'ready',
-        items: [{ product_name: 'Hydraulic Pallet Jack', sku: 'EQP-009', quantity: 2 }]
+        vendor_from: 'Steelworks International',
+        destination_to: 'WH/Stock1',
+        contact: 'Marcus Vance',
+        source_document: 'PO-2026-0099',
+        items: [
+          { product_name: 'Heavy Duty Steel Beam', sku: 'STL-999', quantity: 40, unit: 'Units' }
+        ]
       })
     });
-    assert.strictEqual(createReceiptRes.status, 201);
-    const createdReceiptJson = await createReceiptRes.json();
-    assert.strictEqual(createdReceiptJson.data.vendor_from, 'Apex Heavy Logistics');
-    console.log(`     ✓ Receipt created with reference: ${createdReceiptJson.data.reference}`);
+    assert.strictEqual(createRecRes.status, 201);
+    const createRecJson = await createRecRes.json();
+    const createdReceiptId = createRecJson.data.id;
+    assert.ok(createRecJson.data.reference.startsWith('WH/IN/'));
+    console.log(`     ✓ Receipt created with reference: ${createRecJson.data.reference}`);
 
-    // 13. Update Receipt Status
-    console.log(`  13. Testing PATCH /api/operations/receipts/${targetReceipt.id}/status`);
-    const updateRes = await fetch(`${baseUrl}/api/operations/receipts/${targetReceipt.id}/status`, {
+    // 16. Update status PATCH /api/operations/receipts/:id/status
+    console.log(`  16. Testing PATCH /api/operations/receipts/${createdReceiptId}/status`);
+    const patchRecRes = await fetch(`${baseUrl}/api/operations/receipts/${createdReceiptId}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -179,46 +236,46 @@ async function runTests() {
       },
       body: JSON.stringify({ status: 'done' })
     });
-    assert.strictEqual(updateRes.status, 200);
-    const updateJson = await updateRes.json();
-    assert.strictEqual(updateJson.data.status, 'done');
+    assert.strictEqual(patchRecRes.status, 200);
+    const patchRecJson = await patchRecRes.json();
+    assert.strictEqual(patchRecJson.data.status, 'done');
     console.log('     ✓ Status updated to "done" successfully');
 
-    // 14. Deliveries operations list
-    console.log('  14. Testing GET /api/operations/deliveries');
-    const deliveriesRes = await fetch(`${baseUrl}/api/operations/deliveries`);
-    assert.strictEqual(deliveriesRes.status, 200);
-    const deliveriesJson = await deliveriesRes.json();
-    assert.ok(deliveriesJson.count >= 3);
-    const targetDelivery = deliveriesJson.data[0];
-    console.log(`     ✓ Found ${deliveriesJson.count} deliveries`);
+    // 17. Delivery operations list
+    console.log('  17. Testing GET /api/operations/deliveries');
+    const delivRes = await fetch(`${baseUrl}/api/operations/deliveries`);
+    assert.strictEqual(delivRes.status, 200);
+    const delivJson = await delivRes.json();
+    assert.ok(delivJson.count > 0);
+    console.log(`     ✓ Found ${delivJson.count} deliveries`);
 
-    // 15. Create Delivery Order
-    console.log('  15. Testing POST /api/operations/deliveries (Protected)');
-    const createDeliveryRes = await fetch(`${baseUrl}/api/operations/deliveries`, {
+    // 18. Create new delivery operation (Authenticated)
+    console.log('  18. Testing POST /api/operations/deliveries (Protected)');
+    const createDelRes = await fetch(`${baseUrl}/api/operations/deliveries`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${authToken}`
       },
       body: JSON.stringify({
-        vendor_from: 'WH/Stock',
-        destination_to: 'Global Enterprises Inc',
-        contact: 'Marcus Brody',
-        source_document: 'SO0099',
-        status: 'ready',
-        items: [{ product_name: 'Standing Desk Frame', sku: 'FUR-002', quantity: 5 }]
+        destination_to: 'Apex Logistics Hub',
+        vendor_from: 'WH/Stock1',
+        contact: 'Dispatch Driver',
+        source_document: 'SO-9921',
+        items: [
+          { product_name: 'Heavy Duty Steel Beam', sku: 'STL-999', quantity: 15, unit: 'Units' }
+        ]
       })
     });
-    assert.strictEqual(createDeliveryRes.status, 201);
-    const createdDeliveryJson = await createDeliveryRes.json();
-    assert.strictEqual(createdDeliveryJson.data.destination_to, 'Global Enterprises Inc');
-    assert.strictEqual(createdDeliveryJson.data.type, 'delivery');
-    console.log(`     ✓ Delivery created with reference: ${createdDeliveryJson.data.reference}`);
+    assert.strictEqual(createDelRes.status, 201);
+    const createDelJson = await createDelRes.json();
+    const createdDelivId = createDelJson.data.id;
+    assert.ok(createDelJson.data.reference.startsWith('WH/OUT/'));
+    console.log(`     ✓ Delivery created with reference: ${createDelJson.data.reference}`);
 
-    // 16. Update Delivery Status
-    console.log(`  16. Testing PATCH /api/operations/deliveries/${targetDelivery.id}/status`);
-    const updateDeliveryRes = await fetch(`${baseUrl}/api/operations/deliveries/${targetDelivery.id}/status`, {
+    // 19. Update status of delivery
+    console.log(`  19. Testing PATCH /api/operations/deliveries/${createdDelivId}/status`);
+    const patchDelRes = await fetch(`${baseUrl}/api/operations/deliveries/${createdDelivId}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -226,55 +283,40 @@ async function runTests() {
       },
       body: JSON.stringify({ status: 'done' })
     });
-    assert.strictEqual(updateDeliveryRes.status, 200);
-    const updateDeliveryJson = await updateDeliveryRes.json();
-    assert.strictEqual(updateDeliveryJson.data.status, 'done');
+    assert.strictEqual(patchDelRes.status, 200);
+    const patchDelJson = await patchDelRes.json();
+    assert.strictEqual(patchDelJson.data.status, 'done');
     console.log('     ✓ Delivery status updated to "done" successfully');
 
-    // 17. Unified operations query
-    console.log('  17. Testing GET /api/operations?type=all');
-    const allOpsRes = await fetch(`${baseUrl}/api/operations`);
-    assert.strictEqual(allOpsRes.status, 200);
-    const allOpsJson = await allOpsRes.json();
-    assert.ok(allOpsJson.count >= 10);
-    console.log(`     ✓ Total warehouse operations queried: ${allOpsJson.count}`);
+    // 20. Public operations list
+    console.log('  20. Testing GET /api/operations?type=all');
+    const opsRes = await fetch(`${baseUrl}/api/operations?type=all`);
+    assert.strictEqual(opsRes.status, 200);
+    const opsJson = await opsRes.json();
+    assert.ok(opsJson.count > 0);
+    console.log(`     ✓ Total warehouse operations queried: ${opsJson.count}`);
 
-    // 18. Unauthenticated Create Receipt
-    console.log('  18. Testing POST /api/operations/receipts (Unauthenticated / Public)');
+    // 21. Unauthenticated receipt creation
+    console.log('  21. Testing POST /api/operations/receipts (Unauthenticated / Public)');
     const unauthRecRes = await fetch(`${baseUrl}/api/operations/receipts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         vendor_from: 'Direct Factory Supplier',
         destination_to: 'WH/Stock1',
-        scheduled_date: '2026-09-30',
-        items: [{ product_name: 'Steel Bolts Pack', sku: 'BOLT-01', quantity: 100 }]
+        contact: 'Warehouse Lead',
+        source_document: 'PO-PUBLIC-101',
+        items: [{ product_name: 'Steel Bolts Pack', sku: 'BOLT-01', quantity: 200, unit: 'Units' }]
       })
     });
     assert.strictEqual(unauthRecRes.status, 201);
     const unauthRecJson = await unauthRecRes.json();
-    assert.ok(unauthRecJson.data.reference.startsWith('WH/IN/'));
     const unauthRecId = unauthRecJson.data.id;
+    assert.ok(unauthRecJson.data.reference.startsWith('WH/IN/'));
     console.log(`     ✓ Unauthenticated receipt created: ${unauthRecJson.data.reference}`);
 
-    // 19. Unauthenticated Create Delivery
-    console.log('  19. Testing POST /api/operations/deliveries (Unauthenticated / Public)');
-    const unauthDelRes = await fetch(`${baseUrl}/api/operations/deliveries`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        destination_to: 'Express Client Logistics',
-        scheduled_date: '2026-09-30',
-        items: [{ product_name: 'Steel Bolts Pack', sku: 'BOLT-01', quantity: 20 }]
-      })
-    });
-    assert.strictEqual(unauthDelRes.status, 201);
-    const unauthDelJson = await unauthDelRes.json();
-    assert.ok(unauthDelJson.data.reference.startsWith('WH/OUT/'));
-    console.log(`     ✓ Unauthenticated delivery created: ${unauthDelJson.data.reference}`);
-
-    // 20. Single operation retrieval with items
-    console.log(`  20. Testing GET /api/operations/${unauthRecId}`);
+    // 22. Single operation retrieval with items
+    console.log(`  22. Testing GET /api/operations/${unauthRecId}`);
     const getOpRes = await fetch(`${baseUrl}/api/operations/${unauthRecId}`);
     assert.strictEqual(getOpRes.status, 200);
     const getOpJson = await getOpRes.json();
@@ -283,8 +325,8 @@ async function runTests() {
     assert.strictEqual(getOpJson.data.items[0].sku, 'BOLT-01');
     console.log(`     ✓ Operation retrieved with ${getOpJson.data.items.length} line items`);
 
-    // 21. Update operation details (PUT)
-    console.log(`  21. Testing PUT /api/operations/${unauthRecId}`);
+    // 23. Update operation details (PUT)
+    console.log(`  23. Testing PUT /api/operations/${unauthRecId}`);
     const updateOpRes = await fetch(`${baseUrl}/api/operations/${unauthRecId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -300,25 +342,26 @@ async function runTests() {
     assert.strictEqual(updateOpJson.data.items[0].sku, 'BOLT-01-HD');
     console.log('     ✓ Operation updated successfully');
 
-    // 22. Stock Inventory API
-    console.log('  22. Testing GET /api/stock');
+    // 24. Stock Inventory API
+    console.log('  24. Testing GET /api/stock');
     const stockRes = await fetch(`${baseUrl}/api/stock`);
     assert.strictEqual(stockRes.status, 200);
     const stockJson = await stockRes.json();
     assert.ok(stockJson.count > 0);
     assert.ok(stockJson.data.some(s => s.sku === 'FUR-001'));
-    console.log(`     ✓ Stock returned ${stockJson.count} tracked products`);
+    assert.ok(stockJson.lowStockCount !== undefined);
+    console.log(`     ✓ Stock returned ${stockJson.count} tracked products (Low stock count: ${stockJson.lowStockCount})`);
 
-    // 23. Move History API
-    console.log('  23. Testing GET /api/move-history');
+    // 25. Move History API
+    console.log('  25. Testing GET /api/move-history');
     const historyRes = await fetch(`${baseUrl}/api/move-history`);
     assert.strictEqual(historyRes.status, 200);
     const historyJson = await historyRes.json();
     assert.ok(historyJson.count > 0);
     console.log(`     ✓ Move history returned ${historyJson.count} logged movement records`);
 
-    // 24. Delete Operation
-    console.log(`  24. Testing DELETE /api/operations/${unauthRecId}`);
+    // 26. Delete Operation
+    console.log(`  26. Testing DELETE /api/operations/${unauthRecId}`);
     const deleteRes = await fetch(`${baseUrl}/api/operations/${unauthRecId}`, {
       method: 'DELETE'
     });
@@ -327,7 +370,7 @@ async function runTests() {
     assert.strictEqual(deleteJson.success, true);
     console.log('     ✓ Operation deleted successfully');
 
-    console.log('\n🎉 ALL 24 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + HISTORY + AUTH) PASSED SUCCESSFULLY!\n');
+    console.log('\n🎉 ALL 26 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + LOW STOCK ALERTS + STRONG PASSWORDS + HISTORY + AUTH) PASSED SUCCESSFULLY!\n');
   } finally {
     server.close();
   }

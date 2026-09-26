@@ -57,19 +57,28 @@ You can log in right away using either of these pre-created accounts:
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| **Inventory Manager** | `marcus.v@stocksense.io` | `password123` |
-| **Warehouse Staff** | `operator@stocksense.io` | `password123` |
+| **Inventory Manager** | `marcus.v@stocksense.io` | `Password123!` |
+| **Warehouse Staff** | `operator@stocksense.io` | `Password123!` |
 
+> **Strong Password Requirement**: All new passwords (during account signup or password reset) require at least 8 characters, including at least one uppercase letter (A-Z), one lowercase letter (a-z), one digit (0-9), and one special symbol (`!@#$%^&*` etc.).
+>
 > **Forgot Password / OTP**: If you click *"Forgot Password"*, the system generates a 6-digit OTP code and displays it directly in your terminal console.
 
 ---
 
 ## ✨ Main Features
 
-### 1. Simple Authentication
-* Log in, sign up, and reset passwords with a secure OTP code.
+### 1. Robust Authentication & Strong Password Security
+* Log in, sign up, and reset passwords with real-time strength validation and secure OTP verification.
+* Strict server-side and client-side password policy (minimum 8 characters, uppercase, lowercase, number, and special character).
 
-### 2. Live Dashboard
+### 2. Low Stock Alerts & Inventory Health
+* **Automated Low Stock Detection**: Automatically flags items when quantities drop to or below safety stock threshold ($\le 10$ units) or reach 0 (Out of Stock).
+* **Live Alerts Notification Center**: Header notification bell with badge counters and instant drop-down summary of endangered stock.
+* **Dashboard Health Panel**: Dedicated low stock preview cards with 1-click **Restock** shortcuts to immediately draft replenishment receipts.
+* **Stock Ledger Filtering**: Quick toggle to filter and view only low/out-of-stock items.
+
+### 3. Live Dashboard
 * See total items in stock, low stock warnings, pending incoming shipments, and outgoing deliveries.
 * Filter orders easily by status (`Draft`, `Ready`, `Done`) or search by product name/SKU.
 

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const db = require('../config/db');
 const { generateToken } = require('../middleware/authMiddleware');
 const OtpService = require('../services/otpService');
+const { validateStrongPassword } = require('../utils/passwordValidator');
 
 class AuthController {
   static async signup(req, res) {
@@ -24,10 +25,12 @@ class AuthController {
         });
       }
 
-      if (password.length < 8) {
+      const passCheck = validateStrongPassword(password);
+      if (!passCheck.isValid) {
         return res.status(400).json({
           success: false,
-          message: 'Password must be at least 8 characters long.'
+          message: passCheck.message,
+          errors: passCheck.errors
         });
       }
 
@@ -235,10 +238,12 @@ class AuthController {
         });
       }
 
-      if (newPassword.length < 8) {
+      const passCheck = validateStrongPassword(newPassword);
+      if (!passCheck.isValid) {
         return res.status(400).json({
           success: false,
-          message: 'Password must be at least 8 characters long.'
+          message: passCheck.message,
+          errors: passCheck.errors
         });
       }
 

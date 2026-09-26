@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const StockController = require('./stockController');
 
 class DashboardController {
   static getStats(req, res) {
@@ -65,6 +66,12 @@ class DashboardController {
         items: getItems.all(op.id)
       }));
 
+      // Real-time Low Stock Analysis
+      const stockList = StockController._computeStock('', 10);
+      const lowStockAlerts = stockList.filter(item => item.is_low_stock);
+      const criticalCount = lowStockAlerts.filter(item => item.is_out_of_stock).length;
+      const warningCount = lowStockAlerts.filter(item => !item.is_out_of_stock).length;
+
       return res.json({
         success: true,
         data: {
@@ -76,6 +83,13 @@ class DashboardController {
           deliveries: {
             toDeliver: deliveriesToDeliver,
             totalOperations: totalDeliveries
+          },
+          lowStock: {
+            threshold: 10,
+            totalAlerts: lowStockAlerts.length,
+            criticalCount,
+            warningCount,
+            items: lowStockAlerts
           },
           recentMovements
         }

@@ -12,7 +12,7 @@ async function seed() {
   db.exec('DELETE FROM users;');
 
   // 1. Seed Default Users
-  const passwordHash = await bcrypt.hash('password123', 10);
+  const passwordHash = await bcrypt.hash('Password123!', 10);
   const now = new Date().toISOString();
 
   const insertUser = db.prepare(`
@@ -40,7 +40,7 @@ async function seed() {
     now
   );
 
-  console.log('✓ Users seeded: marcus.v@stocksense.io and operator@stocksense.io (Password: password123)');
+  console.log('✓ Users seeded: marcus.v@stocksense.io and operator@stocksense.io (Password: Password123!)');
 
   // 2. Seed Warehouse Receipts
   const receipts = [
