@@ -88,9 +88,10 @@ async function runTests() {
     }
     console.log('     ✓ Rejected all weak password combinations correctly');
 
-    // 6. User Signup test with valid strong password
+    // 6. User Signup test with valid strong password and warehouse setup (2-step registration)
     const newEmail = `tester_${Date.now()}@stocksense.io`;
-    console.log(`  6. Testing POST /api/auth/signup with strong password (${newEmail})`);
+    const whSetupCode = `WH${Math.floor(100 + Math.random() * 899)}`;
+    console.log(`  6. Testing POST /api/auth/signup with strong password & warehouse setup (${newEmail}, code: ${whSetupCode})`);
     const signupRes = await fetch(`${baseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -98,15 +99,24 @@ async function runTests() {
         name: 'New Logistics Lead',
         email: newEmail,
         password: 'securePassword99!',
-        role: 'manager'
+        role: 'manager',
+        warehouse: {
+          name: 'Apex Central Hub',
+          short_code: whSetupCode,
+          address: '400 Industrial Blvd, Dock 8, Chicago, IL 60605'
+        }
       })
     });
     assert.strictEqual(signupRes.status, 201);
     const signupJson = await signupRes.json();
     assert.strictEqual(signupJson.success, true);
     assert.strictEqual(signupJson.user.email, newEmail);
+    assert.ok(signupJson.warehouse, 'Warehouse should be created during signup');
+    assert.strictEqual(signupJson.warehouse.name, 'Apex Central Hub');
+    assert.strictEqual(signupJson.warehouse.short_code, whSetupCode);
+    assert.strictEqual(signupJson.warehouse.locations.length, 4, 'Should auto-generate 4 standard locations');
     const newEmailToken = signupJson.token;
-    console.log('     ✓ User registered and auto-signed JWT');
+    console.log('     ✓ User registered with warehouse and 4 auto-generated storage locations');
 
     // 7. Forgot Password: Step 1 (Send OTP)
     console.log('  7. Testing POST /api/auth/forgot-password/send-otp');
@@ -428,7 +438,165 @@ async function runTests() {
     assert.strictEqual(verifyAuthLoginRes.status, 200);
     console.log('     ✓ In-app OTP password change verified with strong password enforcement');
 
-    console.log('\n🎉 ALL 28 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + LOW STOCK ALERTS + STRONG PASSWORDS + PUBLIC & IN-APP OTP RESET) PASSED SUCCESSFULLY!\n');
+    // 29. Warehouse Details: GET /api/warehouse
+    console.log('  29. Testing GET /api/warehouse (Warehouse Details & Locations)');
+    const whRes = await fetch(`${baseUrl}/api/warehouse`);
+    assert.strictEqual(whRes.status, 200);
+    const whJson = await whRes.json();
+    assert.strictEqual(whJson.success, true);
+    assert.ok(whJson.warehouse.id, 'Warehouse ID should be present');
+    assert.strictEqual(whJson.warehouse.short_code, 'WH');
+    assert.ok(Array.isArray(whJson.warehouse.locations), 'Locations array should be present');
+    assert.ok(whJson.warehouse.locations.length >= 4, 'Should have at least 4 default locations');
+    console.log(`     ✓ Warehouse details retrieved: "${whJson.warehouse.name}" (${whJson.warehouse.short_code}) with ${whJson.warehouse.locations.length} locations`);
+
+    // 30. Warehouse Validation: Reject empty or invalid fields
+    console.log('  30. Testing PUT /api/warehouse with invalid payload (rejection)');
+    const whInvalidRes = await fetch(`${baseUrl}/api/warehouse`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: '', short_code: '', address: '' })
+    });
+    assert.strictEqual(whInvalidRes.status, 400);
+    console.log('     ✓ Empty warehouse details correctly rejected');
+
+    // 31. Warehouse Details: PUT /api/warehouse update
+    console.log('  31. Testing PUT /api/warehouse update details');
+    const whUpdateRes = await fetch(`${baseUrl}/api/warehouse`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Main Distribution Hub',
+        short_code: 'WH',
+        address: '500 Logistics Parkway, Suite B, Chicago, IL 60611'
+      })
+    });
+    assert.strictEqual(whUpdateRes.status, 200);
+    const whUpdateJson = await whUpdateRes.json();
+    assert.strictEqual(whUpdateJson.warehouse.name, 'Main Distribution Hub');
+    assert.strictEqual(whUpdateJson.warehouse.address, '500 Logistics Parkway, Suite B, Chicago, IL 60611');
+    console.log('     ✓ Warehouse details updated successfully');
+
+    // 32. Warehouse Locations: POST /api/warehouse/locations
+    console.log('  32. Testing POST /api/warehouse/locations (Create new location)');
+    const newLocRes = await fetch(`${baseUrl}/api/warehouse/locations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Cold Storage Room 3',
+        code: 'WH/Cold3',
+        type: 'internal'
+      })
+    });
+    assert.strictEqual(newLocRes.status, 201);
+    const newLocJson = await newLocRes.json();
+    assert.strictEqual(newLocJson.success, true);
+    assert.strictEqual(newLocJson.location.code, 'WH/Cold3');
+    const createdLocId = newLocJson.location.id;
+    console.log('     ✓ New location "WH/Cold3" created successfully');
+
+    // Test duplicate location code rejection
+    const dupLocRes = await fetch(`${baseUrl}/api/warehouse/locations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Another Cold Room',
+        code: 'WH/Cold3',
+        type: 'internal'
+      })
+    });
+    assert.strictEqual(dupLocRes.status, 400);
+    console.log('     ✓ Duplicate location code correctly rejected');
+
+    // 33. Warehouse Locations: DELETE /api/warehouse/locations/:id
+    console.log('  33. Testing DELETE /api/warehouse/locations/:id');
+    const delLocRes = await fetch(`${baseUrl}/api/warehouse/locations/${createdLocId}`, {
+      method: 'DELETE'
+    });
+    assert.strictEqual(delLocRes.status, 200);
+    const delLocJson = await delLocRes.json();
+    assert.strictEqual(delLocJson.success, true);
+    console.log('     ✓ Location deleted successfully');
+
+    // 34. User-linked Warehouse: GET and PUT /api/warehouse with User Session Token
+    console.log('  34. Testing GET and PUT /api/warehouse with User Auth Token');
+    const userWhRes = await fetch(`${baseUrl}/api/warehouse`, {
+      headers: { Authorization: `Bearer ${newEmailToken}` }
+    });
+    assert.strictEqual(userWhRes.status, 200);
+    const userWhJson = await userWhRes.json();
+    assert.strictEqual(userWhJson.warehouse.name, 'Apex Central Hub');
+    assert.strictEqual(userWhJson.warehouse.short_code, whSetupCode);
+    assert.strictEqual(userWhJson.warehouse.locations.length, 4);
+
+    // Update warehouse address using session token
+    const userWhUpdateRes = await fetch(`${baseUrl}/api/warehouse`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${newEmailToken}`
+      },
+      body: JSON.stringify({
+        name: 'Apex Central Hub (Updated)',
+        short_code: whSetupCode,
+        address: '400 Industrial Blvd, Dock 10, Chicago, IL 60605'
+      })
+    });
+    assert.strictEqual(userWhUpdateRes.status, 200);
+    const userWhUpdateJson = await userWhUpdateRes.json();
+    assert.strictEqual(userWhUpdateJson.warehouse.name, 'Apex Central Hub (Updated)');
+    assert.strictEqual(userWhUpdateJson.warehouse.address, '400 Industrial Blvd, Dock 10, Chicago, IL 60605');
+    // 35. Stock Update: Invalid Payload Rejection
+    console.log('  35. Testing PUT /api/stock/:sku with invalid payload (rejection)');
+    const stockInvalidRes = await fetch(`${baseUrl}/api/stock/FUR-001`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`
+      },
+      body: JSON.stringify({
+        product_name: '',
+        location: 'WH/Stock1',
+        on_hand: -5
+      })
+    });
+    assert.strictEqual(stockInvalidRes.status, 400);
+    console.log('     ✓ Invalid stock payload correctly rejected');
+
+    // 36. Stock Update: Valid Edit & Verification
+    console.log('  36. Testing PUT /api/stock/:sku to edit product stock details');
+    const stockUpdateRes = await fetch(`${baseUrl}/api/stock/FUR-001`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`
+      },
+      body: JSON.stringify({
+        product_name: 'Office Chair Ergonomic Pro Max',
+        category: 'Executive Furniture',
+        location: 'WH/Stock2',
+        on_hand: 42,
+        min_threshold: 15,
+        unit: 'Units'
+      })
+    });
+    assert.strictEqual(stockUpdateRes.status, 200);
+    const stockUpdateJson = await stockUpdateRes.json();
+    assert.strictEqual(stockUpdateJson.success, true);
+    assert.strictEqual(stockUpdateJson.data.product_name, 'Office Chair Ergonomic Pro Max');
+    assert.strictEqual(stockUpdateJson.data.location, 'WH/Stock2');
+    assert.strictEqual(stockUpdateJson.data.on_hand, 42);
+
+    // Verify GET /api/stock reflects updated item
+    const verifyStockRes = await fetch(`${baseUrl}/api/stock`);
+    const verifyStockJson = await verifyStockRes.json();
+    const updatedItem = verifyStockJson.data.find(s => s.sku === 'FUR-001');
+    assert.strictEqual(updatedItem.product_name, 'Office Chair Ergonomic Pro Max');
+    assert.strictEqual(updatedItem.on_hand, 42);
+    assert.strictEqual(updatedItem.location, 'WH/Stock2');
+    console.log('     ✓ Stock item edited and verified in inventory feed');
+
+    console.log('\n🎉 ALL 36 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + LOW STOCK ALERTS + STRONG PASSWORDS + OTP + WAREHOUSE ONBOARDING & DETAILS + STOCK EDITING) PASSED SUCCESSFULLY!\n');
   } finally {
     server.close();
   }

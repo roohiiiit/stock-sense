@@ -7,6 +7,7 @@ const operationsRoutes = require('./routes/operationsRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const stockRoutes = require('./routes/stockRoutes');
 const historyRoutes = require('./routes/historyRoutes');
+const warehouseRoutes = require('./routes/warehouseRoutes');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/operations', operationsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/stock', stockRoutes);
 app.use('/api/move-history', historyRoutes);
+app.use('/api/warehouse', warehouseRoutes);
 
 // Serve frontend static assets from project root
 const publicDir = path.join(__dirname, '..', '..');

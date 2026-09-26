@@ -51,11 +51,83 @@ class AuthController {
       const id = crypto.randomUUID();
       const now = new Date().toISOString();
 
+      // Check warehouse info if provided
+      let createdWarehouse = null;
+      const whData = req.body.warehouse;
+
+      if (whData) {
+        if (!whData.name || typeof whData.name !== 'string' || whData.name.trim().length < 2) {
+          return res.status(400).json({
+            success: false,
+            message: 'Warehouse facility name is required (at least 2 characters).'
+          });
+        }
+        if (!whData.short_code || typeof whData.short_code !== 'string' || whData.short_code.trim().length < 1) {
+          return res.status(400).json({
+            success: false,
+            message: 'Warehouse short code prefix is required (e.g. WH).'
+          });
+        }
+        if (!whData.address || typeof whData.address !== 'string' || whData.address.trim().length < 3) {
+          return res.status(400).json({
+            success: false,
+            message: 'Warehouse physical address is required.'
+          });
+        }
+
+        const cleanWhCode = whData.short_code.trim().toUpperCase();
+        const existingCode = db.prepare('SELECT id FROM warehouses WHERE short_code = ?').get(cleanWhCode);
+        if (existingCode) {
+          return res.status(400).json({
+            success: false,
+            message: `Warehouse short code "${cleanWhCode}" is already in use. Please choose a different prefix.`
+          });
+        }
+      }
+
       const insertStmt = db.prepare(`
         INSERT INTO users (id, name, email, password_hash, role, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
       insertStmt.run(id, name.trim(), cleanEmail, passwordHash, assignedRole, now, now);
+
+      // Create warehouse & default locations if provided
+      if (whData) {
+        const whId = crypto.randomUUID();
+        const cleanWhName = whData.name.trim();
+        const cleanWhCode = whData.short_code.trim().toUpperCase();
+        const cleanWhAddress = whData.address.trim();
+
+        db.prepare(`
+          INSERT INTO warehouses (id, user_id, name, short_code, address, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(whId, id, cleanWhName, cleanWhCode, cleanWhAddress, now, now);
+
+        const defaultLocations = [
+          { id: crypto.randomUUID(), name: 'Main Storage A', code: `${cleanWhCode}/Stock1`, type: 'internal' },
+          { id: crypto.randomUUID(), name: 'Rack Storage B', code: `${cleanWhCode}/Stock2`, type: 'internal' },
+          { id: crypto.randomUUID(), name: 'Inbound Receiving Dock', code: `${cleanWhCode}/InputDock`, type: 'incoming' },
+          { id: crypto.randomUUID(), name: 'Outbound Shipping Dock', code: `${cleanWhCode}/Output`, type: 'outgoing' }
+        ];
+
+        const insertLoc = db.prepare(`
+          INSERT INTO warehouse_locations (id, warehouse_id, name, code, type, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `);
+
+        for (const loc of defaultLocations) {
+          insertLoc.run(loc.id, whId, loc.name, loc.code, loc.type, now, now);
+        }
+
+        createdWarehouse = {
+          id: whId,
+          user_id: id,
+          name: cleanWhName,
+          short_code: cleanWhCode,
+          address: cleanWhAddress,
+          locations: defaultLocations
+        };
+      }
 
       const user = { id, name: name.trim(), email: cleanEmail, role: assignedRole };
       const token = generateToken(user);
@@ -64,7 +136,8 @@ class AuthController {
         success: true,
         message: 'Account created successfully.',
         token,
-        user
+        user,
+        warehouse: createdWarehouse
       });
     } catch (err) {
       console.error('Error during signup:', err);

@@ -96,6 +96,10 @@ You can log in right away using either of these pre-created accounts:
 ### 4. Move History (Stock Ledger)
 * Every single inventory movement is logged with date, product, quantity, source, and destination for full transparency.
 
+### 5. Warehouse Facility & Location Management
+* **Warehouse Details**: Configure primary warehouse identity, short code prefix (e.g. `WH`), and physical facility location address for transport and carrier documentation.
+* **Storage Locations & Zones**: Manage physical and internal storage areas (racks, shelves, receiving docks, and shipping staging bays) with real-time zone status.
+
 ---
 
 ## 🔄 Simple Example of How Stock Flows

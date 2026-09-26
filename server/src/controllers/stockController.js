@@ -86,6 +86,40 @@ class StockController {
       }
     }
 
+    try {
+      const customItems = db.prepare('SELECT * FROM stock_items').all();
+      for (const custom of customItems) {
+        if (stockMap.has(custom.sku)) {
+          const entry = stockMap.get(custom.sku);
+          if (custom.product_name) entry.product_name = custom.product_name;
+          if (custom.category) entry.category = custom.category;
+          if (custom.location) entry.location = custom.location;
+          if (custom.unit) entry.unit = custom.unit;
+          if (custom.min_threshold !== undefined && custom.min_threshold !== null) {
+            entry.min_threshold = Number(custom.min_threshold);
+          }
+          if (custom.on_hand !== undefined && custom.on_hand !== null) {
+            entry.on_hand = Number(custom.on_hand);
+          }
+        } else {
+          stockMap.set(custom.sku, {
+            sku: custom.sku,
+            product_name: custom.product_name,
+            category: custom.category || 'General',
+            location: custom.location || 'WH/Stock1',
+            unit: custom.unit || 'Units',
+            min_threshold: custom.min_threshold !== undefined && custom.min_threshold !== null ? Number(custom.min_threshold) : defaultThreshold,
+            on_hand: Number(custom.on_hand) || 0,
+            incoming: 0,
+            outgoing: 0,
+            forecasted: Number(custom.on_hand) || 0
+          });
+        }
+      }
+    } catch (e) {
+      // Table may not exist yet in edge conditions
+    }
+
     let result = Array.from(stockMap.values()).map(item => {
       const minThreshold = item.min_threshold || defaultThreshold;
       const isOutOfStock = item.on_hand === 0;
@@ -262,6 +296,78 @@ class StockController {
       return res.status(500).json({ success: false, message: 'Could not adjust stock.' });
     }
   }
+
+  static updateStock(req, res) {
+    try {
+      const { sku } = req.params;
+      const { product_name, category, location, on_hand, min_threshold, unit } = req.body;
+
+      if (!sku || typeof sku !== 'string' || !sku.trim()) {
+        return res.status(400).json({ success: false, message: 'Valid SKU is required.' });
+      }
+
+      if (!product_name || typeof product_name !== 'string' || product_name.trim().length < 2) {
+        return res.status(400).json({ success: false, message: 'Product name must be at least 2 characters.' });
+      }
+
+      if (!location || typeof location !== 'string' || !location.trim()) {
+        return res.status(400).json({ success: false, message: 'Valid primary location is required.' });
+      }
+
+      const parsedOnHand = parseInt(on_hand, 10);
+      if (isNaN(parsedOnHand) || parsedOnHand < 0) {
+        return res.status(400).json({ success: false, message: 'On-hand quantity must be a non-negative integer.' });
+      }
+
+      const parsedThreshold = min_threshold !== undefined && min_threshold !== null ? parseInt(min_threshold, 10) : 10;
+      if (isNaN(parsedThreshold) || parsedThreshold < 0) {
+        return res.status(400).json({ success: false, message: 'Min threshold must be a non-negative integer.' });
+      }
+
+      const now = new Date().toISOString();
+      const cleanSku = sku.trim();
+      const cleanName = product_name.trim();
+      const cleanCategory = (category || 'General').trim();
+      const cleanLocation = location.trim();
+      const cleanUnit = (unit || 'Units').trim();
+
+      db.prepare(`
+        INSERT INTO stock_items (sku, product_name, category, location, on_hand, min_threshold, unit, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(sku) DO UPDATE SET
+          product_name = excluded.product_name,
+          category = excluded.category,
+          location = excluded.location,
+          on_hand = excluded.on_hand,
+          min_threshold = excluded.min_threshold,
+          unit = excluded.unit,
+          updated_at = excluded.updated_at
+      `).run(
+        cleanSku,
+        cleanName,
+        cleanCategory,
+        cleanLocation,
+        parsedOnHand,
+        parsedThreshold,
+        cleanUnit,
+        now,
+        now
+      );
+
+      const allStock = StockController._computeStock();
+      const updated = allStock.find(s => s.sku.toLowerCase() === cleanSku.toLowerCase());
+
+      return res.json({
+        success: true,
+        message: `Stock for ${cleanSku} updated successfully.`,
+        data: updated
+      });
+    } catch (err) {
+      console.error('Error updating stock item:', err);
+      return res.status(500).json({ success: false, message: 'Failed to update stock item.' });
+    }
+  }
 }
 
 module.exports = StockController;
+

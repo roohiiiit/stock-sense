@@ -8,5 +8,7 @@ router.get('/', StockController.getStock);
 router.get('/alerts', StockController.getLowStockAlerts);
 router.post('/adjust', authenticateToken, StockController.adjustStock);
 router.get('/:sku', StockController.getStockBySku);
+router.put('/:sku', authenticateToken, StockController.updateStock);
 
 module.exports = router;
+
