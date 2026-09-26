@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #f8f9ff;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+</style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "secondary-fixed-dim": "#c0c4ea",
+        "on-surface-variant": "#464555",
+        "on-secondary-fixed-variant": "#404564",
+        "tertiary-fixed": "#6ffbbe",
+        "background": "#f8f9ff",
+        "primary": "#3525cd",
+        "tertiary-container": "#006e4b",
+        "tertiary-fixed-dim": "#4edea3",
+        "primary-fixed-dim": "#c3c0ff",
+        "error-container": "#ffdad6",
+        "surface-bright": "#f8f9ff",
+        "on-tertiary": "#ffffff",
+        "tertiary": "#005338",
+        "inverse-primary": "#c3c0ff",
+        "outline": "#777587",
+        "surface-container-high": "#dce9ff",
+        "on-secondary-fixed": "#141936",
+        "surface-variant": "#d3e4fe",
+        "on-error-container": "#93000a",
+        "on-secondary": "#ffffff",
+        "error": "#ba1a1a",
+        "secondary-container": "#d4d8fe",
+        "on-primary-fixed": "#0f0069",
+        "on-primary-fixed-variant": "#3323cc",
+        "on-surface": "#0b1c30",
+        "on-secondary-container": "#585d7d",
+        "primary-fixed": "#e2dfff",
+        "surface": "#f8f9ff",
+        "surface-dim": "#cbdbf5",
+        "surface-container-highest": "#d3e4fe",
+        "on-tertiary-fixed": "#002113",
+        "on-background": "#0b1c30",
+        "surface-container": "#e5eeff",
+        "secondary": "#585c7d",
+        "on-tertiary-fixed-variant": "#005236",
+        "inverse-surface": "#213145",
+        "surface-container-lowest": "#ffffff",
+        "on-error": "#ffffff",
+        "surface-tint": "#4d44e3",
+        "on-primary-container": "#dad7ff",
+        "primary-container": "#4f46e5",
+        "surface-container-low": "#eff4ff",
+        "outline-variant": "#c7c4d8",
+        "on-tertiary-container": "#67f4b7",
+        "secondary-fixed": "#dee0ff",
+        "on-primary": "#ffffff",
+        "inverse-on-surface": "#eaf1ff"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "margin": "1rem",
+        "space-sm": "0.5rem",
+        "gutter-lg": "1.5rem",
+        "space-xl": "1.5rem",
+        "margin-lg": "2rem",
+        "space-lg": "1rem",
+        "space-xs": "0.25rem",
+        "gutter": "1rem",
+        "space-md": "0.75rem",
+        "space-2xl": "2rem",
+        "margin-md": "1.5rem"
+      },
+      "fontFamily": {
+        "body-md": ["Inter"],
+        "label-md": ["Inter"],
+        "headline-md": ["Inter"],
+        "title-md": ["Inter"],
+        "headline-sm": ["Inter"],
+        "label-sm": ["Inter"],
+        "body-sm": ["Inter"],
+        "body-lg": ["Inter"],
+        "data-tabular": ["Inter"],
+        "display-lg": ["Inter"],
+        "headline-lg": ["Inter"],
+        "display-lg-mobile": ["Inter"]
+      },
+      "fontSize": {
+        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+        "headline-md": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "title-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+        "headline-sm": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600"}],
+        "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600"}],
+        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+      }
+    }
+  }
+};</script></head><body class="min-h-screen bg-background font-body-md text-body-md text-on-surface flex flex-col justify-between selection:bg-primary-container selection:text-white"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full max-w-[1600px] mx-auto px-margin-lg flex items-center justify-between gap-space-xl"><div class="flex items-center gap-space-2xl"><div class="flex items-center gap-space-md select-none"><div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">deployed_code</span></div><span class="font-title-md text-title-md text-on-surface tracking-tight font-bold">StockSense</span></div><nav class="hidden lg:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-bold rounded-lg shadow-sm"><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-label-md text-label-md" data-path="dashboard" href="#">Dashboard</a><!-- Operations Dropdown Menu Trigger Container --><div class="relative inline-block text-left" id="operationsNavContainer"><button aria-expanded="false" aria-haspopup="true" class="px-space-md py-space-sm transition-colors bg-primary-container text-on-primary font-bold rounded-lg shadow-sm flex items-center gap-1.5 focus:outline-none cursor-pointer" id="operationsDropdownBtn" type="button"><span>Operations</span><svg class="w-3.5 h-3.5 transition-transform duration-200" fill="none" id="operationsChevron" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><!-- Operations Desktop Submenu Dropdown --><div class="hidden absolute left-0 top-full mt-2 w-56 z-50 bg-white rounded-xl border border-slate-200/80 shadow-xl py-1.5 overflow-hidden transition-all duration-150 transform origin-top-left" id="operationsDropdownMenu" role="menu"><a class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group" href="#" id="menuItemReceipt" role="menuitem"><span class="w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"></path></svg></span><div class="flex flex-col"><span class="leading-tight">Receipt</span><span class="text-[11px] text-indigo-500/80 font-normal">Incoming shipments</span></div><span class="w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto"></span></a><a class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group" href="#delivery" id="menuItemDelivery" role="menuitem"><span class="w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><path d="M16 8h4l3 3v5h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></span><div class="flex flex-col"><span class="leading-tight">Delivery</span><span class="text-[11px] text-slate-400 group-hover:text-indigo-400 font-normal">Outbound logistics</span></div></a><a class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group" href="#adjustments" id="menuItemAdjustments" role="menuitem"><span class="w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div class="flex flex-col"><span class="leading-tight">Stock Adjustment</span><span class="text-[11px] text-slate-400 group-hover:text-indigo-400 font-normal">Inventory corrections</span></div></a></div></div><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-label-md text-label-md" data-path="products" href="#">Products</a><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-label-md text-label-md" data-path="move-history" href="#">Move History</a><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-label-md text-label-md" data-path="settings" href="#">Settings</a></nav></div><div class="flex items-center gap-space-lg"><div class="hidden sm:flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container-low text-secondary font-label-sm text-label-sm" id="breadcrumbTrail"><span class="font-semibold text-on-surface-variant">OPERATIONS</span><span class="text-outline">/</span><span class="font-semibold text-primary" id="breadcrumbCurrent">RECEIPTS</span></div><div class="flex items-center gap-space-md pl-space-sm"><div class="flex items-center gap-space-sm text-left cursor-pointer group"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-none group-hover:text-primary transition-colors">Marcus Vance</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Warehouse Lead</span></div><span class="material-symbols-outlined text-outline text-[18px] group-hover:text-on-surface transition-colors">expand_more</span></div><!-- Mobile Hamburger Trigger --><button class="lg:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" id="mobileMenuToggleBtn" title="Toggle navigation menu"><span class="material-symbols-outlined text-[24px]">menu</span></button></div></div></div><!-- Mobile Responsive Accordion Navigation Drawer --><div class="hidden lg:hidden border-t border-slate-200/80 bg-white shadow-lg px-4 py-3" id="mobileNavDrawer"><div class="flex flex-col space-y-1"><a class="px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">Dashboard</a><!-- Operations Accordion Item --><div class="rounded-lg overflow-hidden"><button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-semibold" id="mobileOpsAccordionBtn"><span>Operations</span><svg class="w-4 h-4 transition-transform duration-200" fill="none" id="mobileOpsChevron" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><div class="hidden flex flex-col pl-4 py-1 space-y-1 bg-slate-50/70 border-l-2 border-indigo-500 my-1 ml-3 rounded-r-lg" id="mobileOpsAccordionContent"><a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-indigo-700 bg-white shadow-xs" href="#" id="mobileSubReceipt"><span class="material-symbols-outlined text-[18px]">download_for_offline</span><span>Receipt</span></a><a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600" href="#delivery" id="mobileSubDelivery"><span class="material-symbols-outlined text-[18px]">local_shipping</span><span>Delivery</span></a><a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600" href="#adjustments" id="mobileSubAdjustments"><span class="material-symbols-outlined text-[18px]">tune</span><span>Stock Adjustment</span></a></div></div><a class="px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">Products</a><a class="px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">Move History</a><a class="px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50" href="#">Settings</a></div></div></header><main class="w-full flex-1 pt-16 bg-background"><div class="w-full max-w-[1600px] mx-auto px-margin-lg py-space-xl"><div class="flex flex-col w-full">
+<!-- TOP METRIC CARDS / OPERATIONAL SUMMARY STRIP -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider font-semibold">Draft</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">4</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Awaiting review</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[26px]">edit_note</span>
+</div>
+</div>
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-indigo-700 block uppercase tracking-wider font-semibold">Ready</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">12</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Ready to receive</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[26px]">inventory_2</span>
+</div>
+</div>
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-emerald-700 block uppercase tracking-wider font-semibold">Done</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">8</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Received</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-[26px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- MAIN OPERATIONAL TOOLBAR & PAGE HEADER -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg">
+<div class="flex items-center">
+<button class="flex items-center gap-space-xs px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all cursor-pointer font-bold" id="openNewReceiptBtn">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>NEW</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight ml-space-lg">Receipts</h1>
+<span class="ml-space-md px-2.5 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm font-semibold">24 items</span>
+</div>
+<!-- RIGHT CONTROLS: SEARCH, FILTERS & VIEW MODES -->
+<div class="flex items-center gap-space-sm self-end md:self-auto w-full md:w-auto justify-end">
+<!-- Interactive Expandable Search -->
+<div class="relative flex items-center">
+<div class="flex items-center bg-white border border-slate-200/80 rounded-lg shadow-xs px-3 py-1.5 transition-all duration-200 w-48 sm:w-64 focus-within:w-72 focus-within:ring-2 focus-within:ring-primary/20" id="searchContainer">
+<span class="material-symbols-outlined text-outline text-[18px] mr-space-xs">search</span>
+<input class="w-full bg-transparent text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none" id="searchInput" placeholder="Search reference, vendor..." type="text"/>
+<kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-outline bg-slate-100 rounded border border-slate-200">⌘K</kbd>
+</div>
+</div>
+<!-- Quick Status Filter Dropdown Trigger -->
+<div class="relative">
+<button class="h-9 px-space-md rounded-lg bg-white border border-slate-200/80 text-on-surface-variant font-label-md text-label-md flex items-center gap-space-xs shadow-xs hover:text-on-surface hover:bg-slate-50 transition-colors cursor-pointer" id="filterDropdownBtn">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="hidden sm:inline">Filter</span>
+<span class="hidden w-2 h-2 rounded-full bg-primary" id="activeFilterBadge"></span>
+</button>
+<div class="hidden absolute right-0 mt-space-xs w-48 bg-surface-container-lowest rounded-xl shadow-xl py-space-xs z-30 border border-slate-200/80" id="filterMenu"><button class="w-full text-left px-space-md py-space-xs font-body-sm text-body-sm hover:bg-surface-container-low text-on-surface font-semibold" data-filter="all">All Statuses</button><button class="w-full text-left px-space-md py-space-xs font-body-sm text-body-sm hover:bg-surface-container-low text-on-surface-variant" data-filter="Draft">Draft</button><button class="w-full text-left px-space-md py-space-xs font-body-sm text-body-sm hover:bg-surface-container-low text-on-surface-variant" data-filter="Ready">Ready</button><button class="w-full text-left px-space-md py-space-xs font-body-sm text-body-sm hover:bg-surface-container-low text-on-surface-variant" data-filter="Done">Done</button></div>
+</div>
+<!-- View Switcher Group -->
+<div aria-label="View toggle" class="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80 shadow-xs" role="tablist">
+<button aria-pressed="true" class="h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-sm transition-all cursor-pointer font-label-sm text-label-sm font-semibold" id="listViewBtn" title="List View">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+<span class="hidden sm:inline">List</span>
+</button>
+<button aria-pressed="false" class="h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 transition-all cursor-pointer font-label-sm text-label-sm font-semibold" id="kanbanViewBtn" title="Kanban View">
+<span class="material-symbols-outlined text-[18px]">view_kanban</span>
+<span class="hidden sm:inline">Kanban</span>
+</button>
+</div>
+</div>
+</div>
+<!-- TABLE CONTAINER (LIST VIEW - DEFAULT) -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-xs border border-slate-200/80 overflow-hidden flex flex-col" id="listViewContainer">
+<!-- Desktop Table View (Hidden on mobile) -->
+<div class="hidden md:block overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-outline uppercase font-label-sm text-label-sm tracking-wider select-none h-11 border-b border-surface-container">
+<th class="px-space-lg font-semibold w-12 text-center">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" id="selectAllCheckbox" type="checkbox"/>
+</th>
+<th class="px-space-lg font-semibold cursor-pointer hover:text-on-surface transition-colors" data-sort="ref">
+<div class="flex items-center gap-space-xs">
+<span>Reference</span>
+<span class="material-symbols-outlined text-[15px]">unfold_more</span>
+</div>
+</th>
+<th class="px-space-lg font-semibold">From</th>
+<th class="px-space-lg font-semibold">To</th>
+<th class="px-space-lg font-semibold">Contact</th>
+<th class="px-space-lg font-semibold cursor-pointer hover:text-on-surface transition-colors" data-sort="date">
+<div class="flex items-center gap-space-xs">
+<span>Schedule Date</span>
+<span class="material-symbols-outlined text-[15px]">arrow_downward</span>
+</div>
+</th>
+<th class="px-space-lg font-semibold text-center">Status</th>
+<th class="px-space-lg font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm text-on-surface" id="receiptsTableBody">
+<!-- Row 1: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py- space-md py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00042</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-secondary-container/50 text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center justify-center">AI</span>
+<span class="font-medium text-on-surface">Azure Interior</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock1</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Azure Interior</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">
+<div class="flex items-center gap-1.5">
+<span>Oct 28, 2024</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block" title="Scheduled today"></span>
+</div>
+</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+Ready
+</span>
+</td>
+<td class="px-space-lg py-3.5 text-right" onclick="event.stopPropagation()">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00041</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-primary-fixed/50 text-on-primary-fixed-variant font-label-sm text-label-sm font-bold flex items-center justify-center">GF</span>
+<span class="font-medium text-on-surface">Gemini Furniture</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock2</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Marcus Brody</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 26, 2024</td>
+<td class="px-space-lg py-3.5 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready</span></td>
+<td class="px-space-lg py-3.5 text-right" onclick="event.stopPropagation()">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Done -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface group-hover:text-primary group-hover:underline">WH/IN/00039</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center">SC</span>
+<span class="font-medium text-on-surface">SteelCraft Corp</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/RawMaterials</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Elena Rostova</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 25, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-fixed text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+Done
+</span>
+</td>
+<td class="px-space-lg py-3.5 text-right" onclick="event.stopPropagation()"><button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print receipt slip"><span class="material-symbols-outlined text-[18px]">print</span></button><button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="View slip"><span class="material-symbols-outlined text-[18px]">visibility</span></button></td>
+</tr>
+<!-- Row 4: Draft -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface group-hover:text-primary group-hover:underline">WH/IN/00038</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-bold flex items-center justify-center">WT</span>
+<span class="font-medium text-on-surface">WH/Transit</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/InputDock</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Logistics Dispatch</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 22, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-surface-container text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+Draft
+</span>
+</td>
+<td class="px-space-lg py-3.5 text-right" onclick="event.stopPropagation()"><button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Edit draft"><span class="material-symbols-outlined text-[18px]">edit</span></button></td>
+</tr>
+<!-- Row 5: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00035', 'Global Tech Supply', 'WH/Stock1', 'David Chen', 'Oct 22, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00035</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold flex items-center justify-center">GT</span>
+<span class="font-medium text-on-surface">Global Tech Supply</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock1</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">David Chen</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 22, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+Ready
+</span>
+</td>
+<td class="px-space-lg py-3.5 text-right" onclick="event.stopPropagation()">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Responsive Card List for Mobile (< 768px) -->
+<div class="block md:hidden divide-y divide-surface-container-low p-space-sm">
+<!-- Card 1 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-primary">WH/IN/00042</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+Ready
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">Azure Interior</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/Stock1</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Azure Interior</span>
+<span>Oct 28, 2024</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')"><div class="flex items-center justify-between"><span class="font-data-tabular text-data-tabular font-bold text-primary">WH/IN/00041</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready</span></div><div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface"><span class="font-semibold text-on-surface">Gemini Furniture</span><span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/Stock2</span></div><div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs"><span>Contact: Marcus Brody</span><span>Oct 26, 2024</span></div></div>
+<!-- Card 3 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface">WH/IN/00039</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-fixed text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+Done
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">SteelCraft Corp</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/RawMaterials</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Elena Rostova</span>
+<span>Oct 25, 2024</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface">WH/IN/00038</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-surface-container text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+Draft
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">WH/Transit</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/InputDock</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Logistics Dispatch</span>
+<span>Oct 22, 2024</span>
+</div>
+</div>
+</div>
+<!-- CLEAN PAGINATION FOOTER -->
+<div class="px-space-lg py-space-md bg-surface-container-lowest border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-sm">
+<span>Showing <strong class="font-semibold text-on-surface">1 - 10</strong> of <strong class="font-semibold text-on-surface">24</strong> receipts</span>
+<span class="text-outline">|</span>
+<div class="flex items-center gap-1.5">
+<span>Per page:</span>
+<select class="bg-surface-container-low border border-slate-200/60 rounded px-2 py-0.5 font-label-sm text-label-sm text-on-surface focus:outline-none cursor-pointer">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-space-xs rounded-lg text-outline bg-surface-container-low cursor-not-allowed font-label-sm text-label-sm flex items-center gap-1" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+<span>Previous</span>
+</button>
+<button class="w-7 h-7 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center shadow-xs">1</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm font-semibold flex items-center justify-center transition-colors">2</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm font-semibold flex items-center justify-center transition-colors">3</button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm flex items-center gap-1 cursor-pointer">
+<span>Next</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- KANBAN VIEW CONTAINER (INITIALLY HIDDEN) -->
+<div class="hidden grid grid-cols-1 md:grid-cols-3 gap-5 w-full" id="kanbanViewContainer">
+<!-- COLUMN 1: DRAFT -->
+<div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-200/80 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Draft</h3>
+<span class="text-xs text-slate-500 font-normal">Awaiting review</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-label-sm text-label-sm font-bold" id="draftCountBadge">4</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanDraftCol">
+<!-- Card D1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00038</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Logistics Dispatch</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>WH/Transit</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 22, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Intake Draft</span>
+</div>
+</div>
+<!-- Card D2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00037', 'Apex Logistics', 'WH/InputDock', 'Sarah Jenkins', 'Oct 20, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00037</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Sarah Jenkins</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Apex Logistics</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 20, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">PO-8831</span>
+</div>
+</div>
+<!-- Card D3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00036', 'Nordic Timber Co.', 'WH/RawMaterials', 'Nils Lindqvist', 'Oct 19, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00036</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Nils Lindqvist</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Nordic Timber</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/RawMaterials</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 19, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">PO-8820</span>
+</div>
+</div>
+<!-- Card D4 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00033', 'Vanguard Packaging', 'WH/InputDock', 'Claire Dupont', 'Oct 18, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00033</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Claire Dupont</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Vanguard Packaging</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 18, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Internal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMN 2: READY -->
+<div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-indigo-100 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Ready</h3>
+<span class="text-xs text-indigo-700/80 font-normal">Ready to receive</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-label-sm text-label-sm font-bold" id="readyCountBadge">12</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanReadyCol">
+<!-- Card R1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00042</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">storefront</span>
+<span>Azure Interior</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Azure Interior</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+<span class="flex items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 28, 2024
+          </span>
+<span class="text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded">Today</span>
+</div>
+</div>
+<!-- Card R2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00041</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>Marcus Brody</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Gemini Furniture</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock2</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 26, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Cold Racks</span>
+</div>
+</div>
+<!-- Card R3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00035', 'Global Tech Supply', 'WH/Stock1', 'David Chen', 'Oct 22, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00035</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>David Chen</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Global Tech Supply</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 22, 2024
+          </span>
+<span class="text-[11px] font-medium bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">Floor Zone A</span>
+</div>
+</div>
+<!-- Card R4 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00044', 'Horizon Fabricators', 'WH/Stock1', 'Liam Henderson', 'Oct 29, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00044</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>Liam Henderson</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Horizon Fab</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 29, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">High Priority</span>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMN 3: DONE -->
+<div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-emerald-100 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Done</h3>
+<span class="text-xs text-emerald-700/80 font-normal">Received</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-label-sm font-bold" id="doneCountBadge">8</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanDoneCol">
+<!-- Card DN1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00039</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Elena Rostova</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>SteelCraft Corp</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/RawMaterials</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 25, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+<!-- Card DN2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00034', 'Omega Packaging', 'WH/Stock1', 'Arthur Dent', 'Oct 17, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00034</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Arthur Dent</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Omega Pack</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 17, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+<!-- Card DN3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00031', 'Quantum Micro Systems', 'WH/Stock2', 'Kiran Patel', 'Oct 15, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00031</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Kiran Patel</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Quantum Micro</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/Stock2</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 15, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 1: CREATE NEW RECEIPT DRAWER/MODAL -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-md bg-inverse-surface/40 backdrop-blur-sm transition-opacity" id="newReceiptModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto flex flex-col animate-in fade-in zoom-in-95 duration-150">
+<!-- Modal Header -->
+<div class="px-space-xl py-space-lg bg-surface-container-low flex items-center justify-between sticky top-0 z-10 border-b border-surface-container">
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">post_add</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">New Incoming Receipt</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Draft status initialized • Auto-reference: WH/IN/00043</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container flex items-center justify-center transition-colors cursor-pointer" id="closeNewReceiptBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-space-xl flex flex-col gap-space-xl">
+<!-- Form Inputs Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-lg">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Vendor / Source Contact *</label>
+<div class="relative">
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Select or type supplier..." type="text" value="Azure Interior"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-outline text-[18px]">search</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Destination Location *</label>
+<select class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none cursor-pointer">
+<option>WH/Stock1 (Floor Zone A)</option>
+<option>WH/Stock2 (Cold Racks)</option>
+<option>WH/RawMaterials (Bay 4)</option>
+<option>WH/InputDock (Quarantine)</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Scheduled Date *</label>
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" type="date" value="2024-10-30"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Source Document / Tracking</label>
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="PO-2024-8842 or BOL ref" type="text"/>
+</div>
+</div>
+<!-- Product Line Items Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md font-bold text-on-surface">Product Operations Lines</span>
+<button class="font-label-md text-label-md text-primary font-bold hover:underline flex items-center gap-0.5 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Line
+</button>
+</div>
+<div class="bg-surface-container-low rounded-lg overflow-hidden border border-surface-container">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container font-label-sm text-label-sm text-outline uppercase">
+<th class="px-space-md py-space-xs font-semibold">Item &amp; Description</th>
+<th class="px-space-md py-space-xs font-semibold w-24">Demanded</th>
+<th class="px-space-md py-space-xs font-semibold w-24">Done</th>
+<th class="px-space-md py-space-xs font-semibold w-20">UoM</th>
+<th class="px-space-xs py-space-xs w-10 text-center"></th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-surface-container">
+<tr>
+<td class="px-space-md py-space-sm">
+<span class="font-semibold block">[DESK-001] Ergonomic Desk Mat</span>
+<span class="text-outline text-label-sm font-label-sm">High-density rubber, Charcoal</span>
+</td>
+<td class="px-space-md py-space-sm font-data-tabular">50</td>
+<td class="px-space-md py-space-sm font-data-tabular font-bold text-primary">0</td>
+<td class="px-space-md py-space-sm text-outline">Units</td>
+<td class="text-center">
+<button class="text-outline hover:text-error cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+</td>
+</tr>
+<tr>
+<td class="px-space-md py-space-sm">
+<span class="font-semibold block">[CHAIR-409] Swivel Executive Mesh</span>
+<span class="text-outline text-label-sm font-label-sm">Grade 4 Gas Lift, Lumbar Core</span>
+</td>
+<td class="px-space-md py-space-sm font-data-tabular">20</td>
+<td class="px-space-md py-space-sm font-data-tabular font-bold text-primary">0</td>
+<td class="px-space-md py-space-sm text-outline">Units</td>
+<td class="text-center">
+<button class="text-outline hover:text-error cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Notes / Special Instructions -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Special Receiving Instructions</label>
+<textarea class="w-full p-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Inspect pallet shrink wrap for tilt indicator triggers..." rows="2"></textarea>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-space-xl py-space-md bg-surface-container-low flex items-center justify-between sticky bottom-0 border-t border-surface-container">
+<button class="px-space-lg py-space-sm bg-surface-container-lowest text-on-surface font-label-md text-label-md rounded-lg shadow-xs hover:bg-surface-container transition-colors cursor-pointer" id="cancelNewReceiptBtn">
+Discard
+</button>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-lg py-space-sm bg-surface-container-lowest text-primary font-label-md text-label-md rounded-lg shadow-xs hover:bg-surface-container transition-colors cursor-pointer font-semibold">
+Save as Draft
+</button>
+<button class="px-space-xl py-space-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-xs hover:bg-primary-container active:scale-[0.98] transition-all cursor-pointer font-bold" id="validateCreateBtn">
+Validate &amp; Confirm
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 2: RECEIPT DETAILS PREVIEW SLIDE-OVER -->
+<div class="fixed inset-0 z-50 flex items-center justify-end bg-inverse-surface/30 backdrop-blur-xs transition-opacity hidden" id="detailsModal">
+<div class="bg-surface-container-lowest w-full max-w-lg h-full shadow-2xl p-space-xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
+<div>
+<div class="flex items-center justify-between pb-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-secondary-container/80 text-primary" id="detailBadge">Draft</span>
+<span class="font-label-sm text-label-sm text-outline">Internal Transfer</span>
+</div>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-outline hover:text-on-surface flex items-center justify-center transition-colors cursor-pointer" id="closeDetailsBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex items-baseline justify-between mb-space-lg">
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface tracking-tight" id="detailRef">WH/IN/00038</h2>
+<span class="text-tertiary flex items-center gap-1 text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">qr_code_2</span> BARCODE
+</span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-lg flex flex-col gap-space-md mb-space-xl">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Source / Vendor:</span>
+<span class="font-bold text-on-surface" id="detailFrom">WH/Transit</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Destination:</span>
+<span class="font-bold text-on-surface font-mono" id="detailTo">WH/InputDock</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Responsible Contact:</span>
+<span class="text-on-surface font-semibold" id="detailContact">Logistics Dispatch</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Scheduled Intake:</span>
+<span class="text-on-surface font-data-tabular" id="detailDate">Oct 22, 2024</span>
+</div>
+</div>
+<!-- Receipt Progress Step Visualization -->
+<div class="mb-space-xl">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant block uppercase mb-space-md">Intake Pipeline</span>
+<div class="flex items-center justify-between relative"><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[12px]">✓</div><span class="font-label-sm text-label-sm font-semibold text-on-surface">Draft</span></div><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[12px] ring-4 ring-primary/20">2</div><span class="font-label-sm text-label-sm font-bold text-primary">Ready</span></div><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-surface-container text-outline flex items-center justify-center font-bold text-[12px]">3</div><span class="font-label-sm text-label-sm text-outline">Done</span></div><div class="absolute left-3 right-3 top-3.5 h-0.5 bg-surface-container z-0"></div></div>
+</div>
+<div class="bg-primary/5 rounded-xl p-space-md flex items-center gap-space-md text-primary">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+<div class="text-body-sm font-body-sm">
+<span class="font-bold block">Bay Pre-assigned</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">Dock Zone 2B is clear for unloading pallet freight.</span>
+</div>
+</div>
+</div>
+<!-- Action Footer for Drawer -->
+<div class="flex items-center gap-space-md pt-space-lg">
+<button class="w-full py-space-sm bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('detailsModal').classList.add('hidden')">
+Close
+</button>
+<button class="w-full py-space-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container active:scale-[0.98] transition-all cursor-pointer font-bold" onclick="alert('Receipt WH/IN/00042 processed and booked to ledger!')">
+Validate Items
+</button>
+</div>
+</div>
+</div>
+<!-- Sleek Floating Toast Notification -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 ease-out" id="navToast">
+<div class="flex items-center gap-3 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700/60 max-w-sm">
+<div class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0" id="toastIcon">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</div>
+<span class="text-sm font-medium" id="toastMessage">Navigating...</span>
+</div>
+</div>
+</div></div></main><footer class="w-full bg-surface-container-low shadow-[0_-1px_8px_rgba(0,0,0,0.02)] border-t border-slate-200/60 mt-auto"><div class="w-full max-w-[1600px] mx-auto px-margin-lg py-5 flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-sm"><div class="w-5 h-5 rounded bg-primary-container flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[13px]">deployed_code</span></div><span>StockSense Core Inventory Ledger v3.4</span></div><div>© 2024 StockSense Logistics Systems Inc. All rights reserved.</div></div></footer>
+<!-- INLINE INTERACTION JAVASCRIPT -->
+<script>
+  // Elements
+  const openNewBtn = document.getElementById('openNewReceiptBtn');
+  const closeNewBtn = document.getElementById('closeNewReceiptBtn');
+  const cancelNewBtn = document.getElementById('cancelNewReceiptBtn');
+  const newModal = document.getElementById('newReceiptModal');
+  const validateCreateBtn = document.getElementById('validateCreateBtn');
+
+  const detailsModal = document.getElementById('detailsModal');
+  const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+
+  const listViewBtn = document.getElementById('listViewBtn');
+  const kanbanViewBtn = document.getElementById('kanbanViewBtn');
+  const listViewContainer = document.getElementById('listViewContainer');
+  const kanbanViewContainer = document.getElementById('kanbanViewContainer');
+
+  const filterBtn = document.getElementById('filterDropdownBtn');
+  const filterMenu = document.getElementById('filterMenu');
+  const searchInput = document.getElementById('searchInput');
+
+  // Operations Submenu Elements
+  const operationsNavContainer = document.getElementById('operationsNavContainer');
+  const operationsDropdownBtn = document.getElementById('operationsDropdownBtn');
+  const operationsDropdownMenu = document.getElementById('operationsDropdownMenu');
+  const operationsChevron = document.getElementById('operationsChevron');
+
+  const menuItemReceipt = document.getElementById('menuItemReceipt');
+  const menuItemDelivery = document.getElementById('menuItemDelivery');
+  const menuItemAdjustments = document.getElementById('menuItemAdjustments');
+
+  const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+  const navToast = document.getElementById('navToast');
+  const toastMessage = document.getElementById('toastMessage');
+
+  // Mobile Nav Elements
+  const mobileMenuToggleBtn = document.getElementById('mobileMenuToggleBtn');
+  const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+  const mobileOpsAccordionBtn = document.getElementById('mobileOpsAccordionBtn');
+  const mobileOpsAccordionContent = document.getElementById('mobileOpsAccordionContent');
+  const mobileOpsChevron = document.getElementById('mobileOpsChevron');
+
+  // Toast Function
+  let toastTimeout;
+  function showToast(msg) {
+    if (!navToast) return;
+    toastMessage.textContent = msg;
+    navToast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+    navToast.classList.add('translate-y-0', 'opacity-100');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      navToast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      navToast.classList.remove('translate-y-0', 'opacity-100');
+    }, 3200);
+  }
+
+  // Operations Dropdown Toggle Logic
+  function toggleOperationsDropdown(open) {
+    if (!operationsDropdownMenu || !operationsChevron || !operationsDropdownBtn) return;
+    const shouldOpen = open !== undefined ? open : operationsDropdownMenu.classList.contains('hidden');
+    if (shouldOpen) {
+      operationsDropdownMenu.classList.remove('hidden');
+      operationsChevron.classList.add('rotate-180');
+      operationsDropdownBtn.setAttribute('aria-expanded', 'true');
+    } else {
+      operationsDropdownMenu.classList.add('hidden');
+      operationsChevron.classList.remove('rotate-180');
+      operationsDropdownBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  if (operationsDropdownBtn) {
+    operationsDropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleOperationsDropdown();
+    });
+  }
+
+  // Operations Submenu Item Actions
+  function updateOperationsSelection(selectedType) {
+    // Reset desktop styles
+    [menuItemReceipt, menuItemDelivery, menuItemAdjustments].forEach(item => {
+      if (!item) return;
+      item.className = 'flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group';
+      const dot = item.querySelector('.bg-indigo-600.rounded-full');
+      if (dot) dot.remove();
+      const iconWrap = item.querySelector('span:first-child');
+      if (iconWrap) {
+        iconWrap.className = 'w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+      }
+    });
+
+    if (selectedType === 'receipt') {
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = 'RECEIPTS';
+      if (menuItemReceipt) {
+        menuItemReceipt.className = 'flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group';
+        const iconWrap = menuItemReceipt.querySelector('span:first-child');
+        if (iconWrap) iconWrap.className = 'w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+        if (!menuItemReceipt.querySelector('.rounded-full.bg-indigo-600')) {
+          const dot = document.createElement('span');
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto';
+          menuItemReceipt.appendChild(dot);
+        }
+      }
+      showToast('Navigating to Receipts view');
+    } else if (selectedType === 'delivery') {
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = 'DELIVERY';
+      if (menuItemDelivery) {
+        menuItemDelivery.className = 'flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group';
+        const iconWrap = menuItemDelivery.querySelector('span:first-child');
+        if (iconWrap) iconWrap.className = 'w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+        const dot = document.createElement('span');
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto';
+        menuItemDelivery.appendChild(dot);
+      }
+      showToast('Navigating to Delivery module (coming soon)');
+    } else if (selectedType === 'adjustments') {
+      if (breadcrumbCurrent) breadcrumbCurrent.textContent = 'STOCK ADJUSTMENT';
+      if (menuItemAdjustments) {
+        menuItemAdjustments.className = 'flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group';
+        const iconWrap = menuItemAdjustments.querySelector('span:first-child');
+        if (iconWrap) iconWrap.className = 'w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+        const dot = document.createElement('span');
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto';
+        menuItemAdjustments.appendChild(dot);
+      }
+      showToast('Navigating to Stock Adjustment module (coming soon)');
+    }
+  }
+
+  if (menuItemReceipt) {
+    menuItemReceipt.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleOperationsDropdown(false);
+      updateOperationsSelection('receipt');
+    });
+  }
+
+  if (menuItemDelivery) {
+    menuItemDelivery.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleOperationsDropdown(false);
+      updateOperationsSelection('delivery');
+    });
+  }
+
+  if (menuItemAdjustments) {
+    menuItemAdjustments.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleOperationsDropdown(false);
+      updateOperationsSelection('adjustments');
+    });
+  }
+
+  // Mobile Drawer Toggle
+  if (mobileMenuToggleBtn && mobileNavDrawer) {
+    mobileMenuToggleBtn.addEventListener('click', () => {
+      mobileNavDrawer.classList.toggle('hidden');
+    });
+  }
+
+  // Mobile Operations Accordion
+  if (mobileOpsAccordionBtn && mobileOpsAccordionContent && mobileOpsChevron) {
+    mobileOpsAccordionBtn.addEventListener('click', () => {
+      const isHidden = mobileOpsAccordionContent.classList.contains('hidden');
+      mobileOpsAccordionContent.classList.toggle('hidden');
+      mobileOpsChevron.classList.toggle('rotate-180', isHidden);
+    });
+  }
+
+  // Mobile submenu click handlers
+  ['mobileSubReceipt', 'mobileSubDelivery', 'mobileSubAdjustments'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const type = id === 'mobileSubReceipt' ? 'receipt' : id === 'mobileSubDelivery' ? 'delivery' : 'adjustments';
+      updateOperationsSelection(type);
+      document.querySelectorAll('.mobile-subnav-item').forEach(btn => {
+        btn.className = 'mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600';
+      });
+      el.className = 'mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-indigo-700 bg-white shadow-xs';
+      if (mobileNavDrawer) mobileNavDrawer.classList.add('hidden');
+    });
+  });
+
+  // Global click & keydown listeners for dropdown dismissals
+  document.addEventListener('click', (e) => {
+    if (operationsDropdownMenu && !operationsDropdownMenu.classList.contains('hidden')) {
+      if (operationsNavContainer && !operationsNavContainer.contains(e.target)) {
+        toggleOperationsDropdown(false);
+      }
+    }
+    if (filterMenu && !filterMenu.classList.contains('hidden')) {
+      filterMenu.classList.add('hidden');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      toggleOperationsDropdown(false);
+      if (filterMenu) filterMenu.classList.add('hidden');
+      if (detailsModal) detailsModal.classList.add('hidden');
+      if (newModal) newModal.classList.add('hidden');
+    }
+  });
+
+  // Toggle New Receipt Modal
+  function toggleNewModal(show) {
+    if (show) {
+      newModal.classList.remove('hidden');
+    } else {
+      newModal.classList.add('hidden');
+    }
+  }
+
+  if (openNewBtn) openNewBtn.addEventListener('click', () => toggleNewModal(true));
+  if (closeNewBtn) closeNewBtn.addEventListener('click', () => toggleNewModal(false));
+  if (cancelNewBtn) cancelNewBtn.addEventListener('click', () => toggleNewModal(false));
+
+  if (validateCreateBtn) {
+    validateCreateBtn.addEventListener('click', () => {
+      toggleNewModal(false);
+      alert('New Receipt WH/IN/00043 successfully queued in Ready state!');
+    });
+  }
+
+  // Details Modal Populator
+  window.openDetailsModal = function(ref, from, to, contact, date, status) {
+    document.getElementById('detailRef').textContent = ref;
+    document.getElementById('detailFrom').textContent = from;
+    document.getElementById('detailTo').textContent = to;
+    document.getElementById('detailContact').textContent = contact;
+    document.getElementById('detailDate').textContent = date;
+    
+    const badge = document.getElementById('detailBadge');
+    badge.textContent = status;
+
+    // Color badge
+    if (status === 'Done') {
+      badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-tertiary-fixed text-tertiary';
+    } else if (status === 'Waiting') {
+      badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-amber-100 text-amber-900';
+    } else if (status === 'Canceled') {
+      badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-error-container text-error';
+    } else if (status === 'Draft') {
+      badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-slate-100 text-slate-700';
+    } else {
+      badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-secondary-container/80 text-primary';
+    }
+
+    detailsModal.classList.remove('hidden');
+  };
+
+  if (closeDetailsBtn) {
+    closeDetailsBtn.addEventListener('click', () => {
+      detailsModal.classList.add('hidden');
+    });
+  }
+
+  // View Switching (List vs Kanban)
+  function setActiveView(mode) {
+    const activeClasses = ['bg-indigo-600', 'text-white', 'shadow-sm'];
+    const inactiveClasses = ['bg-white', 'text-slate-500', 'hover:text-slate-800', 'hover:bg-slate-50', 'border', 'border-slate-200'];
+
+    if (mode === 'list') {
+      // List active
+      listViewBtn.classList.add(...activeClasses);
+      listViewBtn.classList.remove(...inactiveClasses);
+      listViewBtn.setAttribute('aria-pressed', 'true');
+
+      kanbanViewBtn.classList.remove(...activeClasses);
+      kanbanViewBtn.classList.add(...inactiveClasses);
+      kanbanViewBtn.setAttribute('aria-pressed', 'false');
+
+      listViewContainer.classList.remove('hidden');
+      kanbanViewContainer.classList.add('hidden');
+    } else {
+      // Kanban active
+      kanbanViewBtn.classList.add(...activeClasses);
+      kanbanViewBtn.classList.remove(...inactiveClasses);
+      kanbanViewBtn.setAttribute('aria-pressed', 'true');
+
+      listViewBtn.classList.remove(...activeClasses);
+      listViewBtn.classList.add(...inactiveClasses);
+      listViewBtn.setAttribute('aria-pressed', 'false');
+
+      kanbanViewContainer.classList.remove('hidden');
+      listViewContainer.classList.add('hidden');
+    }
+  }
+
+  if (listViewBtn) listViewBtn.addEventListener('click', () => setActiveView('list'));
+  if (kanbanViewBtn) kanbanViewBtn.addEventListener('click', () => setActiveView('kanban'));
+
+  // Filter Dropdown Toggle
+  if (filterBtn) {
+    filterBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      filterMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Simple Filter Action
+  document.querySelectorAll('[data-filter]').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const selected = e.target.getAttribute('data-filter');
+      const rows = document.querySelectorAll('#receiptsTableBody tr');
+      rows.forEach(row => {
+        if (selected === 'all' || row.innerText.includes(selected)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      // Also filter Kanban columns visibility
+      const dCol = document.getElementById('kanbanDraftCol')?.parentElement;
+      const rCol = document.getElementById('kanbanReadyCol')?.parentElement;
+      const dnCol = document.getElementById('kanbanDoneCol')?.parentElement;
+      if (dCol && rCol && dnCol) {
+        if (selected === 'all') {
+          dCol.style.display = '';
+          rCol.style.display = '';
+          dnCol.style.display = '';
+        } else {
+          dCol.style.display = (selected === 'Draft') ? '' : 'none';
+          rCol.style.display = (selected === 'Ready') ? '' : 'none';
+          dnCol.style.display = (selected === 'Done') ? '' : 'none';
+        }
+      }
+
+      const badge = document.getElementById('activeFilterBadge');
+      if (badge) badge.classList.toggle('hidden', selected === 'all');
+    });
+  });
+
+  // Table Select All Checkbox
+  const selectAll = document.getElementById('selectAllCheckbox');
+  if (selectAll) {
+    selectAll.addEventListener('change', (e) => {
+      document.querySelectorAll('.row-checkbox').forEach(cb => {
+        cb.checked = e.target.checked;
+      });
+    });
+  }
+
+  // Interactive Search Input
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      // Table rows
+      const rows = document.querySelectorAll('#receiptsTableBody tr');
+      rows.forEach(r => {
+        const text = r.textContent.toLowerCase();
+        r.style.display = text.includes(q) ? '' : 'none';
+      });
+      // Kanban cards
+      const kanbanCards = document.querySelectorAll('#kanbanViewContainer .group');
+      kanbanCards.forEach(c => {
+        const text = c.textContent.toLowerCase();
+        c.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  }
+</script>
+</body></html>

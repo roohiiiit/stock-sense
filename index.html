@@ -745,7 +745,48 @@
 <span>Dashboard</span>
 <span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>
 </a>
-<a id="tab-operations" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('receipts')">Operations</a>
+<!-- Operations Dropdown Menu Trigger Container -->
+<div class="relative inline-block text-left" id="operationsNavContainer">
+  <button aria-expanded="false" aria-haspopup="true" class="relative px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none cursor-pointer group" id="operationsDropdownBtn" type="button" onclick="toggleOperationsDropdown()">
+    <span id="operationsBtnLabel">Operations</span>
+    <svg class="w-3.5 h-3.5 transition-transform duration-200 text-slate-400 group-hover:text-slate-600" fill="none" id="operationsChevron" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <span id="operationsIndicator" class="hidden absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>
+  </button>
+  <!-- Operations Desktop Submenu Dropdown -->
+  <div class="hidden absolute left-0 top-full -mt-1 w-64 z-50 bg-white rounded-xl border border-slate-200/90 shadow-xl py-1.5 overflow-hidden transition-all duration-150 transform origin-top-left" id="operationsDropdownMenu" role="menu">
+    <a class="flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group" href="#" id="menuItemReceipt" role="menuitem" onclick="switchDashboardView('receipts'); toggleOperationsDropdown(false); return false;">
+      <span class="w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"></path></svg>
+      </span>
+      <div class="flex flex-col">
+        <span class="leading-tight">Receipt</span>
+        <span class="text-[11px] text-indigo-500/80 font-normal">Incoming shipments</span>
+      </div>
+      <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto active-dot"></span>
+    </a>
+    <a class="flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group" href="#delivery" id="menuItemDelivery" role="menuitem" onclick="switchDashboardView('deliveries'); toggleOperationsDropdown(false); return false;">
+      <span class="w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="13" rx="2" width="16" x="1" y="3"></rect><path d="M16 8h4l3 3v5h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+      </span>
+      <div class="flex flex-col">
+        <span class="leading-tight">Delivery</span>
+        <span class="text-[11px] text-slate-400 group-hover:text-indigo-400 font-normal">Outbound logistics</span>
+      </div>
+    </a>
+    <a class="flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group" href="#adjustments" id="menuItemAdjustments" role="menuitem" onclick="switchDashboardView('adjustments'); toggleOperationsDropdown(false); return false;">
+      <span class="w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </span>
+      <div class="flex flex-col">
+        <span class="leading-tight">Stock Adjustment</span>
+        <span class="text-[11px] text-slate-400 group-hover:text-indigo-400 font-normal">Inventory corrections</span>
+      </div>
+    </a>
+  </div>
+</div>
+
 <a id="tab-stock" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer flex items-center gap-1.5" onclick="switchDashboardView('stock')">
   <span>Stock</span>
   <span id="nav-stock-alert-pill" class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">0</span>
@@ -833,8 +874,31 @@
 <!-- Mobile Nav Collapsible -->
 <div class="hidden md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1" id="mobile-nav">
 <a class="block px-3 py-2 rounded-lg text-sm font-semibold text-primary bg-primary-light/60" href="#" onclick="switchDashboardView('dashboard'); return false;">Dashboard</a>
-<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('receipts'); return false;">Receipts</a>
-<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('deliveries'); return false;">Deliveries</a>
+
+<!-- Operations Mobile Accordion Item -->
+<div class="rounded-lg overflow-hidden">
+  <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer" id="mobileOpsAccordionBtn" type="button" onclick="const c = document.getElementById('mobileOpsAccordionContent'); const ch = document.getElementById('mobileOpsChevron'); c.classList.toggle('hidden'); ch.classList.toggle('rotate-180');">
+    <span>Operations</span>
+    <svg class="w-4 h-4 transition-transform duration-200" fill="none" id="mobileOpsChevron" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </button>
+  <div class="hidden flex flex-col pl-3 py-1 space-y-1 bg-slate-50/70 border-l-2 border-indigo-500 my-1 ml-3 rounded-r-lg" id="mobileOpsAccordionContent">
+    <a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-indigo-700 bg-white shadow-xs" href="#" id="mobileSubReceipt" onclick="switchDashboardView('receipts'); document.getElementById('mobile-nav')?.classList.add('hidden'); return false;">
+      <span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+      <span>Receipt</span>
+    </a>
+    <a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600" href="#" id="mobileSubDelivery" onclick="switchDashboardView('deliveries'); document.getElementById('mobile-nav')?.classList.add('hidden'); return false;">
+      <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+      <span>Delivery</span>
+    </a>
+    <a class="mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600" href="#" id="mobileSubAdjustments" onclick="switchDashboardView('adjustments'); document.getElementById('mobile-nav')?.classList.add('hidden'); return false;">
+      <span class="material-symbols-outlined text-[18px]">tune</span>
+      <span>Stock Adjustment</span>
+    </a>
+  </div>
+</div>
+
 <a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('stock'); return false;">Stock</a>
 <a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('history'); return false;">Move History</a>
 </div>
@@ -1744,10 +1808,10 @@ Draft
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <div class="flex items-center gap-3">
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Stock Inventory</h1>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight" id="stock-view-title">Stock Inventory</h1>
             <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200" id="stock-count-badge">8 products</span>
           </div>
-          <p class="text-xs text-slate-500 mt-1">Real-time warehouse quantities, on-hand ledger, incoming receipts & outgoing commitments</p>
+          <p class="text-xs text-slate-500 mt-1" id="stock-view-desc">Real-time warehouse quantities, on-hand ledger, incoming receipts & outgoing commitments</p>
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
           <!-- Filter tabs -->
@@ -1896,48 +1960,44 @@ Draft
       <!-- Form Inputs Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalPartnerLabel">Vendor / Source Contact *</label>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalPartnerLabel">Receive From *</label>
           <div class="relative">
             <input class="w-full h-10 px-3.5 pr-9 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400" id="modalPartnerInput" placeholder="Select or type supplier..." type="text"/>
             <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-slate-400 text-[20px]">search</span>
           </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalLocationLabel">Destination Location *</label>
-          <select class="w-full h-10 px-3.5 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer" id="modalLocationSelect">
-            <option value="WH/Stock1">WH/Stock1 (Floor Zone A)</option>
-            <option value="WH/Stock2">WH/Stock2 (Cold Racks)</option>
-            <option value="WH/RawMaterials">WH/RawMaterials (Bay 4)</option>
-            <option value="WH/InputDock">WH/InputDock (Quarantine)</option>
-            <option value="WH/Stock">WH/Stock (Central)</option>
-          </select>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalDateLabel">Schedule Date *</label>
+          <input class="w-full h-10 px-3.5 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer" id="modalDateInput" type="date"/>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalDateLabel">Scheduled Date *</label>
-          <input class="w-full h-10 px-3.5 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" id="modalDateInput" type="date"/>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalSourceLabel">Source Document / Tracking</label>
-          <input class="w-full h-10 px-3.5 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400" id="modalSourceInput" placeholder="PO-2026-8842 or BOL ref" type="text"/>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalResponsibleLabel">Responsible</label>
+          <div class="relative">
+            <input class="w-full h-10 px-3.5 pl-9 bg-slate-100 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 shadow-2xs cursor-not-allowed select-none focus:outline-none" id="modalResponsibleInput" type="text" readonly value="Marcus Vance"/>
+            <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400 text-[18px]">person</span>
+          </div>
         </div>
       </div>
 
       <!-- Product Line Items Section -->
       <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-sm font-bold text-slate-900">Product Operations Lines</span>
-          <button class="text-xs text-primary font-bold hover:text-primary-hover flex items-center gap-1 cursor-pointer transition-colors" type="button" id="modalAddLineBtn" onclick="addModalProductLine()">
-            <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Line
-          </button>
+          <span class="text-sm font-bold text-slate-900">Products</span>
+          <div class="flex items-center gap-2">
+            <button class="text-xs text-primary hover:text-primary-hover bg-primary/10 hover:bg-primary/20 font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer transition-colors" type="button" id="modalNewProductBtn" onclick="openQuickNewProductModal()">
+              <span class="material-symbols-outlined text-[16px]">add_box</span> New Product
+            </button>
+            <button class="text-xs text-primary font-bold hover:text-primary-hover flex items-center gap-1 cursor-pointer transition-colors px-2 py-1.5" type="button" id="modalAddLineBtn" onclick="addModalProductLine()">
+              <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Line
+            </button>
+          </div>
         </div>
         <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                <th class="px-3.5 py-2.5">Item &amp; Description</th>
-                <th class="px-3 py-2.5 w-32">SKU</th>
-                <th class="px-3 py-2.5 w-24">Demanded</th>
-                <th class="px-3 py-2.5 w-28">UoM</th>
+                <th class="px-3.5 py-2.5">Product</th>
+                <th class="px-3 py-2.5 w-36">Quantity</th>
                 <th class="px-2 py-2.5 w-10 text-center"></th>
               </tr>
             </thead>
@@ -1946,12 +2006,6 @@ Draft
             </tbody>
           </table>
         </div>
-      </div>
-
-      <!-- Notes / Special Instructions -->
-      <div>
-        <label class="block text-xs font-semibold text-slate-700 mb-1.5" id="modalNotesLabel">Special Instructions / Remarks</label>
-        <textarea class="w-full p-3 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400 resize-none" id="modalNotesInput" placeholder="Inspect packaging, special handling notes..." rows="2"></textarea>
       </div>
     </div>
 
@@ -1968,6 +2022,72 @@ Draft
           Validate &amp; Confirm
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTOCOMPLETE PRODUCT CATALOG DATALIST -->
+<datalist id="receiptProductCatalogList">
+  <!-- Dynamically synchronized with stock catalog -->
+</datalist>
+
+<!-- INTERACTIVE MODAL 1B: QUICK ADD NEW PRODUCT -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs transition-opacity" style="z-index: 100;" id="quickNewProductModal" onclick="if (event.target === this) closeQuickNewProductModal()">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col border border-slate-200 animate-in fade-in zoom-in-95 duration-150 relative z-[101]" style="z-index: 101;" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div class="px-5 py-4 bg-slate-50/90 flex items-center justify-between border-b border-slate-200">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-primary flex items-center justify-center border border-indigo-100">
+          <span class="material-symbols-outlined text-[18px]">inventory_2</span>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Add New Product</h3>
+          <p class="text-xs text-slate-500">Create item and add to receipt</p>
+        </div>
+      </div>
+      <button class="w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors cursor-pointer" onclick="closeQuickNewProductModal()">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5 flex flex-col gap-3.5">
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Product Name *</label>
+        <input class="w-full h-9 px-3 bg-white rounded-lg border border-slate-300 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400" id="quickProdName" placeholder="e.g. Ergonomic Keyboard Stand" type="text" oninput="autoSuggestSKU(this.value)"/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">SKU / Code *</label>
+          <input class="w-full h-9 px-3 bg-white rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-700 uppercase focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400" id="quickProdSku" placeholder="ACC-001" type="text"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity</label>
+          <input class="w-full h-9 px-3 bg-white rounded-lg border border-slate-300 text-xs font-bold text-primary focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" id="quickProdQty" type="number" min="1" value="1"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Category (Optional)</label>
+        <select class="w-full h-9 px-3 bg-white rounded-lg border border-slate-300 text-xs text-slate-700 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer" id="quickProdCategory">
+          <option value="General">General</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Decor">Decor</option>
+          <option value="Hardware">Hardware</option>
+          <option value="Storage">Storage</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Raw Materials">Raw Materials</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-3.5 bg-slate-50 flex items-center justify-end gap-2.5 border-t border-slate-200">
+      <button class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer" onclick="closeQuickNewProductModal()">
+        Cancel
+      </button>
+      <button class="px-4 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5" onclick="submitQuickNewProduct()">
+        <span class="material-symbols-outlined text-[16px]">add</span> Add to Receipt
+      </button>
     </div>
   </div>
 </div>
@@ -3582,6 +3702,93 @@ Draft
     });
     
   
+    function toggleOperationsDropdown(open) {
+      const menu = document.getElementById('operationsDropdownMenu');
+      const chevron = document.getElementById('operationsChevron');
+      const btn = document.getElementById('operationsDropdownBtn');
+      if (!menu || !btn) return;
+      const shouldOpen = open !== undefined ? open : menu.classList.contains('hidden');
+      if (shouldOpen) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    function setActiveOpsTab(active) {
+      const opsBtn = document.getElementById('operationsDropdownBtn');
+      const indicator = document.getElementById('operationsIndicator');
+      if (!opsBtn) return;
+      if (active) {
+        opsBtn.className = 'relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none flex items-center gap-1.5 cursor-pointer group';
+        if (indicator) indicator.classList.remove('hidden');
+      } else {
+        opsBtn.className = 'relative px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none cursor-pointer group';
+        if (indicator) indicator.classList.add('hidden');
+      }
+    }
+
+    // Close Operations dropdown on click outside or Escape
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('operationsDropdownMenu');
+      const container = document.getElementById('operationsNavContainer');
+      if (menu && !menu.classList.contains('hidden')) {
+        if (container && !container.contains(e.target)) {
+          toggleOperationsDropdown(false);
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleOperationsDropdown(false);
+      }
+    });
+
+    function updateOperationsSubmenuActive(type) {
+      const items = [
+        { id: 'menuItemReceipt', type: 'receipt', mobId: 'mobileSubReceipt' },
+        { id: 'menuItemDelivery', type: 'delivery', mobId: 'mobileSubDelivery' },
+        { id: 'menuItemAdjustments', type: 'adjustments', mobId: 'mobileSubAdjustments' }
+      ];
+
+      items.forEach(it => {
+        const el = document.getElementById(it.id);
+        const mobEl = document.getElementById(it.mobId);
+        const isActive = it.type === type;
+
+        if (el) {
+          const dot = el.querySelector('.active-dot');
+          const iconSpan = el.querySelector('span:first-child');
+          if (isActive) {
+            el.className = 'flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-lg mx-1.5 my-1 transition-colors cursor-pointer group';
+            if (iconSpan) iconSpan.className = 'w-7 h-7 rounded-md bg-indigo-100/70 text-indigo-600 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+            if (!dot) {
+              const newDot = document.createElement('span');
+              newDot.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600 ml-auto active-dot';
+              el.appendChild(newDot);
+            }
+          } else {
+            el.className = 'flex items-center gap-3 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50/70 hover:text-indigo-600 transition-colors cursor-pointer rounded-lg mx-1.5 my-1 group';
+            if (iconSpan) iconSpan.className = 'w-7 h-7 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center transition-colors group-hover:bg-indigo-600 group-hover:text-white';
+            if (dot) dot.remove();
+          }
+        }
+
+        if (mobEl) {
+          if (isActive) {
+            mobEl.className = 'mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-semibold text-indigo-700 bg-white shadow-xs';
+          } else {
+            mobEl.className = 'mobile-subnav-item flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:text-indigo-600';
+          }
+        }
+      });
+    }
+
     function switchDashboardView(viewId) {
       const views = ['view-dashboard-main', 'view-receipts-main', 'view-stock-main', 'view-history-main'];
       views.forEach(v => {
@@ -3593,13 +3800,12 @@ Draft
       });
 
       const dashTab = document.getElementById('tab-dashboard');
-      const opsTab = document.getElementById('tab-operations');
       const stockTab = document.getElementById('tab-stock');
       const historyTab = document.getElementById('tab-history');
       const breadcrumb = document.getElementById('header-breadcrumb');
       const titleEl = document.getElementById('operations-view-title');
 
-      const tabs = [dashTab, opsTab, stockTab, historyTab];
+      const tabs = [dashTab, stockTab, historyTab];
       tabs.forEach(tab => {
         if (tab) {
           tab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer';
@@ -3633,30 +3839,52 @@ Draft
       if (viewId === 'dashboard') {
         document.getElementById('view-dashboard-main')?.classList.remove('hidden');
         setActive(dashTab, 'Dashboard');
+        setActiveOpsTab(false);
+        updateOperationsSubmenuActive(null);
         if (breadcrumb) breadcrumb.innerHTML = 'Dashboard';
         loadDashboardStats();
       } else if (viewId === 'deliveries') {
         const rm = document.getElementById('view-receipts-main');
         if (rm) { rm.classList.remove('hidden'); rm.classList.add('block'); }
-        setActive(opsTab, 'Operations');
+        setActiveOpsTab(true);
+        updateOperationsSubmenuActive('delivery');
         if (breadcrumb) breadcrumb.innerHTML = 'OPERATIONS / <span class="font-bold text-primary">DELIVERIES</span>';
         if (titleEl) titleEl.textContent = 'Deliveries';
         loadOperations('delivery');
       } else if (viewId === 'receipts') {
         const rm = document.getElementById('view-receipts-main');
         if (rm) { rm.classList.remove('hidden'); rm.classList.add('block'); }
-        setActive(opsTab, 'Operations');
+        setActiveOpsTab(true);
+        updateOperationsSubmenuActive('receipt');
         if (breadcrumb) breadcrumb.innerHTML = 'OPERATIONS / <span class="font-bold text-primary">RECEIPTS</span>';
         if (titleEl) titleEl.textContent = 'Receipts';
         loadOperations('receipt');
+      } else if (viewId === 'adjustments') {
+        document.getElementById('view-stock-main')?.classList.remove('hidden');
+        setActiveOpsTab(true);
+        updateOperationsSubmenuActive('adjustments');
+        if (breadcrumb) breadcrumb.innerHTML = 'OPERATIONS / <span class="font-bold text-primary">STOCK ADJUSTMENT</span>';
+        const stockTitle = document.getElementById('stock-view-title');
+        const stockDesc = document.getElementById('stock-view-desc');
+        if (stockTitle) stockTitle.textContent = 'Stock Adjustment';
+        if (stockDesc) stockDesc.textContent = 'Inventory corrections, counts, physical variance and warehouse adjustments';
+        loadStock();
       } else if (viewId === 'stock') {
         document.getElementById('view-stock-main')?.classList.remove('hidden');
         setActive(stockTab, 'Stock');
+        setActiveOpsTab(false);
+        updateOperationsSubmenuActive(null);
         if (breadcrumb) breadcrumb.innerHTML = 'INVENTORY / <span class="font-bold text-primary">STOCK</span>';
+        const stockTitle = document.getElementById('stock-view-title');
+        const stockDesc = document.getElementById('stock-view-desc');
+        if (stockTitle) stockTitle.textContent = 'Stock Inventory';
+        if (stockDesc) stockDesc.textContent = 'Real-time warehouse quantities, on-hand ledger, incoming receipts & outgoing commitments';
         loadStock();
       } else if (viewId === 'history') {
         document.getElementById('view-history-main')?.classList.remove('hidden');
         setActive(historyTab, 'Move History');
+        setActiveOpsTab(false);
+        updateOperationsSubmenuActive(null);
         if (breadcrumb) breadcrumb.innerHTML = 'AUDIT / <span class="font-bold text-primary">MOVE HISTORY</span>';
         loadMoveHistory();
       }
@@ -4248,6 +4476,130 @@ Draft
       }
     }
 
+    // ==========================================
+    // PRODUCT CATALOG & QUICK PRODUCT CREATION
+    // ==========================================
+    let cachedProductCatalog = [
+      { sku: 'DESK001', name: 'Desk', category: 'Furniture' },
+      { sku: 'FUR-001', name: 'Office Chair Ergonomic', category: 'Furniture' },
+      { sku: 'FUR-002', name: 'Standing Desk Frame', category: 'Furniture' },
+      { sku: 'DEC-011', name: 'Acoustic Wall Panels', category: 'Decor' },
+      { sku: 'MAT-004', name: 'Anti-fatigue Floor Mat', category: 'Accessories' },
+      { sku: 'WOD-008', name: 'Solid Oak Tabletop', category: 'Raw Materials' },
+      { sku: 'STG-003', name: 'Industrial Shelving Rack', category: 'Storage' },
+      { sku: 'MET-020', name: 'Steel Angle Brackets', category: 'Hardware' },
+      { sku: 'EQP-009', name: 'Hydraulic Pallet Jack', category: 'Equipment' }
+    ];
+
+    async function refreshProductCatalog() {
+      try {
+        const res = await fetch('/api/stock');
+        if (res.ok) {
+          const json = await res.json();
+          if (Array.isArray(json.data) && json.data.length > 0) {
+            json.data.forEach(item => {
+              if (item.sku && !cachedProductCatalog.some(p => p.sku.toLowerCase() === item.sku.toLowerCase())) {
+                cachedProductCatalog.push({
+                  sku: item.sku,
+                  name: item.product_name,
+                  category: item.category || 'General'
+                });
+              }
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Could not refresh product catalog:', err);
+      }
+      updateProductDatalistUI();
+    }
+
+    function updateProductDatalistUI() {
+      const datalist = document.getElementById('receiptProductCatalogList');
+      if (!datalist) return;
+      datalist.innerHTML = cachedProductCatalog.map(p => 
+        `<option value="[${p.sku}] ${p.name}">${p.name} (${p.sku}) • ${p.category || 'General'}</option>`
+      ).join('');
+    }
+
+    function openQuickNewProductModal() {
+      const modal = document.getElementById('quickNewProductModal');
+      if (!modal) return;
+      const nameInput = document.getElementById('quickProdName');
+      const skuInput = document.getElementById('quickProdSku');
+      const qtyInput = document.getElementById('quickProdQty');
+      if (nameInput) nameInput.value = '';
+      if (skuInput) skuInput.value = '';
+      if (qtyInput) qtyInput.value = '1';
+      modal.classList.remove('hidden');
+      setTimeout(() => nameInput?.focus(), 60);
+    }
+
+    function closeQuickNewProductModal() {
+      const modal = document.getElementById('quickNewProductModal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+    }
+
+    function autoSuggestSKU(nameVal) {
+      const skuInput = document.getElementById('quickProdSku');
+      if (!skuInput) return;
+      if (!nameVal || !nameVal.trim()) {
+        skuInput.value = '';
+        return;
+      }
+      const words = nameVal.trim().toUpperCase().replace(/[^A-Z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+      let prefix = '';
+      if (words.length >= 3) {
+        prefix = words.slice(0, 3).map(w => w[0]).join('');
+      } else if (words.length === 2) {
+        prefix = words[0].slice(0, 2) + words[1].slice(0, 1);
+      } else if (words.length === 1) {
+        prefix = words[0].slice(0, 3);
+      }
+      if (!prefix) prefix = 'SKU';
+      const num = String(Math.floor(100 + Math.random() * 900));
+      skuInput.value = `${prefix}-${num}`;
+    }
+
+    function submitQuickNewProduct() {
+      const nameInput = document.getElementById('quickProdName');
+      const skuInput = document.getElementById('quickProdSku');
+      const qtyInput = document.getElementById('quickProdQty');
+      const catInput = document.getElementById('quickProdCategory');
+
+      const name = nameInput?.value.trim();
+      let sku = skuInput?.value.trim().toUpperCase();
+      const qty = parseInt(qtyInput?.value, 10) || 1;
+      const category = catInput?.value || 'General';
+
+      if (!name) {
+        alert('Please enter a product name.');
+        nameInput?.focus();
+        return;
+      }
+      if (!sku) {
+        sku = 'SKU-' + Math.floor(100 + Math.random() * 900);
+      }
+
+      // Add to cached product catalog
+      const existingIdx = cachedProductCatalog.findIndex(p => p.sku.toLowerCase() === sku.toLowerCase());
+      if (existingIdx >= 0) {
+        cachedProductCatalog[existingIdx] = { sku, name, category };
+      } else {
+        cachedProductCatalog.unshift({ sku, name, category });
+      }
+
+      // Update the datalist options so typing it autocompletes anywhere
+      updateProductDatalistUI();
+
+      // Add new line directly to the receipt table
+      const formattedProduct = `[${sku}] ${name}`;
+      addModalProductLine(formattedProduct, qty);
+
+      closeQuickNewProductModal();
+    }
+
     // Modal Operations
     function openNewOperationModal(prefillItem = null) {
       const modal = document.getElementById('newReceiptModal');
@@ -4258,62 +4610,46 @@ Draft
       const subEl = document.getElementById('modalOpSubtitle');
       const partnerLabel = document.getElementById('modalPartnerLabel');
       const partnerInput = document.getElementById('modalPartnerInput');
-      const locLabel = document.getElementById('modalLocationLabel');
-      const locSelect = document.getElementById('modalLocationSelect');
-      const sourceLabel = document.getElementById('modalSourceLabel');
-      const sourceInput = document.getElementById('modalSourceInput');
+      const dateLabel = document.getElementById('modalDateLabel');
+      const respInput = document.getElementById('modalResponsibleInput');
 
       if (isReceipt) {
         if (titleEl) titleEl.textContent = 'New Incoming Receipt';
         if (subEl) subEl.textContent = 'Draft status initialized • Auto-reference: WH/IN/...';
-        if (partnerLabel) partnerLabel.textContent = 'Vendor / Source Contact *';
-        if (partnerInput) partnerInput.placeholder = 'e.g., Azure Interior, Lumber Inc';
-        if (locLabel) locLabel.textContent = 'Destination Location *';
-        if (sourceLabel) sourceLabel.textContent = 'Source Document / PO';
-        if (sourceInput) sourceInput.placeholder = 'e.g., PO00045';
-        if (locSelect) {
-          locSelect.innerHTML = `
-            <option value="WH/Stock1">WH/Stock1 (Floor Zone A)</option>
-            <option value="WH/Stock2">WH/Stock2 (Cold Racks)</option>
-            <option value="WH/RawMaterials">WH/RawMaterials (Bay 4)</option>
-            <option value="WH/InputDock">WH/InputDock (Quarantine)</option>
-            <option value="WH/Stock">WH/Stock (Central)</option>
-          `;
-        }
+        if (partnerLabel) partnerLabel.textContent = 'Receive From *';
+        if (partnerInput) partnerInput.placeholder = 'e.g., Gemini Furniture, Azure Interior';
       } else {
         if (titleEl) titleEl.textContent = 'New Outgoing Delivery';
         if (subEl) subEl.textContent = 'Draft status initialized • Auto-reference: WH/OUT/...';
-        if (partnerLabel) partnerLabel.textContent = 'Customer / Destination Contact *';
+        if (partnerLabel) partnerLabel.textContent = 'Delivery To *';
         if (partnerInput) partnerInput.placeholder = 'e.g., Brandon Freeman, Anita Oliver';
-        if (locLabel) locLabel.textContent = 'Source Location *';
-        if (sourceLabel) sourceLabel.textContent = 'Source Document / SO';
-        if (sourceInput) sourceInput.placeholder = 'e.g., SO00099';
-        if (locSelect) {
-          locSelect.innerHTML = `
-            <option value="WH/Stock">WH/Stock (Central)</option>
-            <option value="WH/Stock1">WH/Stock1 (Floor Zone A)</option>
-            <option value="WH/Stock2">WH/Stock2 (Cold Racks)</option>
-          `;
-        }
+      }
+
+      if (dateLabel) dateLabel.textContent = 'Schedule Date *';
+
+      // Auto-fill responsible user from auth or DOM profile
+      const loggedUser = (typeof getAuthUser === 'function' && getAuthUser()?.name) 
+        || document.getElementById('user-display-name')?.textContent?.trim() 
+        || 'Marcus Vance';
+      if (respInput) {
+        respInput.value = loggedUser;
       }
 
       if (partnerInput) partnerInput.value = (prefillItem && prefillItem.vendor) ? prefillItem.vendor : '';
-      if (sourceInput) sourceInput.value = '';
       const dateInput = document.getElementById('modalDateInput');
       if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-      const notesInput = document.getElementById('modalNotesInput');
-      if (notesInput) notesInput.value = '';
+
+      // Refresh product list for datalist search
+      refreshProductCatalog();
 
       resetModalLines();
       if (prefillItem) {
-        addModalProductLine(
-          prefillItem.product_name || prefillItem.name || 'Warehouse Material',
-          prefillItem.sku || 'SKU-GEN',
-          prefillItem.qty || 25,
-          prefillItem.unit || 'Units'
-        );
+        const formatted = prefillItem.sku 
+          ? `[${prefillItem.sku}] ${prefillItem.product_name || prefillItem.name || 'Warehouse Material'}`
+          : (prefillItem.product_name || prefillItem.name || 'Warehouse Material');
+        addModalProductLine(formatted, prefillItem.qty || 10);
       } else {
-        addModalProductLine('Office Chair Ergonomic', 'FUR-001', 10, 'Units');
+        addModalProductLine('[DESK001] Desk', 4);
       }
 
       modal.classList.remove('hidden');
@@ -4329,30 +4665,20 @@ Draft
       if (tbody) tbody.innerHTML = '';
     }
 
-    function addModalProductLine(name = '', sku = '', qty = 5, unit = 'Units') {
+    function addModalProductLine(productIdentifier = '', qty = 1) {
       const tbody = document.getElementById('modalLinesTableBody');
       if (!tbody) return;
       const tr = document.createElement('tr');
       tr.className = 'hover:bg-slate-50/60 transition-colors border-b border-slate-100 last:border-0';
       tr.innerHTML = `
         <td class="px-3.5 py-2.5">
-          <input type="text" class="line-name w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-semibold text-slate-800 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" placeholder="Product name" value="${name}">
+          <input type="text" list="receiptProductCatalogList" autocomplete="off" class="line-product w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-semibold text-slate-800 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" placeholder="e.g. [DESK001] Desk" value="${productIdentifier}">
         </td>
-        <td class="px-3 py-2.5 w-32">
-          <input type="text" class="line-sku w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-mono text-slate-700 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none uppercase" placeholder="SKU-001" value="${sku}">
-        </td>
-        <td class="px-3 py-2.5 w-24">
+        <td class="px-3 py-2.5 w-36">
           <input type="number" min="1" class="line-qty w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-bold text-primary focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" value="${qty}">
         </td>
-        <td class="px-3 py-2.5 w-28">
-          <select class="line-unit w-full h-9 px-2 rounded-lg border border-slate-300 text-xs text-slate-700 focus:bg-white focus:border-primary focus:outline-none cursor-pointer">
-            <option value="Units" ${unit === 'Units' ? 'selected' : ''}>Units</option>
-            <option value="Boxes" ${unit === 'Boxes' ? 'selected' : ''}>Boxes</option>
-            <option value="Pallets" ${unit === 'Pallets' ? 'selected' : ''}>Pallets</option>
-          </select>
-        </td>
         <td class="text-center py-2.5 px-2 w-10">
-          <button type="button" class="w-7 h-7 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer" onclick="this.closest('tr').remove()">
+          <button type="button" class="w-7 h-7 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer" onclick="this.closest('tr').remove()" title="Remove line">
             <span class="material-symbols-outlined text-[18px]">delete</span>
           </button>
         </td>
@@ -4362,19 +4688,18 @@ Draft
 
     async function submitNewOperation(targetStatus = 'ready') {
       const partnerInput = document.getElementById('modalPartnerInput');
-      const locSelect = document.getElementById('modalLocationSelect');
       const dateInput = document.getElementById('modalDateInput');
-      const sourceInput = document.getElementById('modalSourceInput');
-      const notesInput = document.getElementById('modalNotesInput');
+      const respInput = document.getElementById('modalResponsibleInput');
 
       const partnerVal = partnerInput ? partnerInput.value.trim() : '';
-      const locVal = locSelect ? locSelect.value : 'WH/Stock';
       const dateVal = dateInput && dateInput.value ? dateInput.value : new Date().toISOString().split('T')[0];
-      const sourceVal = sourceInput ? sourceInput.value.trim() : '';
-      const notesVal = notesInput ? notesInput.value.trim() : '';
+      const responsibleVal = (respInput && respInput.value.trim()) 
+        || (typeof getAuthUser === 'function' && getAuthUser()?.name) 
+        || document.getElementById('user-display-name')?.textContent?.trim() 
+        || 'Marcus Vance';
 
       if (!partnerVal) {
-        alert(currentOperationType === 'receipt' ? 'Please provide a vendor / supplier contact.' : 'Please provide a customer / destination contact.');
+        alert(currentOperationType === 'receipt' ? 'Please provide a vendor in Receive From.' : 'Please provide a customer / destination contact.');
         partnerInput?.focus();
         return;
       }
@@ -4382,24 +4707,30 @@ Draft
       const lineRows = document.querySelectorAll('#modalLinesTableBody tr');
       const items = [];
       lineRows.forEach(row => {
-        const name = row.querySelector('.line-name')?.value.trim() || 'Standard Product';
-        const sku = row.querySelector('.line-sku')?.value.trim() || 'SKU-GEN';
+        const rawProduct = row.querySelector('.line-product')?.value.trim() || '[DESK001] Desk';
         const qty = parseInt(row.querySelector('.line-qty')?.value, 10) || 1;
-        const unit = row.querySelector('.line-unit')?.value || 'Units';
-        items.push({ product_name: name, sku, quantity: qty, unit });
+        
+        let sku = 'SKU-001';
+        let productName = rawProduct;
+        const match = rawProduct.match(/^\[([^\]]+)\]\s*(.*)$/);
+        if (match) {
+          sku = match[1].trim();
+          productName = match[2].trim() || rawProduct;
+        }
+        items.push({ product_name: productName, sku, quantity: qty, unit: 'Units' });
       });
 
       if (items.length === 0) {
-        items.push({ product_name: 'Standard Product', sku: 'SKU-001', quantity: 1, unit: 'Units' });
+        items.push({ product_name: 'Desk', sku: 'DESK001', quantity: 1, unit: 'Units' });
       }
 
       const payload = {
         type: currentOperationType,
-        vendor_from: currentOperationType === 'receipt' ? partnerVal : locVal,
-        destination_to: currentOperationType === 'receipt' ? locVal : partnerVal,
-        contact: partnerVal,
+        vendor_from: currentOperationType === 'receipt' ? partnerVal : 'WH/Stock',
+        destination_to: currentOperationType === 'receipt' ? 'WH/Stock' : partnerVal,
+        contact: responsibleVal || partnerVal,
         scheduled_date: dateVal,
-        source_document: sourceVal || notesVal,
+        source_document: '',
         status: targetStatus,
         items
       };
@@ -4762,6 +5093,7 @@ Draft
 
     document.addEventListener('DOMContentLoaded', () => {
       initAuth();
+      if (typeof refreshProductCatalog === 'function') refreshProductCatalog();
       document.getElementById('closeDetailsBtn')?.addEventListener('click', closeDetailsModal);
     });
 </script>
