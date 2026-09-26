@@ -21,8 +21,99 @@
               DEFAULT: '#4F46E5',
               hover: '#4338CA',
             },
+          spacing: { 
+        "margin": "1rem",
+        "space-sm": "0.5rem",
+        "gutter-lg": "1.5rem",
+        "space-xl": "1.5rem",
+        "margin-lg": "2rem",
+        "space-lg": "1rem",
+        "space-xs": "0.25rem",
+        "gutter": "1rem",
+        "space-md": "0.75rem",
+        "space-2xl": "2rem",
+        "margin-md": "1.5rem",
+ },
+          fontSize: { 
+        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+        "headline-md": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+        "title-md": ["16px", {"lineHeight": "22px", "fontWeight": "600"}],
+        "headline-sm": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600"}],
+        "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600"}],
+        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+        "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+ },
+          fontFamily: { sans: ['Inter', 'sans-serif'], 
+        "body-md": ["Inter"],
+        "label-md": ["Inter"],
+        "headline-md": ["Inter"],
+        "title-md": ["Inter"],
+        "headline-sm": ["Inter"],
+        "label-sm": ["Inter"],
+        "body-sm": ["Inter"],
+        "body-lg": ["Inter"],
+        "data-tabular": ["Inter"],
+        "display-lg": ["Inter"],
+        "headline-lg": ["Inter"],
+        "display-lg-mobile": ["Inter"],
+ }
+,
             pageBg: '#F5F5FA',
             inputBg: '#EEF0FC',
+            surface: '#F5F5FA',
+            card: '#FFFFFF',
+
+        "secondary-fixed-dim": "#c0c4ea",
+        "on-surface-variant": "#464555",
+        "on-secondary-fixed-variant": "#404564",
+        "tertiary-fixed": "#6ffbbe",
+        "background": "#f8f9ff",
+        "tertiary-container": "#006e4b",
+        "tertiary-fixed-dim": "#4edea3",
+        "primary-fixed-dim": "#c3c0ff",
+        "error-container": "#ffdad6",
+        "surface-bright": "#f8f9ff",
+        "on-tertiary": "#ffffff",
+        "tertiary": "#005338",
+        "inverse-primary": "#c3c0ff",
+        "outline": "#777587",
+        "surface-container-high": "#dce9ff",
+        "on-secondary-fixed": "#141936",
+        "surface-variant": "#d3e4fe",
+        "on-error-container": "#93000a",
+        "on-secondary": "#ffffff",
+        "error": "#ba1a1a",
+        "secondary-container": "#d4d8fe",
+        "on-primary-fixed": "#0f0069",
+        "on-primary-fixed-variant": "#3323cc",
+        "on-surface": "#0b1c30",
+        "on-secondary-container": "#585d7d",
+        "primary-fixed": "#e2dfff",
+        "surface-dim": "#cbdbf5",
+        "surface-container-highest": "#d3e4fe",
+        "on-tertiary-fixed": "#002113",
+        "on-background": "#0b1c30",
+        "surface-container": "#e5eeff",
+        "secondary": "#585c7d",
+        "on-tertiary-fixed-variant": "#005236",
+        "inverse-surface": "#213145",
+        "surface-container-lowest": "#ffffff",
+        "on-error": "#ffffff",
+        "surface-tint": "#4d44e3",
+        "on-primary-container": "#dad7ff",
+        "primary-container": "#4f46e5",
+        "surface-container-low": "#eff4ff",
+        "outline-variant": "#c7c4d8",
+        "on-tertiary-container": "#67f4b7",
+        "secondary-fixed": "#dee0ff",
+        "on-primary": "#ffffff",
+        "inverse-on-surface": "#eaf1ff",
+
           }
         }
       }
@@ -60,25 +151,115 @@
     .otp-container {
       @apply flex justify-between items-center w-full max-w-[340px] gap-1 sm:gap-2;
     }
+
+    .view-panel { transition: opacity 280ms cubic-bezier(0.4,0,0.2,1), transform 280ms cubic-bezier(0.4,0,0.2,1); }
+    .view-exit { opacity: 0; transform: translateY(8px); }
+    .view-enter-active { opacity: 1; transform: translateY(0); }
+    .view-exit-left { opacity: 0; transform: translateX(-16px); }
+    .view-exit-right { opacity: 0; transform: translateX(16px); }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeSlideUp { animation: fadeSlideUp 400ms cubic-bezier(0.4,0,0.2,1) both; }
+    
+    @keyframes loginPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+    .btn-pulse { animation: loginPulse 1s infinite; }
+    
+    .input-field:focus { box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .animate-shake { animation: shake 300ms; }
+    
+    @keyframes successPop {
+      0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+      60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .animate-successPop { animation: successPop 500ms ease-out forwards; }
+    
+    /* Brand Panel Entrance */
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-popIn { animation: popIn 450ms cubic-bezier(0.34,1.56,0.64,1) both; }
+    
+    @keyframes slideUp16 {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slideUp16 { animation: slideUp16 500ms ease-out both; }
+    
+    @keyframes slideUp12 {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slideUp12 { animation: slideUp12 500ms ease-out both; }
+    
+    @keyframes fadeInOnly {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fadeInOnly { animation: fadeInOnly 400ms ease-out both; }
+
+    /* Ambient Backgrounds */
+    @media (min-width: 1024px) {
+      @keyframes gradientDrift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      .ambient-gradient {
+        background-size: 200% 200%;
+        animation: gradientDrift 15s ease-in-out infinite;
+      }
+      @keyframes floatBlob1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -40px) scale(1.05); }
+        66% { transform: translate(-20px, 20px) scale(0.95); }
+      }
+      @keyframes floatBlob2 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(-30px, 30px) scale(0.95); }
+        66% { transform: translate(20px, -20px) scale(1.05); }
+      }
+      @keyframes dotPulse {
+        0%, 100% { opacity: 0.14; }
+        50% { opacity: 0.18; }
+      }
+      .blob-1 { animation: floatBlob1 22s infinite ease-in-out; will-change: transform; }
+      .blob-2 { animation: floatBlob2 18s infinite ease-in-out; will-change: transform; }
+      .dot-pulse { animation: dotPulse 8s infinite ease-in-out; }
+    }
   </style>
 </head>
 <body class="font-sans text-slate-600 min-h-screen">
-  <main class="min-h-screen w-full flex flex-col lg:flex-row overflow-hidden">
+  <main id="auth-layout" class="min-h-screen w-full flex flex-col lg:flex-row overflow-hidden">
     
     
-    <section class="relative hidden lg:flex lg:w-1/2 flex-col justify-between p-8 lg:p-14 bg-gradient-to-br from-[#090e24] via-[#11183c] to-[#312e81] text-white overflow-hidden min-h-screen">
-      <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.7) 1px, transparent 0); background-size: 24px 24px;"></div>
+    <section class="ambient-gradient relative hidden lg:flex lg:w-1/2 flex-col justify-between p-8 lg:p-14 bg-gradient-to-br from-[#090e24] via-[#11183c] to-[#312e81] text-white overflow-hidden min-h-screen">
+      <!-- Ambient Background Blobs -->
+      <div class="absolute -top-20 -left-20 w-96 h-96 bg-indigo-500/15 rounded-full blur-[60px] blob-1 pointer-events-none z-0"></div>
+      <div class="absolute bottom-10 right-10 w-[28rem] h-[28rem] bg-violet-600/10 rounded-full blur-[60px] blob-2 pointer-events-none z-0"></div>
       
+      <!-- Dot grid overlay -->
+      <div class="absolute inset-0 dot-pulse pointer-events-none z-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.7) 1px, transparent 0); background-size: 24px 24px; opacity: 0.14;"></div>
       
-      <div class="relative z-10 flex items-center mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none" class="h-10 lg:h-12 w-auto drop-shadow-md">
-          <g>
-            <rect x="2" y="6" width="28" height="28" rx="7" fill="#4F46E5"/>
-            <path d="M10 13L16 9.5L22 13L16 16.5L10 13Z" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
-            <path d="M10 17.5L16 21L22 17.5" stroke="#A5B4FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M10 22L16 25.5L22 22" stroke="#E0E7FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="38" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="19" fill="#FFFFFF" letter-spacing="-0.02em">Stock<tspan fill="#A5B4FC">Sense</tspan></text>
-          </g>
+      <!-- Top Brand Logo -->
+      <div id="panel-logo-wrap" class="relative z-10 flex items-center mb-4">
+        <svg viewBox="0 0 160 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 lg:h-12 w-auto drop-shadow-md text-white">
+          <path d="M16 2L30 9L16 16L2 9L16 2Z" class="fill-indigo-400" />
+          <path d="M2 11V21L16 28V18L2 11Z" class="fill-indigo-600" />
+          <path d="M30 11V21L16 28V18L30 11Z" class="fill-indigo-500" />
+          <text x="38" y="22" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="currentColor" letter-spacing="-0.02em">StockSense</text>
         </svg>
       </div>
 
@@ -93,7 +274,7 @@
       </div>
 
       
-      <div class="relative z-10 pt-6">
+      <div id="panel-footer" class="relative z-10 pt-6">
         <div class="text-xs tracking-widest text-slate-400/60 uppercase font-medium">STOCKSENSE WAREHOUSE MANAGEMENT SYSTEM</div>
       </div>
     </section>
@@ -102,15 +283,12 @@
     <section class="w-full lg:w-1/2 min-h-screen flex flex-col p-6 sm:p-10 lg:p-14 bg-pageBg relative overflow-y-auto items-center justify-center">
       
       
-      <div class="flex items-center mb-8 lg:hidden self-start sm:self-center w-full max-w-[440px]">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none" class="h-10 sm:h-12 w-auto">
-          <g>
-            <rect x="2" y="6" width="28" height="28" rx="7" fill="#4F46E5"/>
-            <path d="M10 13L16 9.5L22 13L16 16.5L10 13Z" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
-            <path d="M10 17.5L16 21L22 17.5" stroke="#A5B4FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M10 22L16 25.5L22 22" stroke="#E0E7FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="38" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="19" fill="#0F172A" letter-spacing="-0.02em">Stock<tspan fill="#4F46E5">Sense</tspan></text>
-          </g>
+      <div id="mobile-logo-wrap" class="flex items-center mb-8 lg:hidden self-start sm:self-center w-full max-w-[440px]">
+        <svg viewBox="0 0 160 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-10 sm:h-12 w-auto text-slate-900">
+          <path d="M16 2L30 9L16 16L2 9L16 2Z" class="fill-indigo-400" />
+          <path d="M2 11V21L16 28V18L2 11Z" class="fill-indigo-600" />
+          <path d="M30 11V21L16 28V18L30 11Z" class="fill-indigo-500" />
+          <text x="38" y="22" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="currentColor" letter-spacing="-0.02em">Stock<tspan class="text-primary">Sense</tspan></text>
         </svg>
       </div>
 
@@ -120,7 +298,7 @@
         
         
         
-        <div id="view-login" class="w-full flex flex-col">
+        <div id="view-login" class="w-full flex flex-col view-panel view-enter-active">
           <div class="mb-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
             <p class="text-sm sm:text-base text-slate-500 mt-1">Log in to your StockSense account</p>
@@ -177,7 +355,7 @@
         
         
         
-        <div id="view-signup" class="w-full hidden flex-col">
+        <div id="view-signup" class="w-full hidden flex-col view-panel view-exit">
           <div class="mb-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Create your account</h2>
             <p class="text-sm sm:text-base text-slate-500 mt-1">Start managing your inventory smarter</p>
@@ -206,11 +384,12 @@
                 <span class="text-[11px] text-slate-400">Influences warehouse permissions</span>
               </div>
               <input type="hidden" id="signup-role" value="manager"/>
-              <div class="grid grid-cols-2 p-1 bg-slate-100/90 rounded-lg border border-slate-200 gap-1 text-sm font-medium">
-                <button type="button" id="role-manager" class="py-2 rounded-md text-center font-semibold bg-primary text-white shadow-sm transition-all flex items-center justify-center gap-1.5" onclick="signupSetRole('manager')">
+              <div class="relative grid grid-cols-2 p-1 bg-slate-100/90 rounded-lg border border-slate-200 gap-1 text-sm font-medium isolate">
+                <div id="role-pill" class="absolute top-1 bottom-1 left-1 w-[calc(50%-0.15rem)] bg-primary rounded-md -z-10 transition-transform duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
+                <button type="button" id="role-manager" class="py-2 rounded-md text-center font-semibold text-white transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('manager')">
                   <span class="material-symbols-outlined text-[16px]">inventory_2</span> Manager
                 </button>
-                <button type="button" id="role-staff" class="py-2 rounded-md text-center font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all flex items-center justify-center gap-1.5" onclick="signupSetRole('staff')">
+                <button type="button" id="role-staff" class="py-2 rounded-md text-center font-medium text-slate-600 hover:text-slate-900 transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('staff')">
                   <span class="material-symbols-outlined text-[16px]">badge</span> Staff
                 </button>
               </div>
@@ -272,7 +451,7 @@
         
         
         
-        <div id="view-forgot-password" class="w-full hidden flex-col">
+        <div id="view-forgot-password" class="w-full hidden flex-col view-panel view-exit">
           
           
           <div class="mb-8 relative flex items-center justify-between w-full max-w-[280px] mx-auto" id="fp-stepper">
@@ -291,7 +470,7 @@
           </div>
 
           
-          <div id="fp-step-1" class="w-full flex flex-col">
+          <div id="fp-step-1" class="w-full flex flex-col view-panel view-enter-active">
             <div class="mb-6">
               <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Reset your password</h2>
               <p class="text-sm text-slate-500 mt-1">Enter your registered work email to receive a code.</p>
@@ -318,7 +497,7 @@
           </div>
 
           
-          <div id="fp-step-2" class="w-full hidden flex-col">
+          <div id="fp-step-2" class="w-full hidden flex-col view-panel view-exit">
             <div class="flex items-center justify-between mb-4">
               <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-primary transition-colors" onclick="fpGoToStep(1)">
                 <span class="material-symbols-outlined text-[14px]">arrow_back</span> Back
@@ -358,7 +537,7 @@
           </div>
 
           
-          <div id="fp-step-3" class="w-full hidden flex-col">
+          <div id="fp-step-3" class="w-full hidden flex-col view-panel view-exit">
             <div class="flex items-center justify-between mb-4">
               <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-primary transition-colors" onclick="fpGoToStep(2)">
                 <span class="material-symbols-outlined text-[14px]">arrow_back</span> Back
@@ -412,8 +591,8 @@
           </div>
           
           
-          <div id="fp-step-success" class="w-full hidden flex-col items-center text-center py-6">
-            <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-4 shadow-sm animate-bounce">
+          <div id="fp-step-success" class="w-full hidden flex-col items-center text-center py-6 view-panel view-exit">
+            <div id="fp-success-icon" class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-4 shadow-sm">
               <span class="material-symbols-outlined text-[36px]">check_circle</span>
             </div>
             <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Success!</h2>
@@ -428,11 +607,1216 @@
       </div>
     </section>
   </main>
+
+  <!-- DASHBOARD LAYOUT -->
+  <div id="dashboard-layout" class="hidden flex-col w-full min-h-screen bg-surface">
+    <!-- TOP NAVIGATION BAR -->
+<header class="sticky top-0 z-40 w-full bg-white border-b border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+<div class="max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<!-- Brand & Left Navigation Links -->
+<div class="flex items-center gap-8 lg:gap-10">
+<!-- Logo + Brand name -->
+<a class="flex items-center focus:outline-none" href="#">
+  <svg viewBox="0 0 160 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 sm:h-9 w-auto text-slate-900">
+    <path d="M16 2L30 9L16 16L2 9L16 2Z" class="fill-indigo-400" />
+    <path d="M2 11V21L16 28V18L2 11Z" class="fill-indigo-600" />
+    <path d="M30 11V21L16 28V18L30 11Z" class="fill-indigo-500" />
+    <text x="38" y="22" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="currentColor" letter-spacing="-0.02em">Stock<tspan class="text-primary">Sense</tspan></text>
+  </svg>
+</a>
+<!-- Horizontal Nav Links -->
+<nav class="hidden md:flex items-center gap-1 sm:gap-2">
+<!-- Active: Dashboard with indigo text and bottom border bar -->
+<a id="tab-dashboard" class="relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none group cursor-pointer" onclick="switchDashboardView('dashboard')">
+<span>Dashboard</span>
+<span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>
+</a>
+<a id="tab-operations" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="return false;">Operations</a>
+<a class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">
+            Stock
+          </a>
+<a class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">
+            Move History
+          </a>
+<a class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">
+            Settings
+          </a>
+</nav>
+</div>
+<!-- Right Header Tools: Breadcrumb / Profile Dropdown -->
+<div class="flex items-center gap-4">
+<span id="header-breadcrumb" class="hidden sm:inline-block text-xs font-medium text-slate-400 uppercase tracking-wider">
+          Dashboard
+        </span>
+<!-- Profile trigger & dropdown container -->
+<div class="relative" id="profile-menu-container">
+<button aria-expanded="false" aria-haspopup="true" class="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" id="profile-button" type="button">
+<div class="w-8 h-8 rounded-full bg-primary text-white text-xs font-semibold flex items-center justify-center shadow-sm">
+              MV
+            </div>
+<span class="material-symbols-outlined text-[18px] text-slate-400 hidden sm:inline-block">expand_more</span>
+</button>
+<!-- Interactive dropdown menu -->
+<div class="hidden absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-slate-200/80 py-1.5 z-50 transform origin-top-right transition-all" id="profile-dropdown">
+<div class="px-4 py-2.5 border-b border-slate-100">
+<p class="text-sm font-semibold text-slate-900 leading-tight">Marcus Vance</p>
+<p class="text-xs text-slate-500 mt-0.5">marcus.v@stocksense.io</p>
+</div>
+<a class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-slate-400">person</span>
+              My Profile
+            </a>
+<a class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-slate-400">tune</span>
+              Preferences
+            </a>
+<div class="my-1 border-t border-slate-100"></div>
+<a class="flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-rose-500">logout</span>
+              Logout
+            </a>
+</div>
+</div>
+<!-- Mobile hamburger toggle for nav -->
+<button class="md:hidden p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none" id="mobile-menu-toggle" type="button">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+</div>
+</div>
+<!-- Mobile Nav Collapsible -->
+<div class="hidden md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1" id="mobile-nav">
+<a class="block px-3 py-2 rounded-lg text-sm font-semibold text-primary bg-primary-light/60" href="#">Dashboard</a>
+<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#">Operations</a>
+<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#">Stock</a>
+<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#">Move History</a>
+<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#">Settings</a>
+</div>
+</header>
+    <!-- MAIN CONTAINER (Centered max width ~1180px) -->
+<main id="view-dashboard-main" class="flex-1 w-full max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+<!-- Title & Context Header -->
+<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+<div>
+<h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+          Dashboard
+        </h1>
+<p class="text-sm text-slate-500 mt-1">
+          Operational warehouse throughput and pending delivery flow
+        </p>
+</div>
+<div class="inline-flex items-center gap-2 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-white border border-slate-200/90 text-xs font-medium text-slate-600 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Warehouse Central • Real-time Sync</span>
+</div>
+</div>
+<!-- TWO STATUS CARDS SIDE BY SIDE (Matches hand-drawn wireframe specification) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+<!-- CARD 1: RECEIPT -->
+<section class="bg-card rounded-2xl border border-slate-200 p-7 sm:p-8 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight">Receipt</h2>
+<div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">inventory_2</span>
+</div>
+</div>
+<!-- Prominent Count Box ("4 to receive") -->
+<div class="mt-6">
+<a class="group block w-full py-4 px-5 rounded-xl border border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50/70 transition-all text-left shadow-sm" href="#" onclick="switchDashboardView('receipts'); return false;">
+<div class="flex items-center justify-between">
+<span class="text-lg sm:text-[20px] font-bold text-primary tracking-tight group-hover:text-primary-dark transition-colors">
+                  4 to receive
+                </span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[20px]">
+                  arrow_forward
+                </span>
+</div>
+</a>
+</div>
+</div>
+<!-- Secondary Supporting Stats -->
+<div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-end text-sm">
+<span class="text-slate-500 text-sm font-medium">
+            6 operations
+          </span>
+</div>
+</section>
+<!-- CARD 2: DELIVERY -->
+<section class="bg-card rounded-2xl border border-slate-200 p-7 sm:p-8 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow flex flex-col justify-between">
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight">Delivery</h2>
+<div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 text-slate-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+</div>
+</div>
+<!-- Prominent Count Box ("4 to Deliver") -->
+<div class="mt-6">
+<a class="group block w-full py-4 px-5 rounded-xl border border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50/70 transition-all text-left shadow-sm" href="#">
+<div class="flex items-center justify-between">
+<span class="text-lg sm:text-[20px] font-bold text-primary tracking-tight group-hover:text-primary-dark transition-colors">
+                  4 to Deliver
+                </span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[20px]">
+                  arrow_forward
+                </span>
+</div>
+</a>
+</div>
+</div>
+<!-- Secondary Supporting Stats ("1 Late", "2 waiting", "6 operations") -->
+<div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-end text-sm">
+<span class="text-slate-500 text-sm font-medium">
+            6 operations
+          </span>
+</div>
+</section>
+</div>
+<!-- CLEAN MINIMAL RECENT ACTIVITY SECTION (Calm, grounded preview below the 2 cards) -->
+<div class="mt-10 bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="text-base font-semibold text-slate-900">Recent Movements</h3>
+<p class="text-xs text-slate-500">Latest active manifests across fulfillment bays</p>
+</div>
+<a class="text-xs font-semibold text-primary hover:text-primary-dark transition-colors" href="#">
+          View All Movements →
+        </a>
+</div>
+<!-- 3-item ultra-clean list -->
+<div class="divide-y divide-slate-100">
+<!-- Item 1 -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span>
+<div class="truncate">
+<span class="font-semibold text-sm text-slate-900 font-mono">WH/IN/0042</span>
+<span class="text-xs text-slate-500 ml-2">SKU-9921 Industrial Valves (48 units)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<span class="text-xs font-medium text-slate-500">Today, 10:45 AM</span>
+<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-primary-light text-primary">Ready</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0"></span>
+<div class="truncate">
+<span class="font-semibold text-sm text-slate-900 font-mono">WH/OUT/1094</span>
+<span class="text-xs text-slate-500 ml-2">Electronics Modules Batch 02 (14 units)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<span class="text-xs font-medium text-slate-500">Today, 09:15 AM</span>
+<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-200/50">Draft</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="py-3.5 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
+<div class="truncate">
+<span class="font-semibold text-sm text-slate-900 font-mono">WH/OUT/1095</span>
+<span class="text-xs text-slate-500 ml-2">Lithium-Ion Pack Mod B (120 units)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<span class="text-xs font-medium text-slate-500">Yesterday, 11:20 AM</span>
+<span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/50">Done</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<main id="view-receipts-main" class="hidden w-full flex-1 bg-background"><div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"><div class="flex flex-col w-full">
+<!-- TOP METRIC CARDS / OPERATIONAL SUMMARY STRIP -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider font-semibold">Draft</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">4</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Awaiting review</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined text-[26px]">edit_note</span>
+</div>
+</div>
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-indigo-700 block uppercase tracking-wider font-semibold">Ready</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">12</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Ready to receive</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[26px]">inventory_2</span>
+</div>
+</div>
+<div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+<div>
+<span class="font-label-md text-label-md text-emerald-700 block uppercase tracking-wider font-semibold">Done</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">8</span>
+<span class="font-body-sm text-body-sm text-outline block mt-1">Received</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-[26px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- MAIN OPERATIONAL TOOLBAR & PAGE HEADER -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1.5 h-10 px-4 bg-primary text-white rounded-lg text-sm shadow-sm hover:bg-primary/90 active:scale-[0.98] transition-all cursor-pointer font-bold" id="openNewReceiptBtn">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>NEW</span>
+</button>
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-bold text-slate-900 tracking-tight">Receipts</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200">24 items</span>
+</div>
+</div>
+<!-- RIGHT CONTROLS: SEARCH, FILTERS & VIEW MODES -->
+<div class="flex items-center gap-3 self-end md:self-auto w-full md:w-auto justify-end">
+<!-- Interactive Expandable Search -->
+<div class="relative flex items-center">
+<div class="flex items-center bg-white border border-slate-200 rounded-lg shadow-sm px-3 h-10 transition-all duration-200 w-48 sm:w-64 focus-within:w-72 focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/10" id="searchContainer">
+<span class="material-symbols-outlined text-slate-400 text-[18px] mr-2">search</span>
+<input class="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 border-0 focus:ring-0 p-0 h-full" id="searchInput" placeholder="Search reference, vendor..." type="text"/>
+<kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-slate-50 rounded border border-slate-200">⌘K</kbd>
+</div>
+</div>
+<!-- Quick Status Filter Dropdown Trigger -->
+<div class="relative">
+<button class="h-10 px-3 rounded-lg bg-white border border-slate-200 text-slate-600 text-sm font-semibold flex items-center gap-1.5 shadow-sm hover:text-slate-900 hover:bg-slate-50 transition-colors cursor-pointer" id="filterDropdownBtn">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="hidden sm:inline">Filter</span>
+<span class="hidden flex items-center justify-center w-4 h-4 text-[10px] text-white font-bold rounded-full bg-primary" id="activeFilterBadge">1</span>
+</button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1.5 z-30 border border-slate-200" id="filterMenu">
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-900 font-semibold" onclick="applyReceiptFilter('all')">All Statuses</button>
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Draft')">Draft</button>
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Ready')">Ready</button>
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Done')">Done</button>
+  <div class="my-1 border-t border-slate-100"></div>
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-rose-600 font-medium" onclick="applyReceiptFilter('all')">Clear all</button>
+</div>
+</div>
+<!-- View Switcher Group -->
+<div aria-label="View toggle" class="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80 shadow-xs" role="tablist">
+<button aria-pressed="true" class="h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-sm transition-all cursor-pointer font-label-sm text-label-sm font-semibold" id="listViewBtn" onclick="toggleReceiptsView('list')" title="List View">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+<span class="hidden sm:inline">List</span>
+</button>
+<button aria-pressed="false" class="h-8 px-2.5 rounded-lg flex items-center justify-center gap-1.5 bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 transition-all cursor-pointer font-label-sm text-label-sm font-semibold" id="kanbanViewBtn" onclick="toggleReceiptsView('kanban')" title="Kanban View">
+<span class="material-symbols-outlined text-[18px]">view_kanban</span>
+<span class="hidden sm:inline">Kanban</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- KANBAN VIEW CONTAINER -->
+<div id="receipts-kanban-view" class="hidden w-full flex-col md:flex-row gap-5 items-start">
   
+  <!-- Column 1: Draft -->
+  <div class="w-full md:w-1/3 bg-slate-50/50 rounded-xl border border-slate-200/60 p-4 flex flex-col gap-3">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+        <h3 class="font-semibold text-slate-700">Draft</h3>
+      </div>
+      <span class="px-2 py-0.5 rounded-full bg-slate-200/50 text-slate-600 text-xs font-bold">1</span>
+    </div>
+    
+    <!-- Card -->
+    <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-slate-400">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-mono text-sm font-bold text-slate-900">WH/IN/00044</span>
+        <span class="text-xs font-medium text-slate-500">Oct 30, 2024</span>
+      </div>
+      <p class="text-sm font-medium text-slate-700 mb-1">TechCorp Displays</p>
+      <div class="flex items-center gap-1.5 text-xs text-slate-500">
+        <span class="px-1.5 py-0.5 rounded bg-slate-100 font-medium">WH/Stock1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column 2: Ready -->
+  <div class="w-full md:w-1/3 bg-slate-50/50 rounded-xl border border-slate-200/60 p-4 flex flex-col gap-3">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+        <h3 class="font-semibold text-slate-700">Ready</h3>
+      </div>
+      <span class="px-2 py-0.5 rounded-full bg-slate-200/50 text-slate-600 text-xs font-bold">2</span>
+    </div>
+    
+    <!-- Card 1 -->
+    <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-indigo-500">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-mono text-sm font-bold text-slate-900">WH/IN/00042</span>
+        <span class="text-xs font-medium text-slate-500">Oct 28, 2024</span>
+      </div>
+      <p class="text-sm font-medium text-slate-700 mb-1">Azure Interior</p>
+      <div class="flex items-center gap-1.5 text-xs text-slate-500">
+        <span class="px-1.5 py-0.5 rounded bg-slate-100 font-medium">WH/Stock1</span>
+      </div>
+    </div>
+    
+    <!-- Card 2 -->
+    <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-indigo-500">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-mono text-sm font-bold text-slate-900">WH/IN/00041</span>
+        <span class="text-xs font-medium text-slate-500">Oct 26, 2024</span>
+      </div>
+      <p class="text-sm font-medium text-slate-700 mb-1">Gemini Furniture</p>
+      <div class="flex items-center gap-1.5 text-xs text-slate-500">
+        <span class="px-1.5 py-0.5 rounded bg-slate-100 font-medium">WH/Stock2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column 3: Done -->
+  <div class="w-full md:w-1/3 bg-slate-50/50 rounded-xl border border-slate-200/60 p-4 flex flex-col gap-3">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <h3 class="font-semibold text-slate-700">Done</h3>
+      </div>
+      <span class="px-2 py-0.5 rounded-full bg-slate-200/50 text-slate-600 text-xs font-bold">1</span>
+    </div>
+    
+    <!-- Card -->
+    <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-emerald-500 opacity-75">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-mono text-sm font-bold text-slate-900">WH/IN/00039</span>
+        <span class="text-xs font-medium text-slate-500">Oct 25, 2024</span>
+      </div>
+      <p class="text-sm font-medium text-slate-700 mb-1">WoodCo Supplies</p>
+      <div class="flex items-center gap-1.5 text-xs text-slate-500">
+        <span class="px-1.5 py-0.5 rounded bg-slate-100 font-medium">WH/Stock1</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TABLE CONTAINER (LIST VIEW - DEFAULT) -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-xs border border-slate-200/80 overflow-hidden flex flex-col" id="listViewContainer">
+<!-- Desktop Table View (Hidden on mobile) -->
+<div class="hidden md:block overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-outline uppercase font-label-sm text-label-sm tracking-wider select-none h-11 border-b border-surface-container">
+<th class="px-space-lg font-semibold w-12 text-center">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" id="selectAllCheckbox" type="checkbox"/>
+</th>
+<th class="px-space-lg font-semibold cursor-pointer hover:text-on-surface transition-colors" data-sort="ref">
+<div class="flex items-center gap-1">
+<span>Reference</span>
+<span class="material-symbols-outlined text-[15px]">unfold_more</span>
+</div>
+</th>
+<th class="px-space-lg font-semibold">From</th>
+<th class="px-space-lg font-semibold">To</th>
+<th class="px-space-lg font-semibold">Contact</th>
+<th class="px-space-lg font-semibold cursor-pointer hover:text-on-surface transition-colors" data-sort="date">
+<div class="flex items-center gap-space-xs">
+<span>Schedule Date</span>
+<span class="material-symbols-outlined text-[15px]">arrow_downward</span>
+</div>
+</th>
+<th class="px-space-lg font-semibold text-center">Status</th>
+<th class="px-space-lg font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-body-sm text-on-surface" id="receiptsTableBody">
+<!-- Row 1: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00042</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-secondary-container/50 text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center justify-center">AI</span>
+<span class="font-medium text-on-surface">Azure Interior</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock1</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Azure Interior</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">
+<div class="flex items-center gap-1.5">
+<span>Oct 28, 2024</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block" title="Scheduled today"></span>
+</div>
+</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/50">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+Ready
+</span>
+</td>
+<td class="px-space-lg py-3.5" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 w-[60px] ml-auto">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00041</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-primary-fixed/50 text-on-primary-fixed-variant font-label-sm text-label-sm font-bold flex items-center justify-center">GF</span>
+<span class="font-medium text-on-surface">Gemini Furniture</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock2</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Marcus Brody</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 26, 2024</td>
+<td class="px-space-lg py-3.5 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready</span></td>
+<td class="px-space-lg py-3.5" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 w-[60px] ml-auto">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Done -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface group-hover:text-primary group-hover:underline">WH/IN/00039</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center">SC</span>
+<span class="font-medium text-on-surface">SteelCraft Corp</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/RawMaterials</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Elena Rostova</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 25, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-fixed text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+Done
+</span>
+</td>
+<td class="px-space-lg py-3.5" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 w-[60px] ml-auto">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print receipt slip"><span class="material-symbols-outlined text-[18px]">print</span></button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="View slip"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Draft -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface group-hover:text-primary group-hover:underline">WH/IN/00038</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-bold flex items-center justify-center">WT</span>
+<span class="font-medium text-on-surface">WH/Transit</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/InputDock</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">Logistics Dispatch</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 22, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+Draft
+</span>
+</td>
+<td class="px-space-lg py-3.5" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 w-[60px] ml-auto">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Edit draft"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<div class="w-7"></div>
+</div>
+</td>
+</tr>
+<!-- Row 5: Ready -->
+<tr class="hover:bg-surface-container-low/70 transition-colors group cursor-pointer" onclick="openDetailsModal('WH/IN/00035', 'Global Tech Supply', 'WH/Stock1', 'David Chen', 'Oct 22, 2024', 'Ready')">
+<td class="px-space-lg text-center" onclick="event.stopPropagation()">
+<input class="row-checkbox w-4 h-4 rounded text-primary focus:ring-primary/30 cursor-pointer accent-primary" type="checkbox"/>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[17px]">receipt_long</span>
+<span class="font-data-tabular text-data-tabular font-bold text-primary group-hover:underline">WH/IN/00035</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<div class="flex items-center gap-space-xs">
+<span class="w-6 h-6 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold flex items-center justify-center">GT</span>
+<span class="font-medium text-on-surface">Global Tech Supply</span>
+</div>
+</td>
+<td class="px-space-lg py-3.5">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium">WH/Stock1</span>
+</td>
+<td class="px-space-lg py-3.5 text-on-surface-variant font-medium">David Chen</td>
+<td class="px-space-lg py-3.5 text-on-surface font-data-tabular text-data-tabular">Oct 22, 2024</td>
+<td class="px-space-lg py-3.5 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/50">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+Ready
+</span>
+</td>
+<td class="px-space-lg py-3.5" onclick="event.stopPropagation()">
+<div class="flex items-center justify-end gap-1 w-[60px] ml-auto">
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer" title="Print slip">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors cursor-pointer ml-1" title="Validate receipt">
+<span class="material-symbols-outlined text-[18px]">check_box</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Responsive Card List for Mobile (< 768px) -->
+<div class="block md:hidden divide-y divide-surface-container-low p-space-sm">
+<!-- Card 1 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-primary">WH/IN/00042</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+Ready
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">Azure Interior</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/Stock1</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Azure Interior</span>
+<span>Oct 28, 2024</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')"><div class="flex items-center justify-between"><span class="font-data-tabular text-data-tabular font-bold text-primary">WH/IN/00041</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready</span></div><div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface"><span class="font-semibold text-on-surface">Gemini Furniture</span><span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/Stock2</span></div><div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs"><span>Contact: Marcus Brody</span><span>Oct 26, 2024</span></div></div>
+<!-- Card 3 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface">WH/IN/00039</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-tertiary-fixed text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+Done
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">SteelCraft Corp</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/RawMaterials</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Elena Rostova</span>
+<span>Oct 25, 2024</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="p-space-md hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer flex flex-col gap-space-xs" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-on-surface">WH/IN/00038</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-surface-container text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+Draft
+</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold text-on-surface">WH/Transit</span>
+<span class="material-symbols-outlined text-[14px] text-outline">arrow_forward</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-mono">WH/InputDock</span>
+</div>
+<div class="flex items-center justify-between text-outline text-label-sm font-label-sm pt-space-xs">
+<span>Contact: Logistics Dispatch</span>
+<span>Oct 22, 2024</span>
+</div>
+</div>
+</div>
+<!-- CLEAN PAGINATION FOOTER -->
+<div class="px-space-lg py-space-md bg-surface-container-lowest border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-3">
+<span>Showing <strong class="font-semibold text-on-surface">1 - 10</strong> of <strong class="font-semibold text-on-surface">24</strong> receipts</span>
+<span class="text-outline">|</span>
+<div class="flex items-center gap-1.5">
+<span>Per page:</span>
+<select class="bg-surface-container-low border border-slate-200/60 rounded px-2 py-0.5 font-label-sm text-label-sm text-on-surface focus:outline-none cursor-pointer">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-space-xs rounded-lg text-outline bg-surface-container-low cursor-not-allowed font-label-sm text-label-sm flex items-center gap-1" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+<span>Previous</span>
+</button>
+<button class="w-7 h-7 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center shadow-xs">1</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm font-semibold flex items-center justify-center transition-colors">2</button>
+<button class="w-7 h-7 rounded-lg hover:bg-surface-container-low text-on-surface font-label-sm text-label-sm font-semibold flex items-center justify-center transition-colors">3</button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm flex items-center gap-1 cursor-pointer">
+<span>Next</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- KANBAN VIEW CONTAINER (INITIALLY HIDDEN) -->
+<div class="hidden grid grid-cols-1 md:grid-cols-3 gap-5 w-full" id="kanbanViewContainer">
+<!-- COLUMN 1: DRAFT -->
+<div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-200/80 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Draft</h3>
+<span class="text-xs text-slate-500 font-normal">Awaiting review</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-label-sm text-label-sm font-bold" id="draftCountBadge">4</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanDraftCol">
+<!-- Card D1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00038', 'WH/Transit', 'WH/InputDock', 'Logistics Dispatch', 'Oct 22, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00038</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Logistics Dispatch</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>WH/Transit</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 22, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Intake Draft</span>
+</div>
+</div>
+<!-- Card D2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00037', 'Apex Logistics', 'WH/InputDock', 'Sarah Jenkins', 'Oct 20, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00037</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Sarah Jenkins</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Apex Logistics</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 20, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">PO-8831</span>
+</div>
+</div>
+<!-- Card D3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00036', 'Nordic Timber Co.', 'WH/RawMaterials', 'Nils Lindqvist', 'Oct 19, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00036</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Nils Lindqvist</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Nordic Timber</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/RawMaterials</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 19, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">PO-8820</span>
+</div>
+</div>
+<!-- Card D4 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00033', 'Vanguard Packaging', 'WH/InputDock', 'Claire Dupont', 'Oct 18, 2024', 'Draft')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-900 group-hover:text-primary transition-colors">WH/IN/00033</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Draft
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-slate-400">person</span>
+<span class="font-medium text-slate-700">Claire Dupont</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Vanguard Packaging</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/InputDock</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 18, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Internal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMN 2: READY -->
+<div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-indigo-100 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Ready</h3>
+<span class="text-xs text-indigo-700/80 font-normal">Ready to receive</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-label-sm text-label-sm font-bold" id="readyCountBadge">12</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanReadyCol">
+<!-- Card R1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00042', 'Azure Interior', 'WH/Stock1', 'Azure Interior', 'Oct 28, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00042</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">storefront</span>
+<span>Azure Interior</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Azure Interior</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+<span class="flex items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 28, 2024
+          </span>
+<span class="text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded">Today</span>
+</div>
+</div>
+<!-- Card R2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00041', 'Gemini Furniture', 'WH/Stock2', 'Marcus Brody', 'Oct 26, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00041</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>Marcus Brody</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Gemini Furniture</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock2</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 26, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Cold Racks</span>
+</div>
+</div>
+<!-- Card R3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00035', 'Global Tech Supply', 'WH/Stock1', 'David Chen', 'Oct 22, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00035</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>David Chen</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Global Tech Supply</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 22, 2024
+          </span>
+<span class="text-[11px] font-medium bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">Floor Zone A</span>
+</div>
+</div>
+<!-- Card R4 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00044', 'Horizon Fabricators', 'WH/Stock1', 'Liam Henderson', 'Oct 29, 2024', 'Ready')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-indigo-600 group-hover:underline">WH/IN/00044</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-container/80 text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ready
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+<span class="material-symbols-outlined text-[15px] text-indigo-500">person</span>
+<span>Liam Henderson</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Horizon Fab</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700 font-bold">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 29, 2024
+          </span>
+<span class="text-[11px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">High Priority</span>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUMN 3: DONE -->
+<div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-4 flex flex-col min-h-[580px]">
+<!-- Column Header -->
+<div class="flex items-center justify-between pb-3.5 mb-3 border-b border-emerald-100 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Done</h3>
+<span class="text-xs text-emerald-700/80 font-normal">Received</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-label-sm font-bold" id="doneCountBadge">8</span>
+</div>
+<!-- Scrollable Cards Column List -->
+<div class="space-y-3 overflow-y-auto max-h-[620px] pr-1.5 flex-1" id="kanbanDoneCol">
+<!-- Card DN1 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00039', 'SteelCraft Corp', 'WH/RawMaterials', 'Elena Rostova', 'Oct 25, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00039</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Elena Rostova</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>SteelCraft Corp</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/RawMaterials</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 25, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+<!-- Card DN2 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00034', 'Omega Packaging', 'WH/Stock1', 'Arthur Dent', 'Oct 17, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00034</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Arthur Dent</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Omega Pack</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/Stock1</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 17, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+<!-- Card DN3 -->
+<div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer flex flex-col gap-2 group" onclick="openDetailsModal('WH/IN/00031', 'Quantum Micro Systems', 'WH/Stock2', 'Kiran Patel', 'Oct 15, 2024', 'Done')">
+<div class="flex items-center justify-between">
+<span class="font-data-tabular text-data-tabular font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">WH/IN/00031</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-100 text-emerald-700">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Done
+          </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-600">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
+<span class="font-medium text-slate-700">Kiran Patel</span>
+</div>
+<div class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+<span>Quantum Micro</span>
+<span class="material-symbols-outlined text-[13px] text-slate-400">arrow_forward</span>
+<span class="font-mono bg-slate-100 px-1 rounded text-slate-700">WH/Stock2</span>
+</div>
+<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Oct 15, 2024
+          </span>
+<span class="text-[11px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Validated</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 1: CREATE NEW RECEIPT DRAWER/MODAL -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-md bg-inverse-surface/40 backdrop-blur-sm transition-opacity" id="newReceiptModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto flex flex-col animate-in fade-in zoom-in-95 duration-150">
+<!-- Modal Header -->
+<div class="px-space-xl py-space-lg bg-surface-container-low flex items-center justify-between sticky top-0 z-10 border-b border-surface-container">
+<div class="flex items-center gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">post_add</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">New Incoming Receipt</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Draft status initialized • Auto-reference: WH/IN/00043</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg text-outline hover:text-on-surface hover:bg-surface-container flex items-center justify-center transition-colors cursor-pointer" id="closeNewReceiptBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-space-xl flex flex-col gap-space-xl">
+<!-- Form Inputs Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-lg">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Vendor / Source Contact *</label>
+<div class="relative">
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Select or type supplier..." type="text" value="Azure Interior"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-outline text-[18px]">search</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Destination Location *</label>
+<select class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none cursor-pointer">
+<option>WH/Stock1 (Floor Zone A)</option>
+<option>WH/Stock2 (Cold Racks)</option>
+<option>WH/RawMaterials (Bay 4)</option>
+<option>WH/InputDock (Quarantine)</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Scheduled Date *</label>
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" type="date" value="2024-10-30"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Source Document / Tracking</label>
+<input class="w-full h-[38px] px-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="PO-2024-8842 or BOL ref" type="text"/>
+</div>
+</div>
+<!-- Product Line Items Section -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md font-bold text-on-surface">Product Operations Lines</span>
+<button class="font-label-md text-label-md text-primary font-bold hover:underline flex items-center gap-0.5 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Line
+</button>
+</div>
+<div class="bg-surface-container-low rounded-lg overflow-hidden border border-surface-container">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container font-label-sm text-label-sm text-outline uppercase">
+<th class="px-space-md py-space-xs font-semibold">Item &amp; Description</th>
+<th class="px-space-md py-space-xs font-semibold w-24">Demanded</th>
+<th class="px-space-md py-space-xs font-semibold w-24">Done</th>
+<th class="px-space-md py-space-xs font-semibold w-20">UoM</th>
+<th class="px-space-xs py-space-xs w-10 text-center"></th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-surface-container">
+<tr>
+<td class="px-space-md py-space-sm">
+<span class="font-semibold block">[DESK-001] Ergonomic Desk Mat</span>
+<span class="text-outline text-label-sm font-label-sm">High-density rubber, Charcoal</span>
+</td>
+<td class="px-space-md py-space-sm font-data-tabular">50</td>
+<td class="px-space-md py-space-sm font-data-tabular font-bold text-primary">0</td>
+<td class="px-space-md py-space-sm text-outline">Units</td>
+<td class="text-center">
+<button class="text-outline hover:text-error cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+</td>
+</tr>
+<tr>
+<td class="px-space-md py-space-sm">
+<span class="font-semibold block">[CHAIR-409] Swivel Executive Mesh</span>
+<span class="text-outline text-label-sm font-label-sm">Grade 4 Gas Lift, Lumbar Core</span>
+</td>
+<td class="px-space-md py-space-sm font-data-tabular">20</td>
+<td class="px-space-md py-space-sm font-data-tabular font-bold text-primary">0</td>
+<td class="px-space-md py-space-sm text-outline">Units</td>
+<td class="text-center">
+<button class="text-outline hover:text-error cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Notes / Special Instructions -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs font-semibold">Special Receiving Instructions</label>
+<textarea class="w-full p-space-md bg-surface-container-lowest rounded-lg border border-slate-300 text-body-sm font-body-sm text-on-surface shadow-xs focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Inspect pallet shrink wrap for tilt indicator triggers..." rows="2"></textarea>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-space-xl py-space-md bg-surface-container-low flex items-center justify-between sticky bottom-0 border-t border-surface-container">
+<button class="px-space-lg py-space-sm bg-surface-container-lowest text-on-surface font-label-md text-label-md rounded-lg shadow-xs hover:bg-surface-container transition-colors cursor-pointer" id="cancelNewReceiptBtn">
+Discard
+</button>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-lg py-space-sm bg-surface-container-lowest text-primary font-label-md text-label-md rounded-lg shadow-xs hover:bg-surface-container transition-colors cursor-pointer font-semibold">
+Save as Draft
+</button>
+<button class="px-space-xl py-space-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-xs hover:bg-primary-container active:scale-[0.98] transition-all cursor-pointer font-bold" id="validateCreateBtn">
+Validate &amp; Confirm
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL 2: RECEIPT DETAILS PREVIEW SLIDE-OVER -->
+<div class="fixed inset-0 z-50 flex items-center justify-end bg-inverse-surface/30 backdrop-blur-xs transition-opacity hidden" id="detailsModal">
+<div class="bg-surface-container-lowest w-full max-w-lg h-full shadow-2xl p-space-xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
+<div>
+<div class="flex items-center justify-between pb-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-label-sm font-bold bg-secondary-container/80 text-primary" id="detailBadge">Draft</span>
+<span class="font-label-sm text-label-sm text-outline">Internal Transfer</span>
+</div>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-outline hover:text-on-surface flex items-center justify-center transition-colors cursor-pointer" id="closeDetailsBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex items-baseline justify-between mb-space-lg">
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface tracking-tight" id="detailRef">WH/IN/00038</h2>
+<span class="text-tertiary flex items-center gap-1 text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">qr_code_2</span> BARCODE
+</span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-lg flex flex-col gap-space-md mb-space-xl">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Source / Vendor:</span>
+<span class="font-bold text-on-surface" id="detailFrom">WH/Transit</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Destination:</span>
+<span class="font-bold text-on-surface font-mono" id="detailTo">WH/InputDock</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Responsible Contact:</span>
+<span class="text-on-surface font-semibold" id="detailContact">Logistics Dispatch</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">Scheduled Intake:</span>
+<span class="text-on-surface font-data-tabular" id="detailDate">Oct 22, 2024</span>
+</div>
+</div>
+<!-- Receipt Progress Step Visualization -->
+<div class="mb-space-xl">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant block uppercase mb-space-md">Intake Pipeline</span>
+<div class="flex items-center justify-between relative"><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[12px]">✓</div><span class="font-label-sm text-label-sm font-semibold text-on-surface">Draft</span></div><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[12px] ring-4 ring-primary/20">2</div><span class="font-label-sm text-label-sm font-bold text-primary">Ready</span></div><div class="flex flex-col items-center gap-1 z-10"><div class="w-7 h-7 rounded-full bg-surface-container text-outline flex items-center justify-center font-bold text-[12px]">3</div><span class="font-label-sm text-label-sm text-outline">Done</span></div><div class="absolute left-3 right-3 top-3.5 h-0.5 bg-surface-container z-0"></div></div>
+</div>
+<div class="bg-primary/5 rounded-xl p-space-md flex items-center gap-space-md text-primary">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+<div class="text-body-sm font-body-sm">
+<span class="font-bold block">Bay Pre-assigned</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">Dock Zone 2B is clear for unloading pallet freight.</span>
+</div>
+</div>
+</div>
+<!-- Action Footer for Drawer -->
+<div class="flex items-center gap-space-md pt-space-lg">
+<button class="w-full py-space-sm bg-surface-container-low text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('detailsModal').classList.add('hidden')">
+Close
+</button>
+<button class="w-full py-space-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container active:scale-[0.98] transition-all cursor-pointer font-bold" onclick="alert('Receipt WH/IN/00042 processed and booked to ledger!')">
+Validate Items
+</button>
+</div>
+</div>
+</div>
+</div></div></main>
+  </div>
+
   <script>
-    // ==========================================
-    // VIEW SWITCHING LOGIC
-    // ==========================================
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let signupAnimated = false;
+    let fpCurrentStep = 1;
+
     const views = {
       'login': { heading: 'Real-time stock control, one dashboard.', subtext: 'Streamlined inventory tracking and warehouse operations for floor teams.' },
       'signup': { heading: 'Join the StockSense network.', subtext: 'Create your account to start managing inventory efficiently.' },
@@ -440,20 +1824,129 @@
     };
 
     function showView(viewId) {
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('view-signup').classList.add('hidden');
-      document.getElementById('view-forgot-password').classList.add('hidden');
-      
-      if(viewId === 'forgot-password' && document.getElementById('view-forgot-password').classList.contains('hidden')) {
-        fpGoToStep(1);
+      const headingEl = document.getElementById('panel-heading');
+      const subtextEl = document.getElementById('panel-subtext');
+      const viewsList = ['login', 'signup', 'forgot-password'];
+      const activeViewId = viewsList.find(v => !document.getElementById(`view-${v}`).classList.contains('hidden'));
+      const activeEl = activeViewId ? document.getElementById(`view-${activeViewId}`) : null;
+      const targetEl = document.getElementById(`view-${viewId}`);
+
+      if (reduceMotion) {
+        if(activeEl) { activeEl.classList.add('hidden'); activeEl.classList.remove('flex'); }
+        if(viewId === 'forgot-password') fpGoToStep(1);
+        targetEl.classList.remove('hidden'); targetEl.classList.add('flex');
+        headingEl.textContent = views[viewId].heading;
+        subtextEl.textContent = views[viewId].subtext;
+      } else {
+        headingEl.style.transition = 'opacity 150ms, transform 150ms ease-out';
+        subtextEl.style.transition = 'opacity 150ms, transform 150ms ease-out';
+        headingEl.style.opacity = '0';
+        subtextEl.style.opacity = '0';
+        
+        if (activeEl) {
+          activeEl.classList.remove('view-enter-active');
+          activeEl.classList.add('view-exit');
+        }
+        
+        setTimeout(() => {
+          if (activeEl) {
+            activeEl.classList.add('hidden');
+            activeEl.classList.remove('flex');
+          }
+          
+          headingEl.textContent = views[viewId].heading;
+          subtextEl.textContent = views[viewId].subtext;
+          
+          headingEl.classList.remove('animate-slideUp16');
+          subtextEl.classList.remove('animate-slideUp12');
+          
+          headingEl.style.transform = 'translateY(6px)';
+          subtextEl.style.transform = 'translateY(6px)';
+          
+          requestAnimationFrame(() => {
+            headingEl.style.opacity = '1';
+            subtextEl.style.opacity = '1';
+            headingEl.style.transform = 'translateY(0)';
+            subtextEl.style.transform = 'translateY(0)';
+          });
+          
+          if(viewId === 'forgot-password') fpGoToStep(1);
+          
+          targetEl.classList.remove('hidden', 'view-exit', 'view-exit-left', 'view-exit-right');
+          targetEl.classList.add('flex', 'view-exit');
+          void targetEl.offsetWidth;
+          targetEl.classList.remove('view-exit');
+          targetEl.classList.add('view-enter-active');
+          
+          if (viewId === 'signup' && !signupAnimated) {
+            signupAnimated = true;
+            triggerFadeSlideUp('signup-form', '#view-signup > p');
+          }
+        }, 180);
+      }
+    }
+
+    function triggerFadeSlideUp(formId, pSelector) {
+      if (reduceMotion) return;
+      const form = document.getElementById(formId);
+      if (form) {
+        Array.from(form.children).forEach((c, i) => {
+          c.classList.add('animate-fadeSlideUp');
+          c.style.animationDelay = `${i * 50}ms`;
+        });
+        const p = document.querySelector(pSelector);
+        if (p) {
+          p.classList.add('animate-fadeSlideUp');
+          p.style.animationDelay = `${form.children.length * 50}ms`;
+        }
+      }
+    }
+
+    // Profile Dropdown Toggle
+      const profileBtn = document.getElementById('profile-button');
+      const profileDropdown = document.getElementById('profile-dropdown');
+
+      if (profileBtn && profileDropdown) {
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+          }
+        });
       }
 
-      document.getElementById(`view-${viewId}`).classList.remove('hidden');
-      document.getElementById(`view-${viewId}`).classList.add('flex');
+      // Mobile Menu Toggle
+      const mobileToggle = document.getElementById('mobile-menu-toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+
+      if (mobileToggle && mobileNav) {
+        mobileToggle.addEventListener('click', () => {
+          mobileNav.classList.toggle('hidden');
+        });
+      }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      triggerFadeSlideUp('login-form', '#view-login > p');
       
-      document.getElementById('panel-heading').textContent = views[viewId].heading;
-      document.getElementById('panel-subtext').textContent = views[viewId].subtext;
-    }
+      if (!reduceMotion) {
+        const dLogo = document.getElementById('panel-logo-wrap');
+        const heading = document.getElementById('panel-heading');
+        const subtext = document.getElementById('panel-subtext');
+        const footer = document.getElementById('panel-footer');
+        
+        if (dLogo) dLogo.classList.add('animate-popIn');
+        if (heading) { heading.classList.add('animate-slideUp16'); heading.style.animationDelay = '150ms'; }
+        if (subtext) { subtext.classList.add('animate-slideUp12'); subtext.style.animationDelay = '280ms'; }
+        if (footer) { footer.classList.add('animate-fadeInOnly'); footer.style.animationDelay = '500ms'; }
+        
+        const mLogo = document.getElementById('mobile-logo-wrap');
+        if (mLogo) { mLogo.classList.add('animate-popIn'); mLogo.style.animationDuration = '350ms'; }
+      }
+    });
 
     function togglePassword(inputId, iconId) {
       const input = document.getElementById(inputId);
@@ -482,15 +1975,17 @@
       text.textContent = 'Verifying...';
       alert.classList.add('hidden');
       
+      if(!reduceMotion) btn.classList.add('btn-pulse');
+      
       setTimeout(() => {
         btn.disabled = false;
         spinner.classList.add('hidden');
+        if(!reduceMotion) btn.classList.remove('btn-pulse');
         text.textContent = 'Log In';
-        alert.classList.remove('hidden');
-        document.getElementById('login-alert-msg').textContent = 'Demo mode: Login successful.';
-        document.getElementById('login-alert').classList.replace('bg-red-50', 'bg-green-50');
-        document.getElementById('login-alert').classList.replace('text-red-700', 'text-green-700');
-        document.getElementById('login-alert').querySelector('span').textContent = 'check_circle';
+        document.getElementById('auth-layout').classList.add('hidden');
+        document.getElementById('auth-layout').classList.remove('flex');
+        document.getElementById('dashboard-layout').classList.remove('hidden');
+        document.getElementById('dashboard-layout').classList.add('flex');
       }, 1000);
     }
 
@@ -502,15 +1997,27 @@
       const mgr = document.getElementById('role-manager');
       const stf = document.getElementById('role-staff');
       
-      const activeClasses = 'bg-primary text-white shadow-sm font-semibold'.split(' ');
-      const inactiveClasses = 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 font-medium'.split(' ');
-
-      if (role === 'manager') {
-        mgr.classList.remove(...inactiveClasses); mgr.classList.add(...activeClasses);
-        stf.classList.remove(...activeClasses); stf.classList.add(...inactiveClasses);
+      if (reduceMotion) {
+        const activeClasses = 'bg-primary text-white font-semibold shadow-sm'.split(' ');
+        const inactiveClasses = 'text-slate-600 hover:text-slate-900 font-medium hover:bg-slate-200/60'.split(' ');
+        if (role === 'manager') {
+          mgr.classList.remove(...inactiveClasses); mgr.classList.add(...activeClasses);
+          stf.classList.remove(...activeClasses); stf.classList.add(...inactiveClasses);
+        } else {
+          stf.classList.remove(...inactiveClasses); stf.classList.add(...activeClasses);
+          mgr.classList.remove(...activeClasses); mgr.classList.add(...inactiveClasses);
+        }
       } else {
-        stf.classList.remove(...inactiveClasses); stf.classList.add(...activeClasses);
-        mgr.classList.remove(...activeClasses); mgr.classList.add(...inactiveClasses);
+        const pill = document.getElementById('role-pill');
+        if (role === 'manager') {
+          pill.style.transform = 'translateX(0)';
+          mgr.classList.replace('text-slate-600', 'text-white');
+          stf.classList.replace('text-white', 'text-slate-600');
+        } else {
+          pill.style.transform = 'translateX(100%)';
+          stf.classList.replace('text-slate-600', 'text-white');
+          mgr.classList.replace('text-white', 'text-slate-600');
+        }
       }
     }
 
@@ -529,6 +2036,7 @@
       ];
       const feedback = document.getElementById('signup-password-feedback');
 
+      const oldColors = bars.map(b => b.className);
       bars.forEach(b => b.className = 'h-full w-1/4 bg-slate-200 transition-all duration-300');
 
       if (val.length === 0) {
@@ -547,6 +2055,16 @@
         feedback.textContent = "Strong password";
         feedback.className = "text-[11px] text-green-600 mt-1 font-medium";
       }
+      
+      if (!reduceMotion) {
+        bars.forEach((b, i) => {
+          if (!b.className.includes('bg-slate-200') && oldColors[i] !== b.className) {
+            b.style.transform = 'scaleY(1.4)';
+            setTimeout(() => b.style.transform = 'scaleY(1)', 200);
+          }
+        });
+      }
+      
       signupCheckPasswordMatch();
     }
 
@@ -556,11 +2074,18 @@
       const fb = document.getElementById('signup-match-feedback');
       if (!p2) { fb.classList.add('hidden'); return; }
       
+      const wasHidden = fb.classList.contains('hidden');
       fb.classList.remove('hidden');
       if (p1 === p2) {
         fb.textContent = '✓ Matches'; fb.className = 'text-xs font-semibold text-green-600';
       } else {
         fb.textContent = '✕ Doesn\'t match'; fb.className = 'text-xs font-semibold text-red-500';
+      }
+      
+      if (!reduceMotion && wasHidden) {
+        fb.style.opacity = '0'; fb.style.transform = 'scale(0.9)';
+        fb.style.transition = 'opacity 200ms, transform 200ms';
+        requestAnimationFrame(() => { fb.style.opacity = '1'; fb.style.transform = 'scale(1)'; });
       }
     }
 
@@ -577,10 +2102,21 @@
       btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Creating...';
       
       setTimeout(() => {
-        btn.disabled = false; spinner.classList.add('hidden'); text.textContent = 'Create Account';
-        document.getElementById('signup-form').reset();
-        signupSetRole('manager');
-        showView('login');
+        btn.disabled = false; spinner.classList.add('hidden');
+        if(!reduceMotion) {
+          text.innerHTML = '<span class="material-symbols-outlined text-[18px] inline-block animate-successPop">check_circle</span>';
+          setTimeout(() => {
+            text.textContent = 'Create Account';
+            document.getElementById('signup-form').reset();
+            signupSetRole('manager');
+            showView('login');
+          }, 400);
+        } else {
+          text.textContent = 'Create Account';
+          document.getElementById('signup-form').reset();
+          signupSetRole('manager');
+          showView('login');
+        }
       }, 1200);
     }
 
@@ -590,41 +2126,90 @@
     let fpCountdownTimer;
     
     function fpGoToStep(step) {
-      document.getElementById('fp-step-1').classList.add('hidden');
-      document.getElementById('fp-step-2').classList.add('hidden');
-      document.getElementById('fp-step-3').classList.add('hidden');
-      document.getElementById('fp-step-success').classList.add('hidden');
-      document.getElementById('fp-stepper').classList.remove('hidden');
+      const isForward = step > fpCurrentStep;
+      const prevStep = fpCurrentStep;
+      fpCurrentStep = step;
       
-      if(step === 4) {
-        document.getElementById('fp-stepper').classList.add('hidden');
-        document.getElementById('fp-step-success').classList.remove('hidden');
-        document.getElementById('fp-step-success').classList.add('flex');
-        return;
+      const activeEl = document.getElementById(prevStep === 4 ? 'fp-step-success' : `fp-step-${prevStep}`);
+      const targetEl = document.getElementById(step === 4 ? 'fp-step-success' : `fp-step-${step}`);
+      
+      if (reduceMotion) {
+        document.getElementById('fp-step-1').classList.add('hidden');
+        document.getElementById('fp-step-2').classList.add('hidden');
+        document.getElementById('fp-step-3').classList.add('hidden');
+        document.getElementById('fp-step-success').classList.add('hidden');
+        
+        if(step === 4) {
+          document.getElementById('fp-stepper').classList.add('hidden');
+          targetEl.classList.remove('hidden'); targetEl.classList.add('flex');
+          return;
+        }
+        document.getElementById('fp-stepper').classList.remove('hidden');
+        targetEl.classList.remove('hidden'); targetEl.classList.add('flex');
+      } else {
+        if (activeEl && activeEl !== targetEl && !activeEl.classList.contains('hidden')) {
+          activeEl.classList.remove('view-enter-active');
+          activeEl.classList.add(isForward ? 'view-exit-left' : 'view-exit-right');
+          setTimeout(() => {
+            activeEl.classList.add('hidden'); activeEl.classList.remove('flex');
+            
+            if(step === 4) document.getElementById('fp-stepper').classList.add('hidden');
+            else document.getElementById('fp-stepper').classList.remove('hidden');
+            
+            targetEl.classList.remove('hidden', 'view-exit-left', 'view-exit-right', 'view-enter-active', 'view-exit');
+            targetEl.classList.add('flex', isForward ? 'view-exit-right' : 'view-exit-left');
+            void targetEl.offsetWidth;
+            targetEl.classList.remove('view-exit-right', 'view-exit-left');
+            targetEl.classList.add('view-enter-active');
+            
+            if(step === 4) {
+               document.getElementById('fp-success-icon').classList.add('animate-successPop');
+               triggerFadeSlideUp('fp-step-success', null);
+            }
+          }, 200);
+        } else {
+           document.getElementById('fp-step-1').classList.add('hidden');
+           document.getElementById('fp-step-2').classList.add('hidden');
+           document.getElementById('fp-step-3').classList.add('hidden');
+           document.getElementById('fp-step-success').classList.add('hidden');
+           
+           if(step === 4) document.getElementById('fp-stepper').classList.add('hidden');
+           else document.getElementById('fp-stepper').classList.remove('hidden');
+           
+           targetEl.classList.remove('hidden'); targetEl.classList.add('flex', 'view-enter-active');
+        }
       }
       
-      document.getElementById(`fp-step-${step}`).classList.remove('hidden');
-      document.getElementById(`fp-step-${step}`).classList.add('flex');
-      
-      const line = document.getElementById('fp-stepper-line');
-      if(step === 1) {
-        line.style.width = '0%';
-        fpSetNode(1, 'active'); fpSetNode(2, 'inactive'); fpSetNode(3, 'inactive');
-      } else if (step === 2) {
-        line.style.width = '50%';
-        fpSetNode(1, 'done'); fpSetNode(2, 'active'); fpSetNode(3, 'inactive');
-        document.querySelector('.fp-otp-input').focus();
-      } else if (step === 3) {
-        line.style.width = '100%';
-        fpSetNode(1, 'done'); fpSetNode(2, 'done'); fpSetNode(3, 'active');
+      if (step < 4) {
+        const line = document.getElementById('fp-stepper-line');
+        if(step === 1) {
+          line.style.width = '0%';
+          fpSetNode(1, 'active'); fpSetNode(2, 'inactive'); fpSetNode(3, 'inactive');
+        } else if (step === 2) {
+          line.style.width = '50%';
+          fpSetNode(1, 'done'); fpSetNode(2, 'active'); fpSetNode(3, 'inactive');
+          setTimeout(() => {
+            const firstOtp = document.querySelector('.fp-otp-input');
+            if (firstOtp) firstOtp.focus();
+          }, reduceMotion ? 0 : 250);
+        } else if (step === 3) {
+          line.style.width = '100%';
+          fpSetNode(1, 'done'); fpSetNode(2, 'done'); fpSetNode(3, 'active');
+        }
       }
     }
     
     function fpSetNode(idx, state) {
       const node = document.getElementById(`fp-node-${idx}`);
+      const wasNotActive = !node.className.includes('ring-4');
+      
       if (state === 'active') {
         node.className = 'w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold flex items-center justify-center shadow-sm ring-4 ring-primary/20 transition-all z-10';
         node.innerHTML = idx;
+        if (!reduceMotion && wasNotActive) {
+          node.style.transform = 'scale(1.15)';
+          setTimeout(() => node.style.transform = 'scale(1)', 300);
+        }
       } else if (state === 'done') {
         node.className = 'w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold flex items-center justify-center shadow-sm transition-all z-10';
         node.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
@@ -665,7 +2250,13 @@
         const val = e.target.value.replace(/[^0-9]/g, '');
         e.target.value = val ? val[val.length-1] : '';
         document.getElementById('fp-otp-error').classList.add('hidden');
-        if (e.target.value && idx < fpBoxes.length - 1) fpBoxes[idx+1].focus();
+        if (e.target.value) {
+          if (!reduceMotion) {
+             e.target.style.transform = 'scale(1.08)';
+             setTimeout(() => e.target.style.transform = 'scale(1)', 150);
+          }
+          if (idx < fpBoxes.length - 1) fpBoxes[idx+1].focus();
+        }
         fpCheckOtpDone();
       });
       box.addEventListener('keydown', (e) => {
@@ -693,6 +2284,23 @@
       const spinner = document.getElementById('fp-spinner-2');
       const text = document.getElementById('fp-text-2');
       
+      let code = '';
+      fpBoxes.forEach(b => code += b.value);
+      
+      if (code === '000000') {
+        const container = document.getElementById('fp-otp-container');
+        const err = document.getElementById('fp-otp-error');
+        err.classList.remove('hidden');
+        if (!reduceMotion) {
+          container.classList.add('animate-shake');
+          setTimeout(() => container.classList.remove('animate-shake'), 300);
+        }
+        fpBoxes.forEach(b => b.value = '');
+        fpBoxes[0].focus();
+        fpCheckOtpDone();
+        return;
+      }
+      
       btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Verifying...';
       
       setTimeout(() => {
@@ -707,13 +2315,25 @@
       document.getElementById('fp-countdown-block').classList.remove('hidden');
       document.getElementById('fp-resend-block').classList.add('hidden');
       
+      const cd = document.getElementById('fp-countdown');
       fpCountdownTimer = setInterval(() => {
         sec--;
-        document.getElementById('fp-countdown').textContent = `00:${String(sec).padStart(2, '0')}`;
+        cd.textContent = `00:${String(sec).padStart(2, '0')}`;
+        if (!reduceMotion) {
+          cd.style.transform = 'scale(1.1)';
+          setTimeout(() => cd.style.transform = 'scale(1)', 150);
+        }
+        
         if(sec <= 0) {
           clearInterval(fpCountdownTimer);
           document.getElementById('fp-countdown-block').classList.add('hidden');
-          document.getElementById('fp-resend-block').classList.remove('hidden');
+          const resend = document.getElementById('fp-resend-block');
+          resend.classList.remove('hidden');
+          if (!reduceMotion) {
+            resend.style.opacity = '0';
+            resend.style.transition = 'opacity 250ms';
+            requestAnimationFrame(() => resend.style.opacity = '1');
+          }
         }
       }, 1000);
     }
@@ -779,6 +2399,139 @@
       }, 1000);
     }
     
-  </script>
+  
+    function switchDashboardView(viewId) {
+      document.getElementById('view-dashboard-main').classList.add('hidden');
+      document.getElementById('view-receipts-main').classList.add('hidden');
+      document.getElementById('view-receipts-main').classList.remove('block');
+      
+      document.getElementById('view-' + viewId + '-main').classList.remove('hidden');
+      if (viewId === 'receipts') {
+        document.getElementById('view-' + viewId + '-main').classList.add('block');
+      }
+      
+      const dashTab = document.getElementById('tab-dashboard');
+      const opsTab = document.getElementById('tab-operations');
+      const breadcrumb = document.getElementById('header-breadcrumb');
+      
+      if(viewId === 'dashboard') {
+        dashTab.className = 'relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none group cursor-pointer';
+        dashTab.innerHTML = '<span>Dashboard</span><span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>';
+        opsTab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer';
+        opsTab.innerHTML = 'Operations';
+        if (breadcrumb) breadcrumb.innerHTML = 'Dashboard';
+      } else {
+        opsTab.className = 'relative px-3 py-5 text-sm font-semibold text-primary focus:outline-none group cursor-pointer';
+        opsTab.innerHTML = '<span>Operations</span><span class="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-t-full"></span>';
+        dashTab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer';
+        dashTab.innerHTML = 'Dashboard';
+        if (breadcrumb) breadcrumb.innerHTML = 'OPERATIONS / <span class="font-bold text-primary">RECEIPTS</span>';
+      }
+    }
+
+  
+    function toggleReceiptsView(view) {
+      const listBtn = document.getElementById('listViewBtn');
+      const kanbanBtn = document.getElementById('kanbanViewBtn');
+      const listContainer = document.getElementById('listViewContainer');
+      const kanbanContainer = document.getElementById('receipts-kanban-view');
+      
+      const activeClasses = 'bg-indigo-600 text-white shadow-sm'.split(' ');
+      const inactiveClasses = 'bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-50 border border-slate-200'.split(' ');
+      
+      if (view === 'list') {
+        listContainer.classList.remove('hidden');
+        listContainer.classList.add('flex');
+        kanbanContainer.classList.add('hidden');
+        kanbanContainer.classList.remove('flex');
+        
+        listBtn.classList.remove(...inactiveClasses);
+        listBtn.classList.add(...activeClasses);
+        kanbanBtn.classList.remove(...activeClasses);
+        kanbanBtn.classList.add(...inactiveClasses);
+      } else {
+        kanbanContainer.classList.remove('hidden');
+        kanbanContainer.classList.add('flex');
+        listContainer.classList.add('hidden');
+        listContainer.classList.remove('flex');
+        
+        kanbanBtn.classList.remove(...inactiveClasses);
+        kanbanBtn.classList.add(...activeClasses);
+        listBtn.classList.remove(...activeClasses);
+        listBtn.classList.add(...inactiveClasses);
+      }
+    }
+
+
+    // Filter Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtn = document.getElementById('filterDropdownBtn');
+      const filterMenu = document.getElementById('filterMenu');
+      
+      if (filterBtn && filterMenu) {
+        filterBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          filterMenu.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!filterMenu.contains(e.target) && !filterBtn.contains(e.target)) {
+            filterMenu.classList.add('hidden');
+          }
+        });
+      }
+    });
+
+    function applyReceiptFilter(status) {
+      document.getElementById('filterMenu').classList.add('hidden');
+      
+      const btn = document.getElementById('filterDropdownBtn');
+      const badge = document.getElementById('activeFilterBadge');
+      
+      if (status === 'all') {
+        badge.classList.add('hidden');
+        btn.classList.remove('bg-indigo-50', 'text-primary', 'border-primary/30');
+        btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+      } else {
+        badge.classList.remove('hidden');
+        btn.classList.add('bg-indigo-50', 'text-primary', 'border-primary/30');
+        btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+      }
+      
+      // Filter the table rows
+      const rows = document.querySelectorAll('#receiptsTableBody tr');
+      rows.forEach(row => {
+        if (status === 'all') {
+          row.style.display = '';
+        } else {
+          // Status is in the 7th column (index 6)
+          const statusCell = row.cells[6];
+          if (statusCell && statusCell.textContent.includes(status)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+      
+      // Filter the kanban cards
+      const kanbanCards = document.querySelectorAll('#receipts-kanban-view > div > div.bg-white');
+      kanbanCards.forEach(card => {
+        if (status === 'all') {
+          card.style.display = '';
+        } else {
+          // In kanban view, the border color indicates status, or we can check the column
+          // The column header contains the status text.
+          const columnHeader = card.parentElement.querySelector('h3').textContent;
+          if (columnHeader.includes(status)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    }
+
+</script>
 </body>
 </html>
