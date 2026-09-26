@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StockSense</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#4F46E5',
+              hover: '#4338CA',
+            },
+            pageBg: '#F5F5FA',
+            inputBg: '#EEF0FC',
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: theme('colors.pageBg');
+      }
+    }
+    .smooth-transition { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* Hide scrollbar */
+    ::-webkit-scrollbar { display: none; }
+    
+    /* Touch target minimum on mobile */
+    @media (max-width: 768px) {
+      button, a, input, select { min-height: 44px; }
+    }
+
+    /* Shared component classes for unified styling */
+    .input-field {
+      @apply w-full bg-inputBg border border-transparent focus:border-primary focus:bg-white text-slate-900 rounded-lg py-2.5 text-sm transition outline-none placeholder:text-slate-400;
+    }
+    .btn-primary {
+      @apply w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-4 rounded-lg shadow-sm shadow-indigo-500/20 transition active:scale-[0.99] flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+    
+    .otp-box {
+      @apply w-[44px] h-[52px] sm:w-11 sm:h-12 text-center text-xl sm:text-2xl font-semibold text-slate-900 rounded-lg bg-inputBg focus:bg-white focus:border focus:border-primary outline-none transition-all;
+    }
+    .otp-container {
+      @apply flex justify-between items-center w-full max-w-[340px] gap-1 sm:gap-2;
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-600 min-h-screen">
+  <main class="min-h-screen w-full flex flex-col lg:flex-row overflow-hidden">
+    
+    
+    <section class="relative hidden lg:flex lg:w-1/2 flex-col justify-between p-8 lg:p-14 bg-gradient-to-br from-[#090e24] via-[#11183c] to-[#312e81] text-white overflow-hidden min-h-screen">
+      <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.7) 1px, transparent 0); background-size: 24px 24px;"></div>
+      
+      
+      <div class="relative z-10 flex items-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none" class="h-10 lg:h-12 w-auto drop-shadow-md">
+          <g>
+            <rect x="2" y="6" width="28" height="28" rx="7" fill="#4F46E5"/>
+            <path d="M10 13L16 9.5L22 13L16 16.5L10 13Z" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M10 17.5L16 21L22 17.5" stroke="#A5B4FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 22L16 25.5L22 22" stroke="#E0E7FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="38" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="19" fill="#FFFFFF" letter-spacing="-0.02em">Stock<tspan fill="#A5B4FC">Sense</tspan></text>
+          </g>
+        </svg>
+      </div>
+
+      
+      <div class="relative z-10 my-auto max-w-lg pr-6">
+        <h1 id="panel-heading" class="text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight leading-tight">
+          Real-time stock control, one dashboard.
+        </h1>
+        <p id="panel-subtext" class="text-lg text-indigo-200 leading-relaxed font-normal">
+          Streamlined inventory tracking and warehouse operations for floor teams.
+        </p>
+      </div>
+
+      
+      <div class="relative z-10 pt-6">
+        <div class="text-xs tracking-widest text-slate-400/60 uppercase font-medium">STOCKSENSE WAREHOUSE MANAGEMENT SYSTEM</div>
+      </div>
+    </section>
+
+    
+    <section class="w-full lg:w-1/2 min-h-screen flex flex-col p-6 sm:p-10 lg:p-14 bg-pageBg relative overflow-y-auto items-center justify-center">
+      
+      
+      <div class="flex items-center mb-8 lg:hidden self-start sm:self-center w-full max-w-[440px]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none" class="h-10 sm:h-12 w-auto">
+          <g>
+            <rect x="2" y="6" width="28" height="28" rx="7" fill="#4F46E5"/>
+            <path d="M10 13L16 9.5L22 13L16 16.5L10 13Z" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M10 17.5L16 21L22 17.5" stroke="#A5B4FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 22L16 25.5L22 22" stroke="#E0E7FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="38" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="19" fill="#0F172A" letter-spacing="-0.02em">Stock<tspan fill="#4F46E5">Sense</tspan></text>
+          </g>
+        </svg>
+      </div>
+
+      
+      <div class="w-full max-w-[440px] flex flex-col items-center bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-10 relative">
+        
+        
+        
+        
+        <div id="view-login" class="w-full flex flex-col">
+          <div class="mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
+            <p class="text-sm sm:text-base text-slate-500 mt-1">Log in to your StockSense account</p>
+          </div>
+          
+          <div class="hidden mb-5 p-3 rounded-lg bg-red-50 text-red-700 text-xs flex items-center gap-2" id="login-alert">
+            <span class="material-symbols-outlined text-[18px] shrink-0">error</span>
+            <span class="font-medium" id="login-alert-msg">Please verify your work email and password.</span>
+          </div>
+
+          <form class="space-y-4" id="login-form" onsubmit="loginSubmit(event)">
+            <div>
+              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="login-email">Work Email</label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">mail</span>
+                <input autocomplete="email" class="input-field pl-10 pr-3.5" id="login-email" type="email" placeholder="operator@logistics.corp" required/>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="login-password">Password</label>
+                <button type="button" class="text-xs font-semibold text-primary hover:text-primary-hover transition-colors" onclick="showView('forgot-password')">Forgot password?</button>
+              </div>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
+                <input autocomplete="current-password" class="input-field pl-10 pr-10" id="login-password" type="password" placeholder="••••••••••••" required/>
+                <button type="button" aria-label="Toggle password visibility" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword('login-password', 'login-eye-icon')">
+                  <span class="material-symbols-outlined text-[18px]" id="login-eye-icon">visibility</span>
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between pt-1">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input class="w-4 h-4 rounded text-primary border-slate-300 focus:ring-primary cursor-pointer" id="remember-me" type="checkbox" checked/>
+                <span class="text-xs sm:text-sm text-slate-600 font-medium">Remember me</span>
+              </label>
+            </div>
+            
+            <div class="pt-2">
+              <button class="btn-primary" id="login-btn-submit" type="submit">
+                <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="login-spinner">progress_activity</span>
+                <span id="login-btn-text">Log In</span>
+              </button>
+            </div>
+          </form>
+
+          <p class="text-sm text-slate-600 font-medium mt-6 text-center">
+            Don't have an account? <button type="button" class="font-bold text-primary hover:underline transition-colors" onclick="showView('signup')">Sign Up</button>
+          </p>
+        </div>
+
+        
+        
+        
+        <div id="view-signup" class="w-full hidden flex-col">
+          <div class="mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Create your account</h2>
+            <p class="text-sm sm:text-base text-slate-500 mt-1">Start managing your inventory smarter</p>
+          </div>
+
+          <form class="space-y-4" id="signup-form" onsubmit="signupSubmit(event)">
+            <div>
+              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-name">Full Name <span class="text-red-500">*</span></label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">person</span>
+                <input class="input-field pl-10 pr-3.5" id="signup-name" type="text" placeholder="e.g. Rohit Fernandez" required/>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-email">Work Email <span class="text-red-500">*</span></label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">mail</span>
+                <input class="input-field pl-10 pr-3.5" id="signup-email" type="email" placeholder="operator@logistics.corp" required/>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs sm:text-sm font-semibold text-slate-700">Your Role</span>
+                <span class="text-[11px] text-slate-400">Influences warehouse permissions</span>
+              </div>
+              <input type="hidden" id="signup-role" value="manager"/>
+              <div class="grid grid-cols-2 p-1 bg-slate-100/90 rounded-lg border border-slate-200 gap-1 text-sm font-medium">
+                <button type="button" id="role-manager" class="py-2 rounded-md text-center font-semibold bg-primary text-white shadow-sm transition-all flex items-center justify-center gap-1.5" onclick="signupSetRole('manager')">
+                  <span class="material-symbols-outlined text-[16px]">inventory_2</span> Manager
+                </button>
+                <button type="button" id="role-staff" class="py-2 rounded-md text-center font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all flex items-center justify-center gap-1.5" onclick="signupSetRole('staff')">
+                  <span class="material-symbols-outlined text-[16px]">badge</span> Staff
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-password">Password <span class="text-red-500">*</span></label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
+                <input class="input-field pl-10 pr-10" id="signup-password" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordStrength()" required/>
+                <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword('signup-password', 'signup-eye-icon')">
+                  <span class="material-symbols-outlined text-[18px]" id="signup-eye-icon">visibility</span>
+                </button>
+              </div>
+              <div class="mt-2">
+                <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden flex gap-1">
+                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-1"></div>
+                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-2"></div>
+                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-3"></div>
+                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-4"></div>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1 font-medium" id="signup-password-feedback">Minimum 8 chars (letters, numbers, symbols)</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-confirm">Confirm Password <span class="text-red-500">*</span></label>
+                <span class="text-xs font-semibold hidden" id="signup-match-feedback"></span>
+              </div>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">verified</span>
+                <input class="input-field pl-10 pr-10" id="signup-confirm" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordMatch()" required/>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <input class="mt-1 h-4 w-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer" id="signup-terms" type="checkbox" required/>
+                <span class="text-xs text-slate-600 leading-normal select-none">
+                  I agree to the <a href="#" class="text-primary font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-primary font-semibold hover:underline">Privacy Policy</a>.
+                </span>
+              </label>
+            </div>
+
+            <div class="pt-3">
+              <button class="btn-primary" id="signup-btn-submit" type="submit">
+                <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="signup-spinner">progress_activity</span>
+                <span id="signup-btn-text">Create Account</span>
+              </button>
+            </div>
+          </form>
+
+          <p class="text-sm text-slate-600 font-medium mt-6 text-center">
+            Already have an account? <button type="button" class="font-bold text-primary hover:underline transition-colors" onclick="showView('login')">Log In</button>
+          </p>
+        </div>
+
+        
+        
+        
+        <div id="view-forgot-password" class="w-full hidden flex-col">
+          
+          
+          <div class="mb-8 relative flex items-center justify-between w-full max-w-[280px] mx-auto" id="fp-stepper">
+            <div class="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-200 -translate-y-1/2 z-0"></div>
+            <div class="absolute top-1/2 left-0 h-[2px] bg-primary -translate-y-1/2 z-0 transition-all duration-500" id="fp-stepper-line" style="width: 0%;"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+              <div class="w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold flex items-center justify-center shadow-sm ring-4 ring-primary/20 transition-all" id="fp-node-1">1</div>
+            </div>
+            <div class="relative z-10 flex flex-col items-center">
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-semibold flex items-center justify-center transition-all" id="fp-node-2">2</div>
+            </div>
+            <div class="relative z-10 flex flex-col items-center">
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-semibold flex items-center justify-center transition-all" id="fp-node-3">3</div>
+            </div>
+          </div>
+
+          
+          <div id="fp-step-1" class="w-full flex flex-col">
+            <div class="mb-6">
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Reset your password</h2>
+              <p class="text-sm text-slate-500 mt-1">Enter your registered work email to receive a code.</p>
+            </div>
+            <form class="space-y-4" onsubmit="fpSendOtp(event)">
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="fp-email">Work Email</label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">mail</span>
+                  <input class="input-field pl-10 pr-3.5" id="fp-email" type="email" placeholder="operator@logistics.corp" required oninput="fpValidateEmail(this.value)"/>
+                </div>
+                <p class="text-xs text-red-500 hidden mt-1" id="fp-email-error">Please enter a valid email.</p>
+              </div>
+              <div class="pt-2 flex flex-col gap-3">
+                <button class="btn-primary" id="fp-btn-1" type="submit" disabled>
+                  <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="fp-spinner-1">progress_activity</span>
+                  <span id="fp-text-1">Send Verification Code</span>
+                </button>
+                <button type="button" class="text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors py-1 flex items-center justify-center gap-1" onclick="showView('login')">
+                  <span class="material-symbols-outlined text-[16px]">arrow_back</span> Back to Login
+                </button>
+              </div>
+            </form>
+          </div>
+
+          
+          <div id="fp-step-2" class="w-full hidden flex-col">
+            <div class="flex items-center justify-between mb-4">
+              <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-primary transition-colors" onclick="fpGoToStep(1)">
+                <span class="material-symbols-outlined text-[14px]">arrow_back</span> Back
+              </button>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Step 2 of 3</span>
+            </div>
+            <div class="mb-6">
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Enter code</h2>
+              <p class="text-sm text-slate-500 mt-1">We sent a 6-digit code to <br><span class="font-semibold text-slate-800" id="fp-masked-email">user@example.com</span></p>
+            </div>
+            <form class="space-y-6" onsubmit="fpVerifyOtp(event)">
+              <div class="flex flex-col items-center">
+                <div class="otp-container" id="fp-otp-container">
+                  <input class="otp-box fp-otp-input" data-idx="0" type="text" inputmode="numeric" maxlength="1"/>
+                  <input class="otp-box fp-otp-input" data-idx="1" type="text" inputmode="numeric" maxlength="1"/>
+                  <input class="otp-box fp-otp-input" data-idx="2" type="text" inputmode="numeric" maxlength="1"/>
+                  <span class="text-slate-300 font-bold">-</span>
+                  <input class="otp-box fp-otp-input" data-idx="3" type="text" inputmode="numeric" maxlength="1"/>
+                  <input class="otp-box fp-otp-input" data-idx="4" type="text" inputmode="numeric" maxlength="1"/>
+                  <input class="otp-box fp-otp-input" data-idx="5" type="text" inputmode="numeric" maxlength="1"/>
+                </div>
+                <p class="text-xs text-red-500 hidden mt-2 flex items-center gap-1" id="fp-otp-error">
+                  <span class="material-symbols-outlined text-[14px]">error</span> Incorrect code, try again.
+                </p>
+              </div>
+              <div class="text-center text-xs text-slate-500" id="fp-countdown-block">
+                Resend code in <span class="font-semibold text-slate-800" id="fp-countdown">00:45</span>
+              </div>
+              <div class="text-center hidden" id="fp-resend-block">
+                <button type="button" class="text-xs font-semibold text-primary hover:underline" onclick="fpResendOtp()">Resend OTP</button>
+              </div>
+              <button class="btn-primary" id="fp-btn-2" type="submit" disabled>
+                <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="fp-spinner-2">progress_activity</span>
+                <span id="fp-text-2">Verify Code</span>
+              </button>
+            </form>
+          </div>
+
+          
+          <div id="fp-step-3" class="w-full hidden flex-col">
+            <div class="flex items-center justify-between mb-4">
+              <button type="button" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-primary transition-colors" onclick="fpGoToStep(2)">
+                <span class="material-symbols-outlined text-[14px]">arrow_back</span> Back
+              </button>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Final Step</span>
+            </div>
+            <div class="mb-6">
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Create new password</h2>
+              <p class="text-sm text-slate-500 mt-1">Choose a secure password.</p>
+            </div>
+            <form class="space-y-4" onsubmit="fpResetPassword(event)">
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="fp-new-password">New Password</label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
+                  <input class="input-field pl-10 pr-10" id="fp-new-password" type="password" placeholder="••••••••••••" oninput="fpEvaluatePassword(this.value)" required/>
+                  <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword('fp-new-password', 'fp-new-eye-icon')">
+                    <span class="material-symbols-outlined text-[18px]" id="fp-new-eye-icon">visibility</span>
+                  </button>
+                </div>
+                <div class="pt-2 space-y-1">
+                  <div class="grid grid-cols-3 gap-1.5 h-1.5 w-full">
+                    <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-1"></div>
+                    <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-2"></div>
+                    <div class="rounded-full bg-slate-200 transition-colors duration-300" id="fp-bar-3"></div>
+                  </div>
+                  <div class="flex justify-end text-[11px] font-medium pt-0.5">
+                    <span class="text-slate-400" id="fp-strength-label">Too Short</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="fp-confirm-password">Confirm Password</label>
+                  <span class="text-xs font-semibold hidden" id="fp-match-badge"></span>
+                </div>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">verified</span>
+                  <input class="input-field pl-10 pr-10" id="fp-confirm-password" type="password" placeholder="••••••••••••" oninput="fpCheckMatch()" required/>
+                </div>
+              </div>
+              
+              <div class="pt-2 flex flex-col gap-3">
+                <button class="btn-primary" id="fp-btn-3" type="submit" disabled>
+                  <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="fp-spinner-3">progress_activity</span>
+                  <span id="fp-text-3">Reset Password</span>
+                </button>
+              </div>
+            </form>
+          </div>
+          
+          
+          <div id="fp-step-success" class="w-full hidden flex-col items-center text-center py-6">
+            <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-4 shadow-sm animate-bounce">
+              <span class="material-symbols-outlined text-[36px]">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Success!</h2>
+            <p class="text-sm text-slate-500 mt-2 mb-6">Your password has been successfully reset. You can now use it to log in.</p>
+            <button class="btn-primary w-full" type="button" onclick="showView('login')">
+              Back to Login
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+  
+  <script>
+    // ==========================================
+    // VIEW SWITCHING LOGIC
+    // ==========================================
+    const views = {
+      'login': { heading: 'Real-time stock control, one dashboard.', subtext: 'Streamlined inventory tracking and warehouse operations for floor teams.' },
+      'signup': { heading: 'Join the StockSense network.', subtext: 'Create your account to start managing inventory efficiently.' },
+      'forgot-password': { heading: 'Let\'s get you back in.', subtext: 'Follow the steps to recover access to your warehouse dashboard.' }
+    };
+
+    function showView(viewId) {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-signup').classList.add('hidden');
+      document.getElementById('view-forgot-password').classList.add('hidden');
+      
+      if(viewId === 'forgot-password' && document.getElementById('view-forgot-password').classList.contains('hidden')) {
+        fpGoToStep(1);
+      }
+
+      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+      document.getElementById(`view-${viewId}`).classList.add('flex');
+      
+      document.getElementById('panel-heading').textContent = views[viewId].heading;
+      document.getElementById('panel-subtext').textContent = views[viewId].subtext;
+    }
+
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // ==========================================
+    // LOGIN LOGIC
+    // ==========================================
+    function loginSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn-submit');
+      const spinner = document.getElementById('login-spinner');
+      const text = document.getElementById('login-btn-text');
+      const alert = document.getElementById('login-alert');
+      
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      text.textContent = 'Verifying...';
+      alert.classList.add('hidden');
+      
+      setTimeout(() => {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+        text.textContent = 'Log In';
+        alert.classList.remove('hidden');
+        document.getElementById('login-alert-msg').textContent = 'Demo mode: Login successful.';
+        document.getElementById('login-alert').classList.replace('bg-red-50', 'bg-green-50');
+        document.getElementById('login-alert').classList.replace('text-red-700', 'text-green-700');
+        document.getElementById('login-alert').querySelector('span').textContent = 'check_circle';
+      }, 1000);
+    }
+
+    // ==========================================
+    // SIGNUP LOGIC
+    // ==========================================
+    function signupSetRole(role) {
+      document.getElementById('signup-role').value = role;
+      const mgr = document.getElementById('role-manager');
+      const stf = document.getElementById('role-staff');
+      
+      const activeClasses = 'bg-primary text-white shadow-sm font-semibold'.split(' ');
+      const inactiveClasses = 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 font-medium'.split(' ');
+
+      if (role === 'manager') {
+        mgr.classList.remove(...inactiveClasses); mgr.classList.add(...activeClasses);
+        stf.classList.remove(...activeClasses); stf.classList.add(...inactiveClasses);
+      } else {
+        stf.classList.remove(...inactiveClasses); stf.classList.add(...activeClasses);
+        mgr.classList.remove(...activeClasses); mgr.classList.add(...inactiveClasses);
+      }
+    }
+
+    function signupCheckPasswordStrength() {
+      const val = document.getElementById('signup-password').value;
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const bars = [
+        document.getElementById('signup-bar-1'),
+        document.getElementById('signup-bar-2'),
+        document.getElementById('signup-bar-3'),
+        document.getElementById('signup-bar-4')
+      ];
+      const feedback = document.getElementById('signup-password-feedback');
+
+      bars.forEach(b => b.className = 'h-full w-1/4 bg-slate-200 transition-all duration-300');
+
+      if (val.length === 0) {
+        feedback.textContent = "Minimum 8 chars (letters, numbers, symbols)";
+        feedback.className = "text-[11px] text-slate-500 mt-1 font-medium";
+      } else if (score === 0) {
+        bars[0].classList.replace('bg-slate-200', 'bg-red-500');
+        feedback.textContent = "Weak — please add numbers and symbols";
+        feedback.className = "text-[11px] text-red-500 mt-1 font-medium";
+      } else if (score === 1 || score === 2) {
+        for(let i=0; i<=score; i++) bars[i].classList.replace('bg-slate-200', 'bg-amber-500');
+        feedback.textContent = "Medium — add special character";
+        feedback.className = "text-[11px] text-amber-600 mt-1 font-medium";
+      } else {
+        bars.forEach(b => b.classList.replace('bg-slate-200', 'bg-green-500'));
+        feedback.textContent = "Strong password";
+        feedback.className = "text-[11px] text-green-600 mt-1 font-medium";
+      }
+      signupCheckPasswordMatch();
+    }
+
+    function signupCheckPasswordMatch() {
+      const p1 = document.getElementById('signup-password').value;
+      const p2 = document.getElementById('signup-confirm').value;
+      const fb = document.getElementById('signup-match-feedback');
+      if (!p2) { fb.classList.add('hidden'); return; }
+      
+      fb.classList.remove('hidden');
+      if (p1 === p2) {
+        fb.textContent = '✓ Matches'; fb.className = 'text-xs font-semibold text-green-600';
+      } else {
+        fb.textContent = '✕ Doesn\'t match'; fb.className = 'text-xs font-semibold text-red-500';
+      }
+    }
+
+    function signupSubmit(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('signup-password').value;
+      const p2 = document.getElementById('signup-confirm').value;
+      if (p1 !== p2 || p1.length < 8) return;
+
+      const btn = document.getElementById('signup-btn-submit');
+      const spinner = document.getElementById('signup-spinner');
+      const text = document.getElementById('signup-btn-text');
+      
+      btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Creating...';
+      
+      setTimeout(() => {
+        btn.disabled = false; spinner.classList.add('hidden'); text.textContent = 'Create Account';
+        document.getElementById('signup-form').reset();
+        signupSetRole('manager');
+        showView('login');
+      }, 1200);
+    }
+
+    // ==========================================
+    // FORGOT PASSWORD LOGIC
+    // ==========================================
+    let fpCountdownTimer;
+    
+    function fpGoToStep(step) {
+      document.getElementById('fp-step-1').classList.add('hidden');
+      document.getElementById('fp-step-2').classList.add('hidden');
+      document.getElementById('fp-step-3').classList.add('hidden');
+      document.getElementById('fp-step-success').classList.add('hidden');
+      document.getElementById('fp-stepper').classList.remove('hidden');
+      
+      if(step === 4) {
+        document.getElementById('fp-stepper').classList.add('hidden');
+        document.getElementById('fp-step-success').classList.remove('hidden');
+        document.getElementById('fp-step-success').classList.add('flex');
+        return;
+      }
+      
+      document.getElementById(`fp-step-${step}`).classList.remove('hidden');
+      document.getElementById(`fp-step-${step}`).classList.add('flex');
+      
+      const line = document.getElementById('fp-stepper-line');
+      if(step === 1) {
+        line.style.width = '0%';
+        fpSetNode(1, 'active'); fpSetNode(2, 'inactive'); fpSetNode(3, 'inactive');
+      } else if (step === 2) {
+        line.style.width = '50%';
+        fpSetNode(1, 'done'); fpSetNode(2, 'active'); fpSetNode(3, 'inactive');
+        document.querySelector('.fp-otp-input').focus();
+      } else if (step === 3) {
+        line.style.width = '100%';
+        fpSetNode(1, 'done'); fpSetNode(2, 'done'); fpSetNode(3, 'active');
+      }
+    }
+    
+    function fpSetNode(idx, state) {
+      const node = document.getElementById(`fp-node-${idx}`);
+      if (state === 'active') {
+        node.className = 'w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold flex items-center justify-center shadow-sm ring-4 ring-primary/20 transition-all z-10';
+        node.innerHTML = idx;
+      } else if (state === 'done') {
+        node.className = 'w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold flex items-center justify-center shadow-sm transition-all z-10';
+        node.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
+      } else {
+        node.className = 'w-8 h-8 rounded-full bg-slate-200 text-slate-500 text-sm font-semibold flex items-center justify-center transition-all z-10';
+        node.innerHTML = idx;
+      }
+    }
+
+    function fpValidateEmail(val) {
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+      document.getElementById('fp-btn-1').disabled = !valid;
+    }
+
+    function fpSendOtp(e) {
+      e.preventDefault();
+      const email = document.getElementById('fp-email').value;
+      const btn = document.getElementById('fp-btn-1');
+      const spinner = document.getElementById('fp-spinner-1');
+      const text = document.getElementById('fp-text-1');
+      
+      btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Sending...';
+      
+      setTimeout(() => {
+        btn.disabled = false; spinner.classList.add('hidden'); text.textContent = 'Send Verification Code';
+        const parts = email.split('@');
+        const masked = parts[0].substring(0, 2) + '••••@' + (parts[1] || 'domain.com');
+        document.getElementById('fp-masked-email').textContent = masked;
+        fpGoToStep(2);
+        fpStartCountdown();
+      }, 800);
+    }
+    
+    
+    const fpBoxes = document.querySelectorAll('.fp-otp-input');
+    fpBoxes.forEach((box, idx) => {
+      box.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val ? val[val.length-1] : '';
+        document.getElementById('fp-otp-error').classList.add('hidden');
+        if (e.target.value && idx < fpBoxes.length - 1) fpBoxes[idx+1].focus();
+        fpCheckOtpDone();
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && idx > 0) fpBoxes[idx-1].focus();
+      });
+      box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text').trim().replace(/[^0-9]/g, '');
+        fpBoxes.forEach((b, i) => b.value = text[i] || '');
+        const targetFocus = Math.min(text.length, fpBoxes.length - 1);
+        fpBoxes[targetFocus].focus();
+        fpCheckOtpDone();
+      });
+    });
+
+    function fpCheckOtpDone() {
+      let code = '';
+      fpBoxes.forEach(b => code += b.value);
+      document.getElementById('fp-btn-2').disabled = code.length !== 6;
+    }
+
+    function fpVerifyOtp(e) {
+      e.preventDefault();
+      const btn = document.getElementById('fp-btn-2');
+      const spinner = document.getElementById('fp-spinner-2');
+      const text = document.getElementById('fp-text-2');
+      
+      btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Verifying...';
+      
+      setTimeout(() => {
+        btn.disabled = false; spinner.classList.add('hidden'); text.textContent = 'Verify Code';
+        fpGoToStep(3);
+      }, 800);
+    }
+
+    function fpStartCountdown() {
+      clearInterval(fpCountdownTimer);
+      let sec = 45;
+      document.getElementById('fp-countdown-block').classList.remove('hidden');
+      document.getElementById('fp-resend-block').classList.add('hidden');
+      
+      fpCountdownTimer = setInterval(() => {
+        sec--;
+        document.getElementById('fp-countdown').textContent = `00:${String(sec).padStart(2, '0')}`;
+        if(sec <= 0) {
+          clearInterval(fpCountdownTimer);
+          document.getElementById('fp-countdown-block').classList.add('hidden');
+          document.getElementById('fp-resend-block').classList.remove('hidden');
+        }
+      }, 1000);
+    }
+
+    function fpResendOtp() {
+      fpBoxes.forEach(b => b.value = '');
+      fpCheckOtpDone();
+      fpStartCountdown();
+    }
+
+    function fpEvaluatePassword(val) {
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      
+      const bars = [document.getElementById('fp-bar-1'), document.getElementById('fp-bar-2'), document.getElementById('fp-bar-3')];
+      const lbl = document.getElementById('fp-strength-label');
+      
+      bars.forEach(b => b.className = 'rounded-full h-1.5 transition-colors duration-300 bg-slate-200');
+      
+      if(val.length === 0) { lbl.textContent = 'Too Short'; lbl.className = 'text-slate-400'; }
+      else if(score === 0 || score === 1) { bars[0].classList.replace('bg-slate-200', 'bg-red-500'); lbl.textContent = 'Weak'; lbl.className = 'text-red-500'; }
+      else if(score === 2) { bars[0].classList.replace('bg-slate-200', 'bg-amber-500'); bars[1].classList.replace('bg-slate-200', 'bg-amber-500'); lbl.textContent = 'Medium'; lbl.className = 'text-amber-500 font-semibold'; }
+      else { bars.forEach(b => b.classList.replace('bg-slate-200', 'bg-green-500')); lbl.textContent = 'Strong'; lbl.className = 'text-green-600 font-bold'; }
+      
+      fpCheckMatch();
+    }
+    
+    function fpCheckMatch() {
+      const p1 = document.getElementById('fp-new-password').value;
+      const p2 = document.getElementById('fp-confirm-password').value;
+      const badge = document.getElementById('fp-match-badge');
+      const btn = document.getElementById('fp-btn-3');
+      
+      if(!p2) { badge.classList.add('hidden'); btn.disabled = true; return; }
+      badge.classList.remove('hidden');
+      
+      if(p1 === p2 && p1.length >= 8) {
+        badge.textContent = 'Matches'; badge.className = 'text-xs font-semibold text-green-600';
+        btn.disabled = false;
+      } else {
+        badge.textContent = 'Mismatch or too short'; badge.className = 'text-xs font-semibold text-red-500';
+        btn.disabled = true;
+      }
+    }
+
+    function fpResetPassword(e) {
+      e.preventDefault();
+      const btn = document.getElementById('fp-btn-3');
+      const spinner = document.getElementById('fp-spinner-3');
+      const text = document.getElementById('fp-text-3');
+      
+      btn.disabled = true; spinner.classList.remove('hidden'); text.textContent = 'Resetting...';
+      setTimeout(() => {
+        btn.disabled = false; spinner.classList.add('hidden'); text.textContent = 'Reset Password';
+        document.getElementById('fp-email').value = '';
+        fpBoxes.forEach(b => b.value = '');
+        document.getElementById('fp-new-password').value = '';
+        document.getElementById('fp-confirm-password').value = '';
+        fpEvaluatePassword('');
+        fpGoToStep(4);
+      }, 1000);
+    }
+    
+  </script>
+</body>
+</html>
