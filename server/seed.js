@@ -9,6 +9,8 @@ async function seed() {
   db.exec('DELETE FROM operation_items;');
   db.exec('DELETE FROM operations;');
   db.exec('DELETE FROM password_resets;');
+  db.exec('DELETE FROM warehouse_locations;');
+  db.exec('DELETE FROM warehouses;');
   db.exec('DELETE FROM users;');
 
   // 1. Seed Default Users
@@ -245,6 +247,38 @@ async function seed() {
   }
 
   console.log(`✓ Seeded ${deliveries.length} delivery operations with items.`);
+
+  // 4. Seed Default Warehouse & Storage Locations
+  const whId = 'wh-default-001';
+  db.prepare(`
+    INSERT INTO warehouses (id, name, short_code, address, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    whId,
+    'Central Warehouse',
+    'WH',
+    '100 Logistics Blvd, Dock 4, Chicago, IL 60601',
+    now,
+    now
+  );
+
+  const defaultLocations = [
+    { id: 'loc-001', name: 'Main Storage A', code: 'WH/Stock1', type: 'internal' },
+    { id: 'loc-002', name: 'Rack Storage B', code: 'WH/Stock2', type: 'internal' },
+    { id: 'loc-003', name: 'Inbound Receiving Dock', code: 'WH/InputDock', type: 'incoming' },
+    { id: 'loc-004', name: 'Outbound Shipping Dock', code: 'WH/Output', type: 'outgoing' }
+  ];
+
+  const insertLocation = db.prepare(`
+    INSERT INTO warehouse_locations (id, warehouse_id, name, code, type, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  for (const loc of defaultLocations) {
+    insertLocation.run(loc.id, whId, loc.name, loc.code, loc.type, now, now);
+  }
+
+  console.log('✓ Seeded Central Warehouse with 4 operational locations.');
   console.log('--- Database Seeding Completed Successfully ---');
 }
 

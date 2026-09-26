@@ -355,9 +355,20 @@
         
         
         <div id="view-signup" class="w-full hidden flex-col view-panel view-exit">
-          <div class="mb-6">
-            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Create your account</h2>
-            <p class="text-sm sm:text-base text-slate-500 mt-1">Start managing your inventory smarter</p>
+          <!-- Wizard Stepper Indicator -->
+          <div class="mb-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary" id="signup-step-label">Step 1 of 2: Account Credentials</span>
+              <span class="text-xs font-semibold text-slate-400" id="signup-step-percent">50% Completed</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div id="signup-step-bar" class="h-full bg-primary transition-all duration-300 w-1/2"></div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight" id="signup-heading">Create your account</h2>
+            <p class="text-sm sm:text-base text-slate-500 mt-1" id="signup-subheading">Start managing your inventory smarter</p>
           </div>
 
           <div class="hidden mb-5 p-3 rounded-lg bg-red-50 text-red-700 text-xs flex items-center gap-2" id="signup-alert">
@@ -366,110 +377,168 @@
           </div>
 
           <form class="space-y-4" id="signup-form" onsubmit="signupSubmit(event)">
-            <div>
-              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-name">Full Name <span class="text-red-500">*</span></label>
-              <div class="relative flex items-center">
-                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">person</span>
-                <input class="input-field pl-10 pr-3.5" id="signup-name" type="text" placeholder="e.g. Alex Rivera" required/>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-email">Work Email <span class="text-red-500">*</span></label>
-              <div class="relative flex items-center">
-                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">mail</span>
-                <input class="input-field pl-10 pr-3.5" id="signup-email" type="email" placeholder="operator@logistics.corp" required/>
-              </div>
-            </div>
-
-            <div class="pt-1">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs sm:text-sm font-semibold text-slate-700">Your Role</span>
-                <span class="text-[11px] text-slate-400">Influences warehouse permissions</span>
-              </div>
-              <input type="hidden" id="signup-role" value="manager"/>
-              <div class="relative grid grid-cols-2 p-1 bg-slate-100/90 rounded-lg border border-slate-200 gap-1 text-sm font-medium isolate">
-                <div id="role-pill" class="absolute top-1 bottom-1 left-1 w-[calc(50%-0.15rem)] bg-primary rounded-md -z-10 transition-transform duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
-                <button type="button" id="role-manager" class="py-2 rounded-md text-center font-semibold text-white transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('manager')">
-                  <span class="material-symbols-outlined text-[16px]">inventory_2</span> Manager
-                </button>
-                <button type="button" id="role-staff" class="py-2 rounded-md text-center font-medium text-slate-600 hover:text-slate-900 transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('staff')">
-                  <span class="material-symbols-outlined text-[16px]">badge</span> Staff
-                </button>
-              </div>
-            </div>
-
-            <div class="pt-1">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-password">Password <span class="text-red-500">*</span></label>
-                <span class="text-[11px] font-semibold text-slate-500" id="signup-strength-badge">Strong required</span>
-              </div>
-              <div class="relative flex items-center">
-                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
-                <input class="input-field pl-10 pr-10" id="signup-password" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordStrength()" required/>
-                <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword('signup-password', 'signup-eye-icon')">
-                  <span class="material-symbols-outlined text-[18px]" id="signup-eye-icon">visibility</span>
-                </button>
-              </div>
-              <div class="mt-2">
-                <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden flex gap-1">
-                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-1"></div>
-                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-2"></div>
-                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-3"></div>
-                  <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-4"></div>
+            <!-- STEP 1: ACCOUNT CREDENTIALS -->
+            <div id="signup-step-1-container" class="space-y-4">
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-name">Full Name <span class="text-red-500">*</span></label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">person</span>
+                  <input class="input-field pl-10 pr-3.5" id="signup-name" type="text" placeholder="e.g. Alex Rivera"/>
                 </div>
-                <div class="mt-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200/70" id="signup-rules-box">
-                  <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-[11px]">
-                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-len">
-                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-len">radio_button_unchecked</span>
-                      <span>8+ Characters</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-upper">
-                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-upper">radio_button_unchecked</span>
-                      <span>Uppercase (A-Z)</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-lower">
-                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-lower">radio_button_unchecked</span>
-                      <span>Lowercase (a-z)</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-num">
-                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-num">radio_button_unchecked</span>
-                      <span>Number (0-9)</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-slate-400 transition-colors col-span-2" id="sp-rule-sym">
-                      <span class="material-symbols-outlined text-[15px]" id="sp-icon-sym">radio_button_unchecked</span>
-                      <span>Special Symbol (!@#$%...)</span>
+              </div>
+
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-email">Work Email <span class="text-red-500">*</span></label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">mail</span>
+                  <input class="input-field pl-10 pr-3.5" id="signup-email" type="email" placeholder="operator@logistics.corp"/>
+                </div>
+              </div>
+
+              <div class="pt-1">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs sm:text-sm font-semibold text-slate-700">Your Role</span>
+                  <span class="text-[11px] text-slate-400">Influences warehouse permissions</span>
+                </div>
+                <input type="hidden" id="signup-role" value="manager"/>
+                <div class="relative grid grid-cols-2 p-1 bg-slate-100/90 rounded-lg border border-slate-200 gap-1 text-sm font-medium isolate">
+                  <div id="role-pill" class="absolute top-1 bottom-1 left-1 w-[calc(50%-0.15rem)] bg-primary rounded-md -z-10 transition-transform duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]"></div>
+                  <button type="button" id="role-manager" class="py-2 rounded-md text-center font-semibold text-white transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('manager')">
+                    <span class="material-symbols-outlined text-[16px]">inventory_2</span> Manager
+                  </button>
+                  <button type="button" id="role-staff" class="py-2 rounded-md text-center font-medium text-slate-600 hover:text-slate-900 transition-colors duration-250 flex items-center justify-center gap-1.5" onclick="signupSetRole('staff')">
+                    <span class="material-symbols-outlined text-[16px]">badge</span> Staff
+                  </button>
+                </div>
+              </div>
+
+              <div class="pt-1">
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-password">Password <span class="text-red-500">*</span></label>
+                  <span class="text-[11px] font-semibold text-slate-500" id="signup-strength-badge">Strong required</span>
+                </div>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">lock</span>
+                  <input class="input-field pl-10 pr-10" id="signup-password" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordStrength()"/>
+                  <button type="button" class="absolute right-3 text-slate-400 hover:text-slate-600 p-1 flex items-center justify-center transition-colors" onclick="togglePassword('signup-password', 'signup-eye-icon')">
+                    <span class="material-symbols-outlined text-[18px]" id="signup-eye-icon">visibility</span>
+                  </button>
+                </div>
+                <div class="mt-2">
+                  <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden flex gap-1">
+                    <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-1"></div>
+                    <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-2"></div>
+                    <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-3"></div>
+                    <div class="h-full w-1/4 bg-transparent transition-all duration-300" id="signup-bar-4"></div>
+                  </div>
+                  <div class="mt-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200/70" id="signup-rules-box">
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-[11px]">
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-len">
+                        <span class="material-symbols-outlined text-[15px]" id="sp-icon-len">radio_button_unchecked</span>
+                        <span>8+ Characters</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-upper">
+                        <span class="material-symbols-outlined text-[15px]" id="sp-icon-upper">radio_button_unchecked</span>
+                        <span>Uppercase (A-Z)</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-lower">
+                        <span class="material-symbols-outlined text-[15px]" id="sp-icon-lower">radio_button_unchecked</span>
+                        <span>Lowercase (a-z)</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors" id="sp-rule-num">
+                        <span class="material-symbols-outlined text-[15px]" id="sp-icon-num">radio_button_unchecked</span>
+                        <span>Number (0-9)</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-slate-400 transition-colors col-span-2" id="sp-rule-sym">
+                        <span class="material-symbols-outlined text-[15px]" id="sp-icon-sym">radio_button_unchecked</span>
+                        <span>Special Symbol (!@#$%...)</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-confirm">Confirm Password <span class="text-red-500">*</span></label>
-                <span class="text-xs font-semibold hidden" id="signup-match-feedback"></span>
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="text-xs sm:text-sm font-semibold text-slate-700 block" for="signup-confirm">Confirm Password <span class="text-red-500">*</span></label>
+                  <span class="text-xs font-semibold hidden" id="signup-match-feedback"></span>
+                </div>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">verified</span>
+                  <input class="input-field pl-10 pr-10" id="signup-confirm" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordMatch()"/>
+                </div>
               </div>
-              <div class="relative flex items-center">
-                <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">verified</span>
-                <input class="input-field pl-10 pr-10" id="signup-confirm" type="password" placeholder="••••••••••••" oninput="signupCheckPasswordMatch()" required/>
+
+              <div class="pt-2">
+                <label class="flex items-start gap-3 cursor-pointer group">
+                  <input class="mt-1 h-4 w-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer" id="signup-terms" type="checkbox"/>
+                  <span class="text-xs text-slate-600 leading-normal select-none">
+                    I agree to the <a href="#" class="text-primary font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-primary font-semibold hover:underline">Privacy Policy</a>.
+                  </span>
+                </label>
+              </div>
+
+              <div class="pt-3">
+                <button class="btn-primary flex items-center justify-center gap-2 cursor-pointer" type="button" onclick="signupGoToStep2()">
+                  <span>Next: Set Up Warehouse</span>
+                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
               </div>
             </div>
 
-            <div class="pt-2">
-              <label class="flex items-start gap-3 cursor-pointer group">
-                <input class="mt-1 h-4 w-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer" id="signup-terms" type="checkbox" required/>
-                <span class="text-xs text-slate-600 leading-normal select-none">
-                  I agree to the <a href="#" class="text-primary font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-primary font-semibold hover:underline">Privacy Policy</a>.
-                </span>
-              </label>
-            </div>
+            <!-- STEP 2: WAREHOUSE SETUP -->
+            <div id="signup-step-2-container" class="space-y-4 hidden">
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-wh-name">
+                  Warehouse Name <span class="text-red-500">*</span>
+                </label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">warehouse</span>
+                  <input class="input-field pl-10 pr-3.5" id="signup-wh-name" type="text" placeholder="e.g. Central Warehouse" oninput="signupAutoSuggestCode(this.value)"/>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">Official name for your main facility.</p>
+              </div>
 
-            <div class="pt-3">
-              <button class="btn-primary" id="signup-btn-submit" type="submit">
-                <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="signup-spinner">progress_activity</span>
-                <span id="signup-btn-text">Create Account</span>
-              </button>
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 flex items-center justify-between" for="signup-wh-code">
+                  <span>Short Code <span class="text-red-500">*</span></span>
+                  <span class="text-[11px] text-slate-400 font-mono">2-6 letters (e.g. WH)</span>
+                </label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-slate-400 pointer-events-none text-[20px]">tag</span>
+                  <input class="input-field pl-10 pr-3.5 font-mono uppercase" id="signup-wh-code" type="text" maxlength="8" placeholder="WH"/>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">Prefix for receipts, shipments (<span class="font-mono text-slate-600">WH/IN/...</span>), and storage zones.</p>
+              </div>
+
+              <div>
+                <label class="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 block" for="signup-wh-address">
+                  Warehouse Address <span class="text-red-500">*</span>
+                </label>
+                <div class="relative flex items-start">
+                  <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 pointer-events-none text-[20px]">pin_drop</span>
+                  <textarea class="input-field pl-10 pr-3.5 pt-2.5 resize-none" id="signup-wh-address" rows="3" placeholder="100 Logistics Blvd, Dock 4, Chicago, IL 60601"></textarea>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">Physical shipping facility address for documentation & carriers.</p>
+              </div>
+
+              <div class="p-3 bg-indigo-50/70 rounded-xl border border-indigo-100 flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">auto_awesome</span>
+                <p class="text-xs text-indigo-900 leading-relaxed">
+                  <strong class="font-semibold">Automated Setup:</strong> Standard storage racks (<span class="font-mono text-indigo-800">Stock1</span>, <span class="font-mono text-indigo-800">Stock2</span>) and receiving/shipping docks will automatically be created for you.
+                </p>
+              </div>
+
+              <div class="pt-3 flex items-center gap-3">
+                <button type="button" onclick="signupGoToStep1()" class="w-1/3 py-2.5 border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+                  <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                  <span>Back</span>
+                </button>
+                <button class="btn-primary w-2/3 flex items-center justify-center gap-2 cursor-pointer" id="signup-btn-submit" type="submit">
+                  <span class="material-symbols-outlined text-[18px] animate-spin hidden" id="signup-spinner">progress_activity</span>
+                  <span id="signup-btn-text">Create Account</span>
+                </button>
+              </div>
             </div>
           </form>
 
@@ -751,6 +820,7 @@
   <span id="nav-stock-alert-pill" class="hidden px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">0</span>
 </a>
 <a id="tab-history" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('history')">Move History</a>
+<a id="tab-settings" class="px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer" onclick="switchDashboardView('warehouse')">Settings</a>
 </nav>
 </div>
 <!-- Right Header Tools: Breadcrumb / Profile Dropdown -->
@@ -809,6 +879,10 @@
 <span class="material-symbols-outlined text-[18px] text-slate-400">lock_reset</span>
               Reset Password (OTP)
             </a>
+<a class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors cursor-pointer" href="#" onclick="switchDashboardView('warehouse'); document.getElementById('profile-dropdown')?.classList.add('hidden'); return false;">
+<span class="material-symbols-outlined text-[18px] text-slate-400">warehouse</span>
+              Warehouse Settings
+            </a>
 <a class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors cursor-pointer" href="#">
 <span class="material-symbols-outlined text-[18px] text-slate-400">person</span>
               My Profile
@@ -837,6 +911,7 @@
 <a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('deliveries'); return false;">Deliveries</a>
 <a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('stock'); return false;">Stock</a>
 <a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('history'); return false;">Move History</a>
+<a class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50" href="#" onclick="switchDashboardView('warehouse'); return false;">Settings / Warehouse</a>
 </div>
 </header>
     <!-- MAIN CONTAINER (Centered max width ~1180px) -->
@@ -1747,7 +1822,7 @@ Draft
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Stock Inventory</h1>
             <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200" id="stock-count-badge">8 products</span>
           </div>
-          <p class="text-xs text-slate-500 mt-1">Real-time warehouse quantities, on-hand ledger, incoming receipts & outgoing commitments</p>
+          <p class="text-xs text-slate-500 mt-1">Real-time warehouse quantities, on-hand ledger &amp; storage location tracking</p>
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
           <!-- Filter tabs -->
@@ -1803,9 +1878,6 @@ Draft
                 <th class="px-6 py-3 font-semibold uppercase">SKU</th>
                 <th class="px-6 py-3 font-semibold uppercase">Primary Location</th>
                 <th class="px-6 py-3 font-semibold uppercase text-right">On Hand</th>
-                <th class="px-6 py-3 font-semibold uppercase text-right">Incoming</th>
-                <th class="px-6 py-3 font-semibold uppercase text-right">Outgoing</th>
-                <th class="px-6 py-3 font-semibold uppercase text-right">Forecasted</th>
                 <th class="px-6 py-3 font-semibold uppercase text-center">Status</th>
                 <th class="px-6 py-3 font-semibold uppercase text-right">Actions</th>
               </tr>
@@ -1872,6 +1944,275 @@ Draft
     </div>
   </div>
 </main>
+
+<!-- WAREHOUSE DETAILS & LOCATION VIEW (Matches wireframe specification) -->
+<main id="view-warehouse-main" class="hidden w-full flex-1 bg-background">
+  <div class="w-full max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <!-- Header -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Warehouse</h1>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Active Hub
+          </span>
+        </div>
+        <p class="text-sm text-slate-500 mt-1">This page contains the warehouse details &amp; location.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button type="button" id="warehouseEditToggleBtn" onclick="toggleWarehouseEditMode()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold shadow-2xs transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">edit</span>
+          <span id="warehouseEditToggleText">Edit Details</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert / Toast Banner -->
+    <div id="warehouseAlertBanner" class="hidden mb-6 p-4 rounded-xl border flex items-center justify-between transition-all">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[20px]" id="warehouseAlertIcon">check_circle</span>
+        <span class="text-sm font-medium" id="warehouseAlertText">Warehouse details updated successfully.</span>
+      </div>
+      <button type="button" onclick="document.getElementById('warehouseAlertBanner').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <!-- Layout: Details Card + Storage Locations Card -->
+    <div class="space-y-8">
+      <!-- Card 1: Warehouse Details (Wireframe spec: Name, Short Code, Address) -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[20px]">warehouse</span>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Warehouse Information</h2>
+              <p class="text-xs text-slate-500">Core identity and facility location</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-medium text-slate-400 uppercase tracking-wider" id="warehouseIdBadge">ID: --</span>
+        </div>
+
+        <!-- READ-ONLY VIEW MODE -->
+        <div id="warehouseViewMode" class="p-6 sm:p-8 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Name -->
+            <div class="p-4 rounded-xl bg-slate-50/60 border border-slate-200/60">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Warehouse Name</span>
+              <p class="text-lg font-bold text-slate-900" id="warehouseDisplayName">--</p>
+              <p class="text-xs text-slate-500 mt-1">Primary facility identifier for stock operations.</p>
+            </div>
+
+            <!-- Short Code -->
+            <div class="p-4 rounded-xl bg-slate-50/60 border border-slate-200/60">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Short Code</span>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="px-3 py-1 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 font-mono font-bold text-base" id="warehouseDisplayCode">--</span>
+                <span class="text-xs text-slate-500">Prefix used for receipts &amp; deliveries</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2 font-mono">Example: <span id="warehouseCodeExample">WH/IN/0001</span></p>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="p-4 rounded-xl bg-slate-50/60 border border-slate-200/60 flex items-start gap-3.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-[18px]">location_on</span>
+            </div>
+            <div class="flex-1">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Facility Address</span>
+              <p class="text-sm font-medium text-slate-800 whitespace-pre-line leading-relaxed" id="warehouseDisplayAddress">--</p>
+              <p class="text-xs text-slate-400 mt-1">Designated shipping origin &amp; receiving destination for carrier manifests.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDIT FORM MODE (Hidden by default, unlocked via Edit Details button) -->
+        <form id="warehouseEditMode" onsubmit="saveWarehouseDetails(event)" class="p-6 sm:p-8 space-y-6 hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Name Input -->
+            <div>
+              <label for="warehouseName" class="block text-sm font-semibold text-slate-700 mb-2">
+                Name: <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="warehouseName" name="name" required placeholder="e.g. Central Warehouse"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-2xs" />
+              <p class="text-xs text-slate-400 mt-1.5">Official display name for this warehouse facility.</p>
+            </div>
+
+            <!-- Short Code Input -->
+            <div>
+              <label for="warehouseShortCode" class="block text-sm font-semibold text-slate-700 mb-2 flex items-center justify-between">
+                <span>Short Code: <span class="text-rose-500">*</span></span>
+                <span class="text-[11px] font-normal text-slate-400">Prefix identifier</span>
+              </label>
+              <input type="text" id="warehouseShortCode" name="short_code" required maxlength="10" placeholder="e.g. WH"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-mono uppercase text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-2xs" />
+              <p class="text-xs text-slate-400 mt-1.5">Used as prefix in operations (e.g. <span class="font-mono text-slate-600">WH/IN/...</span>).</p>
+            </div>
+          </div>
+
+          <!-- Address Input -->
+          <div>
+            <label for="warehouseAddress" class="block text-sm font-semibold text-slate-700 mb-2">
+              Address: <span class="text-rose-500">*</span>
+            </label>
+            <textarea id="warehouseAddress" name="address" required rows="3" placeholder="Facility address, street, building, city, state, postal code"
+              class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-2xs resize-none"></textarea>
+            <p class="text-xs text-slate-400 mt-1.5">Physical shipping location &amp; address for transport and carrier documentation.</p>
+          </div>
+
+          <!-- Form Action Bar -->
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <button type="button" onclick="cancelWarehouseEdit()" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition-colors cursor-pointer">
+              Cancel
+            </button>
+            <button type="submit" id="warehouseSaveBtnBottom" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-sm font-semibold shadow-xs transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-[18px]">save</span>
+              <span>Save Changes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Card 2: Warehouse Storage Locations & Zones Overview (Clean Read-Only) -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-slate-50/50">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-slate-900">Storage Locations &amp; Docks</h2>
+              <span id="warehouseLocationCountBadge" class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">0 zones</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Physical storage aisles and inbound/outbound docks configured for this facility</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium">
+            <span class="material-symbols-outlined text-[16px] text-slate-400">verified</span>
+            Auto-provisioned with Short Code
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                <th class="px-6 py-3.5">Location Name</th>
+                <th class="px-6 py-3.5">Short Code / Path</th>
+                <th class="px-6 py-3.5">Type</th>
+                <th class="px-6 py-3.5 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="warehouseLocationsTableBody" class="divide-y divide-slate-100 text-sm">
+              <tr>
+                <td colspan="4" class="px-6 py-8 text-center text-slate-400 text-sm">Loading warehouse storage locations...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- INTERACTIVE MODAL: EDIT STOCK INVENTORY ITEM -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/50 backdrop-blur-xs transition-opacity" id="editStockModal">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    <!-- Modal Header -->
+    <div class="px-6 py-4 bg-slate-50/90 flex items-center justify-between border-b border-slate-200 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+          <span class="material-symbols-outlined text-[20px]">edit_note</span>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Edit Stock Item</h2>
+          <p class="text-xs text-slate-500">Update item details, storage location, and on-hand balance</p>
+        </div>
+      </div>
+      <button type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors cursor-pointer" onclick="closeEditStockModal()">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <!-- Alert Banner inside modal -->
+    <div id="editStockAlert" class="hidden mx-6 mt-4 p-3 rounded-xl text-xs font-semibold"></div>
+
+    <!-- Modal Form -->
+    <form id="editStockForm" onsubmit="saveStockEdit(event)" class="p-6 overflow-y-auto flex-1 flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-4">
+        <!-- SKU (read-only) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">SKU (Identifier)</label>
+          <input type="text" id="editStockSku" readonly class="w-full h-10 px-3.5 bg-slate-100 rounded-lg border border-slate-200 text-sm font-mono font-bold text-indigo-700 cursor-not-allowed select-none" />
+        </div>
+        <!-- Category -->
+        <div>
+          <label for="editStockCategory" class="block text-xs font-semibold text-slate-700 mb-1.5">Category</label>
+          <input type="text" id="editStockCategory" placeholder="e.g. Furniture, Hardware" class="w-full h-10 px-3.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" />
+        </div>
+      </div>
+
+      <!-- Product Name -->
+      <div>
+        <label for="editStockProductName" class="block text-xs font-semibold text-slate-700 mb-1.5">Product Name <span class="text-rose-500">*</span></label>
+        <input type="text" id="editStockProductName" required placeholder="e.g. Ergonomic Office Chair" class="w-full h-10 px-3.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" />
+      </div>
+
+      <!-- Primary Storage Location -->
+      <div>
+        <label for="editStockLocation" class="block text-xs font-semibold text-slate-700 mb-1.5">Primary Storage Location <span class="text-rose-500">*</span></label>
+        <div class="relative">
+          <input type="text" id="editStockLocation" list="editStockLocationList" required placeholder="e.g. WH/Stock1" class="w-full h-10 px-3.5 bg-white rounded-lg border border-slate-300 text-sm font-mono text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" />
+          <datalist id="editStockLocationList">
+            <!-- Dynamically populated from warehouse locations -->
+          </datalist>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1">Select from your warehouse zones or type a dedicated bin code.</p>
+      </div>
+
+      <!-- Quantities Grid -->
+      <div class="grid grid-cols-3 gap-3">
+        <!-- On Hand -->
+        <div>
+          <label for="editStockOnHand" class="block text-xs font-semibold text-slate-700 mb-1.5">On Hand <span class="text-rose-500">*</span></label>
+          <input type="number" id="editStockOnHand" required min="0" step="1" class="w-full h-10 px-3.5 bg-white rounded-lg border border-slate-300 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" />
+        </div>
+
+        <!-- Min Threshold -->
+        <div>
+          <label for="editStockMinThreshold" class="block text-xs font-semibold text-slate-700 mb-1.5">Low Alert Min</label>
+          <input type="number" id="editStockMinThreshold" min="0" step="1" placeholder="10" class="w-full h-10 px-3.5 bg-white rounded-lg border border-slate-300 text-sm font-mono text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all" />
+        </div>
+
+        <!-- Unit of Measure -->
+        <div>
+          <label for="editStockUnit" class="block text-xs font-semibold text-slate-700 mb-1.5">Unit</label>
+          <select id="editStockUnit" class="w-full h-10 px-3 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer">
+            <option value="Units">Units</option>
+            <option value="Pieces">Pieces</option>
+            <option value="Boxes">Boxes</option>
+            <option value="Packs">Packs</option>
+            <option value="Sets">Sets</option>
+            <option value="Kg">Kg</option>
+            <option value="Meters">Meters</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
+        <button type="button" onclick="closeEditStockModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button type="submit" id="editStockSubmitBtn" class="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-white bg-primary hover:bg-primary/90 rounded-lg shadow-sm transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">save</span>
+          <span id="editStockSubmitText">Save Changes</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- INTERACTIVE MODAL 1: CREATE NEW RECEIPT / DELIVERY DRAWER/MODAL -->
 <div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/50 backdrop-blur-xs transition-opacity" id="newReceiptModal">
@@ -2214,6 +2555,16 @@ Draft
 </div>
 
   <script>
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let signupAnimated = false;
     let fpCurrentStep = 1;
@@ -2611,6 +2962,108 @@ Draft
       }
     }
 
+    function signupGoToStep2() {
+      const name = document.getElementById('signup-name')?.value.trim();
+      const email = document.getElementById('signup-email')?.value.trim();
+      const p1 = document.getElementById('signup-password')?.value;
+      const p2 = document.getElementById('signup-confirm')?.value;
+      const terms = document.getElementById('signup-terms');
+      const alert = document.getElementById('signup-alert');
+      const alertMsg = document.getElementById('signup-alert-msg');
+
+      if (!name) {
+        if (alertMsg) alertMsg.textContent = 'Please enter your full name.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (alertMsg) alertMsg.textContent = 'Please provide a valid work email address.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      const rules = evalPasswordRules(p1);
+      const metCount = Object.values(rules).filter(Boolean).length;
+      if (metCount < 5) {
+        if (alertMsg) alertMsg.textContent = 'Password must meet all 5 requirements: 8+ characters, uppercase, lowercase, number, and special symbol.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      if (p1 !== p2) {
+        if (alertMsg) alertMsg.textContent = 'Passwords do not match. Please verify.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      if (terms && !terms.checked) {
+        if (alertMsg) alertMsg.textContent = 'Please agree to the Terms of Service to continue.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      if (alert) alert.classList.add('hidden');
+
+      // Transition to Step 2
+      document.getElementById('signup-step-1-container')?.classList.add('hidden');
+      document.getElementById('signup-step-2-container')?.classList.remove('hidden');
+      
+      const label = document.getElementById('signup-step-label');
+      const pct = document.getElementById('signup-step-percent');
+      const bar = document.getElementById('signup-step-bar');
+      const heading = document.getElementById('signup-heading');
+      const sub = document.getElementById('signup-subheading');
+
+      if (label) label.textContent = 'Step 2 of 2: Warehouse Setup';
+      if (pct) pct.textContent = '100% Completed';
+      if (bar) { bar.classList.remove('w-1/2'); bar.classList.add('w-full'); }
+      if (heading) heading.textContent = 'Set up your primary warehouse';
+      if (sub) sub.textContent = 'Configure facility details & shipping origin for your inventory';
+
+      // Pre-populate warehouse name suggestion if empty
+      const whNameInput = document.getElementById('signup-wh-name');
+      const whCodeInput = document.getElementById('signup-wh-code');
+      if (whNameInput && !whNameInput.value) {
+        const firstName = name.split(' ')[0] || 'Central';
+        whNameInput.value = `${firstName} Main Warehouse`;
+        signupAutoSuggestCode(whNameInput.value);
+      }
+    }
+
+    function signupGoToStep1() {
+      document.getElementById('signup-step-2-container')?.classList.add('hidden');
+      document.getElementById('signup-step-1-container')?.classList.remove('hidden');
+
+      const label = document.getElementById('signup-step-label');
+      const pct = document.getElementById('signup-step-percent');
+      const bar = document.getElementById('signup-step-bar');
+      const heading = document.getElementById('signup-heading');
+      const sub = document.getElementById('signup-subheading');
+
+      if (label) label.textContent = 'Step 1 of 2: Account Credentials';
+      if (pct) pct.textContent = '50% Completed';
+      if (bar) { bar.classList.remove('w-full'); bar.classList.add('w-1/2'); }
+      if (heading) heading.textContent = 'Create your account';
+      if (sub) sub.textContent = 'Start managing your inventory smarter';
+    }
+
+    function signupAutoSuggestCode(name) {
+      const codeInput = document.getElementById('signup-wh-code');
+      if (!codeInput || !name) return;
+
+      const words = name.trim().split(/\s+/).filter(Boolean);
+      let suggested = '';
+      if (words.length >= 2) {
+        suggested = words.map(w => w[0]).join('').substring(0, 4).toUpperCase();
+      } else if (words.length === 1) {
+        suggested = words[0].substring(0, 3).toUpperCase();
+      }
+      if (suggested && (!codeInput.dataset.userEdited || codeInput.value === '')) {
+        codeInput.value = suggested;
+      }
+    }
+
     async function signupSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('signup-name').value.trim();
@@ -2625,13 +3078,35 @@ Draft
       const metCount = Object.values(rules).filter(Boolean).length;
 
       if (metCount < 5) {
+        signupGoToStep1();
         if (alertMsg) alertMsg.textContent = 'Password must meet all 5 requirements: 8+ characters, uppercase, lowercase, number, and special symbol.';
         if (alert) alert.classList.remove('hidden');
         return;
       }
 
       if (p1 !== p2) {
+        signupGoToStep1();
         if (alertMsg) alertMsg.textContent = 'Passwords do not match. Please verify.';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+
+      const whName = document.getElementById('signup-wh-name')?.value.trim();
+      const whCode = document.getElementById('signup-wh-code')?.value.trim().toUpperCase();
+      const whAddress = document.getElementById('signup-wh-address')?.value.trim();
+
+      if (!whName || whName.length < 2) {
+        if (alertMsg) alertMsg.textContent = 'Please provide a warehouse facility name (min 2 characters).';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+      if (!whCode || whCode.length < 1) {
+        if (alertMsg) alertMsg.textContent = 'Please provide a warehouse short code prefix (e.g. WH).';
+        if (alert) alert.classList.remove('hidden');
+        return;
+      }
+      if (!whAddress || whAddress.length < 3) {
+        if (alertMsg) alertMsg.textContent = 'Please provide a warehouse facility address.';
         if (alert) alert.classList.remove('hidden');
         return;
       }
@@ -2642,19 +3117,29 @@ Draft
       
       btn.disabled = true;
       spinner.classList.remove('hidden');
-      text.textContent = 'Creating...';
+      text.textContent = 'Setting up warehouse...';
       if (alert) alert.classList.add('hidden');
       
       try {
         const res = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, role, password: p1 })
+          body: JSON.stringify({
+            name,
+            email,
+            role,
+            password: p1,
+            warehouse: {
+              name: whName,
+              short_code: whCode,
+              address: whAddress
+            }
+          })
         });
         const data = await res.json();
 
         if (!res.ok || !data.success) {
-          throw new Error(data.message || 'Could not create account.');
+          throw new Error(data.message || 'Could not create account and warehouse.');
         }
 
         setAuth(data.token, data.user, true);
@@ -2663,12 +3148,14 @@ Draft
           setTimeout(() => {
             text.textContent = 'Create Account';
             document.getElementById('signup-form').reset();
+            signupGoToStep1();
             signupSetRole('manager');
             showAppView('dashboard');
           }, 400);
         } else {
           text.textContent = 'Create Account';
           document.getElementById('signup-form').reset();
+          signupGoToStep1();
           signupSetRole('manager');
           showAppView('dashboard');
         }
@@ -3583,7 +4070,7 @@ Draft
     
   
     function switchDashboardView(viewId) {
-      const views = ['view-dashboard-main', 'view-receipts-main', 'view-stock-main', 'view-history-main'];
+      const views = ['view-dashboard-main', 'view-receipts-main', 'view-stock-main', 'view-history-main', 'view-warehouse-main'];
       views.forEach(v => {
         const el = document.getElementById(v);
         if (el) {
@@ -3596,10 +4083,11 @@ Draft
       const opsTab = document.getElementById('tab-operations');
       const stockTab = document.getElementById('tab-stock');
       const historyTab = document.getElementById('tab-history');
+      const settingsTab = document.getElementById('tab-settings');
       const breadcrumb = document.getElementById('header-breadcrumb');
       const titleEl = document.getElementById('operations-view-title');
 
-      const tabs = [dashTab, opsTab, stockTab, historyTab];
+      const tabs = [dashTab, opsTab, stockTab, historyTab, settingsTab];
       tabs.forEach(tab => {
         if (tab) {
           tab.className = 'px-3 py-5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer';
@@ -3659,6 +4147,11 @@ Draft
         setActive(historyTab, 'Move History');
         if (breadcrumb) breadcrumb.innerHTML = 'AUDIT / <span class="font-bold text-primary">MOVE HISTORY</span>';
         loadMoveHistory();
+      } else if (viewId === 'warehouse' || viewId === 'settings') {
+        document.getElementById('view-warehouse-main')?.classList.remove('hidden');
+        setActive(settingsTab, 'Settings');
+        if (breadcrumb) breadcrumb.innerHTML = 'SETTINGS / <span class="font-bold text-primary">WAREHOUSE</span>';
+        loadWarehouseDetails();
       }
     }
 
@@ -4661,19 +5154,20 @@ Draft
           });
         }
 
+        window.currentStockData = data;
         const tbody = document.getElementById('stockTableBody');
         if (!tbody) return;
         tbody.innerHTML = '';
 
         if (data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400">No stock products found matching criteria.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No stock products found matching criteria.</td></tr>`;
           return;
         }
 
         data.forEach(item => {
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-slate-50/70 transition-colors';
-          const onHandColor = item.on_hand > 0 ? (item.on_hand <= 10 ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold') : 'text-rose-600 font-bold';
+          const onHandColor = item.on_hand > 0 ? (item.on_hand <= (item.min_threshold || 10) ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold') : 'text-rose-600 font-bold';
           
           const isOut = item.on_hand === 0;
           const isLow = item.on_hand <= (item.min_threshold || 10);
@@ -4686,26 +5180,135 @@ Draft
 
           tr.innerHTML = `
             <td class="px-6 py-3.5">
-              <span class="font-semibold text-slate-900 block">${item.product_name}</span>
-              <span class="text-xs text-slate-500">${item.category || 'General'}</span>
+              <span class="font-semibold text-slate-900 block">${escapeHtml(item.product_name)}</span>
+              <span class="text-xs text-slate-500">${escapeHtml(item.category || 'General')}</span>
             </td>
-            <td class="px-6 py-3.5 font-mono text-xs font-bold text-indigo-600">${item.sku}</td>
-            <td class="px-6 py-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-xs text-slate-600 font-medium">${item.location}</span></td>
-            <td class="px-6 py-3.5 text-right font-mono ${onHandColor}">${item.on_hand} ${item.unit}</td>
-            <td class="px-6 py-3.5 text-right font-mono text-indigo-600">+${item.incoming}</td>
-            <td class="px-6 py-3.5 text-right font-mono text-amber-600">-${item.outgoing}</td>
-            <td class="px-6 py-3.5 text-right font-mono font-bold text-slate-800">${item.forecasted}</td>
+            <td class="px-6 py-3.5 font-mono text-xs font-bold text-indigo-600">${escapeHtml(item.sku)}</td>
+            <td class="px-6 py-3.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-xs text-slate-600 font-medium">${escapeHtml(item.location)}</span></td>
+            <td class="px-6 py-3.5 text-right font-mono ${onHandColor}">${item.on_hand} ${escapeHtml(item.unit || 'Units')}</td>
             <td class="px-6 py-3.5 text-center">${statusBadge}</td>
             <td class="px-6 py-3.5 text-right">
-              <button type="button" class="px-2.5 py-1 text-xs font-bold rounded-lg ${isLow ? 'bg-amber-100 hover:bg-amber-200 text-amber-900' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'} transition-colors cursor-pointer" onclick="triggerRestock('${item.sku}', '${item.product_name.replace(/'/g, "\\'")}', '${item.unit}')">
-                Restock
-              </button>
+              <div class="flex items-center justify-end gap-1.5">
+                <button type="button" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors cursor-pointer inline-flex items-center gap-1" onclick="openEditStockModal('${escapeHtml(item.sku)}')">
+                  <span class="material-symbols-outlined text-[14px]">edit</span>
+                  <span>Edit</span>
+                </button>
+                <button type="button" class="px-2.5 py-1 text-xs font-bold rounded-lg ${isLow ? 'bg-amber-100 hover:bg-amber-200 text-amber-900' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'} transition-colors cursor-pointer" onclick="triggerRestock('${escapeHtml(item.sku)}', '${escapeHtml(item.product_name).replace(/'/g, "\\'")}', '${escapeHtml(item.unit || 'Units')}')">
+                  Restock
+                </button>
+              </div>
             </td>
           `;
           tbody.appendChild(tr);
         });
       } catch (err) {
         console.error('Error loading stock:', err);
+      }
+    }
+
+    // ==========================================
+    // STOCK ITEM EDITING CONTROLLER
+    // ==========================================
+    function openEditStockModal(sku) {
+      const item = (window.currentStockData || []).find(s => s.sku === sku);
+      if (!item) return;
+
+      const modal = document.getElementById('editStockModal');
+      const skuInput = document.getElementById('editStockSku');
+      const nameInput = document.getElementById('editStockProductName');
+      const catInput = document.getElementById('editStockCategory');
+      const locInput = document.getElementById('editStockLocation');
+      const onHandInput = document.getElementById('editStockOnHand');
+      const minThreshInput = document.getElementById('editStockMinThreshold');
+      const unitSelect = document.getElementById('editStockUnit');
+      const alertBox = document.getElementById('editStockAlert');
+
+      if (alertBox) alertBox.classList.add('hidden');
+      if (skuInput) skuInput.value = item.sku;
+      if (nameInput) nameInput.value = item.product_name;
+      if (catInput) catInput.value = item.category || 'General';
+      if (locInput) locInput.value = item.location || 'WH/Stock1';
+      if (onHandInput) onHandInput.value = item.on_hand;
+      if (minThreshInput) minThreshInput.value = item.min_threshold !== undefined ? item.min_threshold : 10;
+      if (unitSelect) unitSelect.value = item.unit || 'Units';
+
+      // Populate location suggestions from warehouse
+      const datalist = document.getElementById('editStockLocationList');
+      if (datalist && window.currentWarehouse && Array.isArray(window.currentWarehouse.locations)) {
+        datalist.innerHTML = window.currentWarehouse.locations.map(l => 
+          `<option value="${escapeHtml(l.code)}">${escapeHtml(l.name)} (${escapeHtml(l.code)})</option>`
+        ).join('');
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeEditStockModal() {
+      const modal = document.getElementById('editStockModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async function saveStockEdit(event) {
+      if (event) event.preventDefault();
+
+      const sku = document.getElementById('editStockSku')?.value;
+      const product_name = document.getElementById('editStockProductName')?.value.trim();
+      const category = document.getElementById('editStockCategory')?.value.trim();
+      const location = document.getElementById('editStockLocation')?.value.trim();
+      const on_hand = parseInt(document.getElementById('editStockOnHand')?.value, 10);
+      const min_threshold = parseInt(document.getElementById('editStockMinThreshold')?.value, 10);
+      const unit = document.getElementById('editStockUnit')?.value;
+      const submitBtn = document.getElementById('editStockSubmitBtn');
+      const submitText = document.getElementById('editStockSubmitText');
+      const alertBox = document.getElementById('editStockAlert');
+
+      if (!sku || !product_name || !location || isNaN(on_hand)) {
+        if (alertBox) {
+          alertBox.className = 'mx-6 mt-4 p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200';
+          alertBox.textContent = 'Please fill in all required fields with valid values.';
+          alertBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      try {
+        if (submitBtn) submitBtn.disabled = true;
+        if (submitText) submitText.textContent = 'Saving...';
+
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const res = await fetch(`/api/stock/${encodeURIComponent(sku)}`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify({ product_name, category, location, on_hand, min_threshold, unit })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Failed to update stock');
+        }
+
+        closeEditStockModal();
+        await loadStock(currentStockSearch, currentStockFilter);
+        await loadDashboardStats();
+      } catch (err) {
+        console.error('Error saving stock edit:', err);
+        if (alertBox) {
+          alertBox.className = 'mx-6 mt-4 p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200';
+          alertBox.textContent = err.message || 'Error saving stock changes.';
+          alertBox.classList.remove('hidden');
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitText) submitText.textContent = 'Save Changes';
       }
     }
 
@@ -4760,9 +5363,238 @@ Draft
       }
     }
 
+    // ==========================================
+    // WAREHOUSE FACILITY DETAILS CONTROLLER
+    // ==========================================
+    window.currentWarehouse = null;
+    let isWarehouseEditMode = false;
+
+    function showWarehouseBanner(message, isError = false) {
+      const banner = document.getElementById('warehouseAlertBanner');
+      const icon = document.getElementById('warehouseAlertIcon');
+      const text = document.getElementById('warehouseAlertText');
+      if (!banner || !icon || !text) return;
+
+      banner.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800');
+      icon.classList.remove('text-emerald-600', 'text-rose-600');
+
+      if (isError) {
+        banner.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
+        icon.classList.add('text-rose-600');
+        icon.textContent = 'error';
+      } else {
+        banner.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+        icon.classList.add('text-emerald-600');
+        icon.textContent = 'check_circle';
+      }
+
+      text.textContent = message;
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        banner.classList.add('hidden');
+      }, 5000);
+    }
+
+    function toggleWarehouseEditMode() {
+      isWarehouseEditMode = !isWarehouseEditMode;
+      const viewCard = document.getElementById('warehouseViewMode');
+      const editForm = document.getElementById('warehouseEditMode');
+      const toggleBtn = document.getElementById('warehouseEditToggleBtn');
+      const toggleText = document.getElementById('warehouseEditToggleText');
+
+      if (isWarehouseEditMode) {
+        viewCard?.classList.add('hidden');
+        editForm?.classList.remove('hidden');
+        if (toggleText) toggleText.textContent = 'Cancel Edit';
+        if (toggleBtn) {
+          toggleBtn.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold shadow-2xs transition-all cursor-pointer';
+        }
+        // Sync values to form
+        if (window.currentWarehouse) {
+          const nameInput = document.getElementById('warehouseName');
+          const codeInput = document.getElementById('warehouseShortCode');
+          const addrInput = document.getElementById('warehouseAddress');
+          if (nameInput) nameInput.value = window.currentWarehouse.name || '';
+          if (codeInput) codeInput.value = window.currentWarehouse.short_code || '';
+          if (addrInput) addrInput.value = window.currentWarehouse.address || '';
+        }
+      } else {
+        viewCard?.classList.remove('hidden');
+        editForm?.classList.add('hidden');
+        if (toggleText) toggleText.textContent = 'Edit Details';
+        if (toggleBtn) {
+          toggleBtn.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold shadow-2xs transition-all cursor-pointer';
+        }
+      }
+    }
+
+    function cancelWarehouseEdit() {
+      if (isWarehouseEditMode) {
+        toggleWarehouseEditMode();
+      }
+    }
+
+    async function loadWarehouseDetails() {
+      try {
+        const token = getAuthToken();
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const res = await fetch('/api/warehouse', { headers });
+        if (!res.ok) throw new Error('Failed to fetch warehouse details');
+        const data = await res.json();
+        
+        if (!data.success || !data.warehouse) return;
+        const wh = data.warehouse;
+        window.currentWarehouse = wh;
+
+        // Populate Read-Only View
+        const dispName = document.getElementById('warehouseDisplayName');
+        const dispCode = document.getElementById('warehouseDisplayCode');
+        const dispAddr = document.getElementById('warehouseDisplayAddress');
+        const idBadge = document.getElementById('warehouseIdBadge');
+        const codeExample = document.getElementById('warehouseCodeExample');
+
+        if (dispName) dispName.textContent = wh.name || 'Primary Warehouse';
+        if (dispCode) dispCode.textContent = wh.short_code || 'WH';
+        if (dispAddr) dispAddr.textContent = wh.address || '100 Logistics Blvd, Dock 4, Chicago, IL 60601';
+        if (idBadge) idBadge.textContent = 'ID: ' + (wh.id || 'wh-default-001');
+        if (codeExample) codeExample.textContent = `${wh.short_code || 'WH'}/IN/0001`;
+
+        // Populate Edit Inputs
+        const nameInput = document.getElementById('warehouseName');
+        const codeInput = document.getElementById('warehouseShortCode');
+        const addrInput = document.getElementById('warehouseAddress');
+        if (nameInput) nameInput.value = wh.name || '';
+        if (codeInput) codeInput.value = wh.short_code || '';
+        if (addrInput) addrInput.value = wh.address || '';
+
+        // Populate Locations Table
+        renderWarehouseLocations(wh.locations || []);
+      } catch (err) {
+        console.error('Error in loadWarehouseDetails:', err);
+        showWarehouseBanner('Could not load warehouse data. Please check connection.', true);
+      }
+    }
+
+    function renderWarehouseLocations(locations) {
+      const tbody = document.getElementById('warehouseLocationsTableBody');
+      const badge = document.getElementById('warehouseLocationCountBadge');
+      if (!tbody) return;
+
+      if (badge) {
+        badge.textContent = `${locations.length} zone${locations.length === 1 ? '' : 's'}`;
+      }
+
+      tbody.innerHTML = '';
+      if (!locations || locations.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="px-6 py-8 text-center text-slate-400 text-sm">
+              <span class="material-symbols-outlined text-[32px] text-slate-300 block mb-1">location_off</span>
+              No storage locations configured for this facility.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const typeBadges = {
+        internal: '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Internal Storage</span>',
+        incoming: '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Inbound Dock</span>',
+        outgoing: '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Outbound Bay</span>',
+        scrap: '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Scrap / Quarantine</span>'
+      };
+
+      locations.forEach(loc => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50/70 transition-colors';
+        const typeHtml = typeBadges[loc.type] || typeBadges.internal;
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-semibold text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-slate-400 text-[18px]">shelves</span>
+            <span>${escapeHtml(loc.name)}</span>
+          </td>
+          <td class="px-6 py-4">
+            <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 border border-slate-200/80">
+              ${escapeHtml(loc.code)}
+            </span>
+          </td>
+          <td class="px-6 py-4">${typeHtml}</td>
+          <td class="px-6 py-4 text-right">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveWarehouseDetails(event) {
+      if (event) event.preventDefault();
+
+      const nameInput = document.getElementById('warehouseName');
+      const codeInput = document.getElementById('warehouseShortCode');
+      const addrInput = document.getElementById('warehouseAddress');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const short_code = codeInput ? codeInput.value.trim().toUpperCase() : '';
+      const address = addrInput ? addrInput.value.trim() : '';
+
+      if (!name || name.length < 2) {
+        showWarehouseBanner('Warehouse name is required (min 2 characters).', true);
+        return;
+      }
+      if (!short_code || short_code.length < 1) {
+        showWarehouseBanner('Short code is required (e.g. WH).', true);
+        return;
+      }
+      if (!address || address.length < 3) {
+        showWarehouseBanner('Warehouse address is required.', true);
+        return;
+      }
+
+      const btnBottom = document.getElementById('warehouseSaveBtnBottom');
+      if (btnBottom) btnBottom.disabled = true;
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const res = await fetch('/api/warehouse', {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify({ name, short_code, address })
+        });
+        const result = await res.json();
+
+        if (!res.ok || !result.success) {
+          throw new Error(result.message || 'Failed to update warehouse details');
+        }
+
+        showWarehouseBanner(result.message || 'Warehouse details updated successfully.');
+        await loadWarehouseDetails();
+        if (isWarehouseEditMode) toggleWarehouseEditMode();
+      } catch (err) {
+        console.error('Error updating warehouse:', err);
+        showWarehouseBanner(err.message || 'Error updating warehouse details.', true);
+      } finally {
+        if (btnBottom) btnBottom.disabled = false;
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       initAuth();
       document.getElementById('closeDetailsBtn')?.addEventListener('click', closeDetailsModal);
+      const editStockModal = document.getElementById('editStockModal');
+      if (editStockModal) {
+        editStockModal.addEventListener('click', (e) => {
+          if (e.target === editStockModal) closeEditStockModal();
+        });
+      }
     });
 </script>
 </body>
