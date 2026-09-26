@@ -1006,7 +1006,7 @@
 </main>
 <main id="view-receipts-main" class="hidden w-full flex-1 bg-background"><div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"><div class="flex flex-col w-full">
 <!-- TOP METRIC CARDS / OPERATIONAL SUMMARY STRIP -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6" id="operationsMetricStrip">
 <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
 <div>
 <span class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider font-semibold">Draft</span>
@@ -1070,6 +1070,7 @@
 <div class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1.5 z-30 border border-slate-200" id="filterMenu">
   <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-900 font-semibold" onclick="applyReceiptFilter('all')">All Statuses</button>
   <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Draft')">Draft</button>
+  <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Waiting')">Waiting</button>
   <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Ready')">Ready</button>
   <button class="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 text-slate-600" onclick="applyReceiptFilter('Done')">Done</button>
   <div class="my-1 border-t border-slate-100"></div>
@@ -2018,11 +2019,187 @@ Draft
         <button class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg shadow-2xs transition-colors cursor-pointer" id="saveDraftBtn" onclick="submitNewOperation('draft')">
           Save as Draft
         </button>
-        <button class="px-5 py-2 bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-sm font-bold rounded-lg shadow-sm transition-all cursor-pointer" id="validateCreateBtn" onclick="submitNewOperation('ready')">
+        <button class="px-5 py-2 bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-sm font-bold rounded-lg shadow-sm transition-all cursor-pointer" id="validateCreateBtn" onclick="submitNewOperation('done')">
           Validate &amp; Confirm
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- INTERACTIVE MODAL 1C: CREATE NEW DELIVERY MODAL (4-STAGE STATUS) -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/50 backdrop-blur-xs transition-opacity" id="newDeliveryModal">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+    
+    <!-- Top Modal Header -->
+    <div class="px-6 py-4 bg-slate-50/90 flex items-center justify-between border-b border-slate-200 shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+          <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-bold text-slate-900">New Outgoing Delivery</h2>
+            <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/70" id="deliveryAutoRef">WH/OUT/0004</span>
+          </div>
+          <p class="text-xs text-slate-500">Outbound dispatch • 4-stage stock availability verification</p>
+        </div>
+      </div>
+      <button class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors cursor-pointer" type="button" onclick="closeNewDeliveryModal()">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <!-- ACTION ROW & STATUS FLOW STEPPER (Wireframe specification) -->
+    <div class="px-6 py-3 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <!-- Left: Action row buttons (Validate, Print, Cancel) -->
+      <div class="flex items-center gap-2">
+        <button type="button" class="h-8 px-3.5 bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5 transition-all cursor-pointer" id="deliveryActionValidateBtn" onclick="handleDeliveryValidate()">
+          <span class="material-symbols-outlined text-[16px]">check_circle</span>
+          <span id="deliveryValidateBtnLabel">Validate</span>
+        </button>
+        <button type="button" class="h-8 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs" id="deliveryActionPrintBtn" onclick="handleDeliveryPrint()">
+          <span class="material-symbols-outlined text-[16px] text-slate-500">print</span>
+          <span>Print</span>
+        </button>
+        <button type="button" class="h-8 px-3 rounded-lg border border-slate-200 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs" id="deliveryActionCancelBtn" onclick="closeNewDeliveryModal()">
+          <span>Cancel</span>
+        </button>
+      </div>
+
+      <!-- Right: Status flow indicator (4 stages: Draft > Waiting > Ready > Done) -->
+      <div class="flex items-center gap-1 sm:gap-1.5 text-xs font-semibold" id="deliveryStatusStepper">
+        <!-- Draft -->
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-slate-700 text-white shadow-xs" id="deliveryStepDraft">
+          <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+          <span>Draft</span>
+        </span>
+        <span class="text-slate-300 font-bold select-none">›</span>
+        <!-- Waiting -->
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-slate-100 text-slate-400" id="deliveryStepWaiting">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>Waiting</span>
+        </span>
+        <span class="text-slate-300 font-bold select-none">›</span>
+        <!-- Ready -->
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-slate-100 text-slate-400" id="deliveryStepReady">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>Ready</span>
+        </span>
+        <span class="text-slate-300 font-bold select-none">›</span>
+        <!-- Done -->
+        <span class="px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-slate-100 text-slate-400" id="deliveryStepDone">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>Done</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Alert / Stock Availability Banner -->
+    <div id="deliveryStockAlertBanner" class="hidden mx-6 mt-4 p-3.5 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+      <span class="material-symbols-outlined text-amber-600 text-[18px] shrink-0 mt-0.5">warning</span>
+      <div class="flex-1">
+        <p class="font-bold text-amber-900" id="deliveryAlertBannerTitle">Insufficient Stock Detected</p>
+        <p class="text-amber-700 mt-0.5" id="deliveryAlertBannerDesc">One or more items are currently short of stock. This delivery will be marked as <strong class="font-bold uppercase text-amber-800">Waiting</strong> until stock is replenished via incoming receipt.</p>
+      </div>
+    </div>
+
+    <div id="deliveryStockReadyBanner" class="hidden mx-6 mt-4 p-3.5 rounded-xl bg-indigo-50/90 border border-indigo-200 text-indigo-950 text-xs flex items-center gap-2.5 animate-in fade-in duration-200">
+      <span class="material-symbols-outlined text-indigo-600 text-[18px]">check_circle</span>
+      <p class="font-medium text-indigo-800">All requested line items are fully in stock in the warehouse. Delivery is <strong class="font-bold text-indigo-950">Ready</strong> to dispatch.</p>
+    </div>
+
+    <!-- Modal Body (Scrollable) -->
+    <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
+      
+      <!-- Two-Column Form Layout -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Left Column: Delivery Address & Responsible -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Delivery Address *</label>
+          <div class="relative">
+            <input class="w-full h-10 px-3.5 pr-9 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all placeholder:text-slate-400" id="deliveryAddressInput" placeholder="e.g. Anita Oliver • 452 Commerce Blvd" type="text"/>
+            <span class="material-symbols-outlined absolute right-2.5 top-2.5 text-slate-400 text-[20px]">location_on</span>
+          </div>
+        </div>
+        <!-- Right Column: Schedule Date -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Schedule Date *</label>
+          <input class="w-full h-10 px-3.5 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm text-slate-900 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer" id="deliveryScheduleDateInput" type="date"/>
+        </div>
+
+        <!-- Left Column: Responsible (Auto-filled & Read-only) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Responsible</label>
+          <div class="relative">
+            <input class="w-full h-10 px-3.5 pl-9 bg-slate-100 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 shadow-2xs cursor-not-allowed select-none focus:outline-none" id="deliveryResponsibleInput" type="text" readonly value="Marcus Vance"/>
+            <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400 text-[18px]">person</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Operation Type Dropdown -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Operation Type *</label>
+          <div class="relative">
+            <select class="w-full h-10 px-3 bg-slate-50/50 hover:bg-white rounded-lg border border-slate-300 text-sm font-medium text-slate-800 shadow-2xs focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all cursor-pointer" id="deliveryOperationTypeSelect">
+              <option value="Delivery Order" selected>Delivery Order (Customer Outbound)</option>
+              <option value="Return to Vendor">Return to Vendor (Supplier RTV)</option>
+              <option value="Internal Transfer Out">Internal Transfer Out (Inter-warehouse)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Section -->
+      <div class="flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold text-slate-900">Products</span>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600" id="deliveryProductsCountBadge">1 item</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="text-xs text-primary hover:text-primary-hover bg-primary/10 hover:bg-primary/20 font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer transition-colors" type="button" onclick="openQuickNewProductModal()">
+              <span class="material-symbols-outlined text-[16px]">add_box</span> New Product
+            </button>
+            <button class="text-xs text-primary font-bold hover:text-primary-hover flex items-center gap-1 cursor-pointer transition-colors px-2 py-1.5" type="button" onclick="addDeliveryProductLine()">
+              <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Line
+            </button>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                <th class="px-3.5 py-2.5">Product</th>
+                <th class="px-3 py-2.5 w-36">Quantity</th>
+                <th class="px-2 py-2.5 w-10 text-center"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm" id="deliveryLinesTableBody">
+              <!-- Dynamically populated rows with live stock check -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 bg-slate-50/90 flex items-center justify-between border-t border-slate-200 shrink-0">
+      <button class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer" type="button" onclick="closeNewDeliveryModal()">
+        Discard
+      </button>
+      <div class="flex items-center gap-3">
+        <button class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg shadow-2xs transition-colors cursor-pointer" type="button" id="deliverySaveDraftBtn" onclick="submitNewDelivery('draft')">
+          Save as Draft
+        </button>
+        <button class="px-5 py-2 bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-sm font-bold rounded-lg shadow-sm transition-all cursor-pointer flex items-center gap-1.5" type="button" id="deliveryValidateCreateBtn" onclick="submitNewDelivery()">
+          <span class="material-symbols-outlined text-[18px]">verified</span>
+          <span id="deliverySubmitBtnLabel">Validate &amp; Confirm</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -4287,6 +4464,97 @@ Draft
 
     let currentOperationType = 'receipt';
 
+    function renderOperationalMetrics(type, operations) {
+      const container = document.getElementById('operationsMetricStrip');
+      if (!container) return;
+
+      const counts = { draft: 0, waiting: 0, ready: 0, done: 0 };
+      (operations || []).forEach(op => {
+        const s = (op.status || 'draft').toLowerCase();
+        if (counts[s] !== undefined) counts[s]++;
+      });
+
+      if (type === 'delivery') {
+        container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6';
+        container.innerHTML = `
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-slate-600 block uppercase tracking-wider font-semibold">Draft</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">${counts.draft}</span>
+              <span class="font-body-sm text-body-sm text-outline block mt-1">Awaiting review</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+              <span class="material-symbols-outlined text-[26px]">edit_note</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-amber-700 block uppercase tracking-wider font-semibold">Waiting</span>
+              <span class="font-headline-lg text-headline-lg text-amber-900 font-bold tracking-tight text-3xl mt-1 block">${counts.waiting}</span>
+              <span class="font-body-sm text-body-sm text-amber-600 block mt-1">Waiting for stock</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+              <span class="material-symbols-outlined text-[26px]">hourglass_empty</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-indigo-700 block uppercase tracking-wider font-semibold">Ready</span>
+              <span class="font-headline-lg text-headline-lg text-indigo-900 font-bold tracking-tight text-3xl mt-1 block">${counts.ready}</span>
+              <span class="font-body-sm text-body-sm text-indigo-600 block mt-1">Ready to dispatch</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+              <span class="material-symbols-outlined text-[26px]">local_shipping</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-emerald-700 block uppercase tracking-wider font-semibold">Done</span>
+              <span class="font-headline-lg text-headline-lg text-emerald-900 font-bold tracking-tight text-3xl mt-1 block">${counts.done}</span>
+              <span class="font-body-sm text-body-sm text-emerald-600 block mt-1">Dispatched</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <span class="material-symbols-outlined text-[26px]">check_circle</span>
+            </div>
+          </div>
+        `;
+      } else {
+        container.className = 'grid grid-cols-1 md:grid-cols-3 gap-5 mb-6';
+        container.innerHTML = `
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-on-surface-variant block uppercase tracking-wider font-semibold">Draft</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">${counts.draft}</span>
+              <span class="font-body-sm text-body-sm text-outline block mt-1">Awaiting review</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+              <span class="material-symbols-outlined text-[26px]">edit_note</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-indigo-700 block uppercase tracking-wider font-semibold">Ready</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">${counts.ready}</span>
+              <span class="font-body-sm text-body-sm text-outline block mt-1">Ready to receive</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-primary-container">
+              <span class="material-symbols-outlined text-[26px]">inventory_2</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-xs flex items-start justify-between transition-all hover:shadow-sm">
+            <div>
+              <span class="font-label-md text-label-md text-emerald-700 block uppercase tracking-wider font-semibold">Done</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight text-3xl mt-1 block">${counts.done}</span>
+              <span class="font-body-sm text-body-sm text-outline block mt-1">Received</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <span class="material-symbols-outlined text-[26px]">check_circle</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
     async function loadOperations(type = currentOperationType, status = currentFilterStatus, search = '') {
       currentOperationType = type;
       try {
@@ -4302,6 +4570,14 @@ Draft
         const countBadge = document.getElementById('operations-count-badge');
         if (countBadge) countBadge.textContent = `${data.length} items`;
 
+        // Track waiting delivery IDs for backend-promotion detection
+        if (type === 'delivery' && (!status || status === 'all')) {
+          _knownWaitingDeliveryIds = new Set(
+            data.filter(d => (d.status || '').toLowerCase() === 'waiting').map(d => d.id)
+          );
+        }
+
+        renderOperationalMetrics(type, data);
         renderReceiptsTable(data);
         renderReceiptsKanban(data);
       } catch (e) {
@@ -4409,8 +4685,8 @@ Draft
 
       const cols = {
         draft: { title: 'Draft', color: 'slate', items: [] },
-        ready: { title: 'Ready', color: 'indigo', items: [] },
         waiting: { title: 'Waiting', color: 'amber', items: [] },
+        ready: { title: 'Ready', color: 'indigo', items: [] },
         done: { title: 'Done', color: 'emerald', items: [] }
       };
 
@@ -4420,7 +4696,7 @@ Draft
       });
 
       kanban.innerHTML = '';
-      ['draft', 'ready', 'waiting', 'done'].forEach(colKey => {
+      ['draft', 'waiting', 'ready', 'done'].forEach(colKey => {
         const col = cols[colKey];
         const colEl = document.createElement('div');
         colEl.className = 'w-full md:w-1/4 bg-slate-50/50 rounded-xl border border-slate-200/60 p-4 flex flex-col gap-3';
@@ -4468,6 +4744,8 @@ Draft
           body: JSON.stringify({ status: 'done' })
         });
         if (res.ok) {
+          await refreshProductCatalog();
+          await checkAndPromoteWaitingDeliveriesClient();
           loadOperations(currentOperationType);
           loadDashboardStats();
         }
@@ -4491,6 +4769,8 @@ Draft
       { sku: 'EQP-009', name: 'Hydraulic Pallet Jack', category: 'Equipment' }
     ];
 
+    let cachedStockMap = new Map();
+
     async function refreshProductCatalog() {
       try {
         const res = await fetch('/api/stock');
@@ -4498,12 +4778,16 @@ Draft
           const json = await res.json();
           if (Array.isArray(json.data) && json.data.length > 0) {
             json.data.forEach(item => {
-              if (item.sku && !cachedProductCatalog.some(p => p.sku.toLowerCase() === item.sku.toLowerCase())) {
-                cachedProductCatalog.push({
-                  sku: item.sku,
-                  name: item.product_name,
-                  category: item.category || 'General'
-                });
+              if (item.sku) {
+                cachedStockMap.set(item.sku.toLowerCase().trim(), item);
+                if (item.product_name) cachedStockMap.set(item.product_name.toLowerCase().trim(), item);
+                if (!cachedProductCatalog.some(p => p.sku.toLowerCase() === item.sku.toLowerCase())) {
+                  cachedProductCatalog.push({
+                    sku: item.sku,
+                    name: item.product_name,
+                    category: item.category || 'General'
+                  });
+                }
               }
             });
           }
@@ -4593,19 +4877,526 @@ Draft
       // Update the datalist options so typing it autocompletes anywhere
       updateProductDatalistUI();
 
-      // Add new line directly to the receipt table
+      // Add new line directly to the open modal table (delivery or receipt)
       const formattedProduct = `[${sku}] ${name}`;
-      addModalProductLine(formattedProduct, qty);
+      const delivModal = document.getElementById('newDeliveryModal');
+      const isDelivOpen = delivModal && !delivModal.classList.contains('hidden');
+      if (isDelivOpen) {
+        addDeliveryProductLine(formattedProduct, qty);
+      } else {
+        addModalProductLine(formattedProduct, qty);
+      }
 
       closeQuickNewProductModal();
     }
 
+    // ==========================================
+    // DELIVERY OPERATIONS & 4-STAGE STATUS LOGIC
+    // ==========================================
+    let toastTimeout;
+    function showToastNotification(msg) {
+      let navToast = document.getElementById('navToast');
+      let toastMessage = document.getElementById('toastMessage');
+      if (!navToast) {
+        navToast = document.createElement('div');
+        navToast.id = 'navToast';
+        navToast.className = 'fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300';
+        navToast.innerHTML = `
+          <div class="bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2.5 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+            <span id="toastMessage">${msg}</span>
+          </div>
+        `;
+        document.body.appendChild(navToast);
+        toastMessage = document.getElementById('toastMessage');
+      }
+      toastMessage.textContent = msg;
+      navToast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      navToast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        navToast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+        navToast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    async function getNextDeliveryReference() {
+      try {
+        const res = await fetch('/api/operations/deliveries');
+        if (res.ok) {
+          const { data } = await res.json();
+          let maxNum = 0;
+          if (Array.isArray(data)) {
+            data.forEach(d => {
+              if (d.reference && d.reference.startsWith('WH/OUT/')) {
+                const num = parseInt(d.reference.replace('WH/OUT/', ''), 10);
+                if (!isNaN(num) && num > maxNum) maxNum = num;
+              }
+            });
+          }
+          return `WH/OUT/${String(maxNum + 1).padStart(4, '0')}`;
+        }
+      } catch (e) {
+        console.warn('Error computing next delivery reference:', e);
+      }
+      return 'WH/OUT/0001';
+    }
+
+    async function openNewDeliveryModal(prefillItem = null) {
+      const modal = document.getElementById('newDeliveryModal');
+      if (!modal) return;
+
+      await refreshProductCatalog();
+
+      const nextRef = await getNextDeliveryReference();
+      const refEl = document.getElementById('deliveryAutoRef');
+      if (refEl) refEl.textContent = nextRef;
+
+      // Auto-fill responsible user from auth or DOM profile
+      const loggedUser = (typeof getAuthUser === 'function' && getAuthUser()?.name) 
+        || document.getElementById('user-display-name')?.textContent?.trim() 
+        || 'Marcus Vance';
+      const respInput = document.getElementById('deliveryResponsibleInput');
+      if (respInput) respInput.value = loggedUser;
+
+      // Schedule Date
+      const dateInput = document.getElementById('deliveryScheduleDateInput');
+      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+
+      // Delivery Address
+      const addressInput = document.getElementById('deliveryAddressInput');
+      if (addressInput) {
+        addressInput.value = (prefillItem && prefillItem.destination) 
+          ? prefillItem.destination 
+          : 'Anita Oliver • 452 Commerce Blvd, Suite 200';
+      }
+
+      // Populate lines
+      const tbody = document.getElementById('deliveryLinesTableBody');
+      if (tbody) tbody.innerHTML = '';
+
+      if (prefillItem) {
+        const formatted = prefillItem.sku 
+          ? `[${prefillItem.sku}] ${prefillItem.product_name || prefillItem.name || 'Warehouse Material'}`
+          : (prefillItem.product_name || prefillItem.name || 'Warehouse Material');
+        addDeliveryProductLine(formatted, prefillItem.qty || 2);
+      } else {
+        addDeliveryProductLine('[FUR-001] Office Chair Ergonomic', 4);
+        addDeliveryProductLine('[FUR-002] Standing Desk Frame', 2);
+      }
+
+      checkDeliveryStockAvailability();
+      modal.classList.remove('hidden');
+    }
+
+    function closeNewDeliveryModal() {
+      const modal = document.getElementById('newDeliveryModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function addDeliveryProductLine(productIdentifier = '', qty = 1) {
+      const tbody = document.getElementById('deliveryLinesTableBody');
+      if (!tbody) return;
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50/60 transition-colors border-b border-slate-100 last:border-0';
+      tr.innerHTML = `
+        <td class="px-3.5 py-2.5">
+          <input type="text" list="receiptProductCatalogList" autocomplete="off" class="line-product w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-semibold text-slate-800 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" placeholder="e.g. [FUR-001] Office Chair" value="${productIdentifier}">
+          <div class="stock-feedback mt-1"></div>
+        </td>
+        <td class="px-3 py-2.5 w-36 align-top">
+          <input type="number" min="1" class="line-qty w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-bold text-primary focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none" value="${qty}">
+        </td>
+        <td class="text-center py-2.5 px-2 w-10 align-top">
+          <button type="button" class="w-7 h-7 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer mt-1" onclick="this.closest('tr').remove(); checkDeliveryStockAvailability();" title="Remove line">
+            <span class="material-symbols-outlined text-[18px]">delete</span>
+          </button>
+        </td>
+      `;
+
+      const prodInput = tr.querySelector('.line-product');
+      const qtyInput = tr.querySelector('.line-qty');
+
+      prodInput.addEventListener('input', () => checkDeliveryStockAvailability());
+      qtyInput.addEventListener('input', () => checkDeliveryStockAvailability());
+
+      tbody.appendChild(tr);
+      checkDeliveryStockAvailability();
+    }
+
+    function checkDeliveryStockAvailability() {
+      const rows = document.querySelectorAll('#deliveryLinesTableBody tr');
+      const countBadge = document.getElementById('deliveryProductsCountBadge');
+      if (countBadge) countBadge.textContent = `${rows.length} ${rows.length === 1 ? 'item' : 'items'}`;
+
+      let shortCount = 0;
+      let totalItems = 0;
+
+      rows.forEach(row => {
+        const prodInput = row.querySelector('.line-product');
+        const qtyInput = row.querySelector('.line-qty');
+        const feedbackEl = row.querySelector('.stock-feedback');
+        if (!prodInput || !qtyInput) return;
+
+        totalItems++;
+        const rawVal = prodInput.value.trim();
+        const qty = parseInt(qtyInput.value, 10) || 0;
+
+        let sku = '';
+        let name = rawVal;
+        const match = rawVal.match(/^\[([^\]]+)\]\s*(.*)$/);
+        if (match) {
+          sku = match[1].trim();
+          name = match[2].trim() || rawVal;
+        } else {
+          const found = cachedProductCatalog.find(p => 
+            p.name.toLowerCase() === rawVal.toLowerCase() || 
+            p.sku.toLowerCase() === rawVal.toLowerCase() ||
+            rawVal.toLowerCase().includes(p.name.toLowerCase()) ||
+            p.name.toLowerCase().includes(rawVal.toLowerCase())
+          );
+          if (found) {
+            sku = found.sku;
+            name = found.name;
+          }
+        }
+
+        const sKey = (sku || '').toLowerCase().trim();
+        const nKey = (name || '').toLowerCase().trim();
+        let stockEntry = cachedStockMap.get(sKey) || cachedStockMap.get(nKey);
+        if (!stockEntry && nKey) {
+          for (const [k, v] of cachedStockMap.entries()) {
+            if (k && (k.includes(nKey) || nKey.includes(k))) {
+              stockEntry = v;
+              break;
+            }
+          }
+        }
+        const available = stockEntry ? (stockEntry.on_hand || 0) : 0;
+
+        if (qty > available) {
+          shortCount++;
+          // Red-flagged row styling: light red/rose tint background with red text / left-border accent
+          row.className = 'bg-rose-50/70 border-l-4 border-l-rose-500 hover:bg-rose-100/60 transition-colors border-b border-rose-100 last:border-0';
+          qtyInput.className = 'line-qty w-full h-9 px-3 rounded-lg border border-rose-300 text-xs font-bold text-rose-700 bg-rose-50/40 focus:bg-white focus:border-rose-500 focus:ring-1 focus:ring-rose-400 focus:outline-none';
+          if (feedbackEl) {
+            feedbackEl.innerHTML = `
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-100 text-rose-800">
+                <span class="material-symbols-outlined text-[13px] text-rose-600">warning</span>
+                Insufficient stock: ${available} available, ${qty} requested
+              </span>
+            `;
+            feedbackEl.classList.remove('hidden');
+          }
+        } else {
+          row.className = 'hover:bg-slate-50/60 transition-colors border-b border-slate-100 last:border-0';
+          qtyInput.className = 'line-qty w-full h-9 px-3 rounded-lg border border-slate-300 text-xs font-bold text-primary focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none';
+          if (feedbackEl) {
+            feedbackEl.innerHTML = `
+              <span class="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600">
+                <span class="material-symbols-outlined text-[13px]">check_circle</span>
+                In stock (${available} available)
+              </span>
+            `;
+            feedbackEl.classList.remove('hidden');
+          }
+        }
+      });
+
+      const alertBanner = document.getElementById('deliveryStockAlertBanner');
+      const readyBanner = document.getElementById('deliveryStockReadyBanner');
+      const alertDesc = document.getElementById('deliveryAlertBannerDesc');
+      const validateActionBtn = document.getElementById('deliveryActionValidateBtn');
+      const validateActionLabel = document.getElementById('deliveryValidateBtnLabel');
+      const submitBtnLabel = document.getElementById('deliverySubmitBtnLabel');
+
+      const stepDraft = document.getElementById('deliveryStepDraft');
+      const stepWaiting = document.getElementById('deliveryStepWaiting');
+      const stepReady = document.getElementById('deliveryStepReady');
+      const stepDone = document.getElementById('deliveryStepDone');
+
+      const resetSteps = () => {
+        [stepDraft, stepWaiting, stepReady, stepDone].forEach(st => {
+          if (!st) return;
+          st.className = 'px-2.5 py-1 rounded-full text-xs font-semibold transition-all flex items-center gap-1 bg-slate-100 text-slate-400 border border-slate-200';
+          const dot = st.querySelector('span:first-child');
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-slate-400';
+        });
+      };
+
+      resetSteps();
+
+      if (totalItems === 0 || shortCount > 0) {
+        if (alertBanner) {
+          alertBanner.classList.remove('hidden');
+          if (alertDesc) alertDesc.innerHTML = `${shortCount} item(s) are currently short of stock. This delivery will be marked as <strong class="font-bold uppercase text-amber-800">Waiting</strong> until stock is replenished via incoming receipt.`;
+        }
+        if (readyBanner) readyBanner.classList.add('hidden');
+
+        if (stepWaiting) {
+          stepWaiting.className = 'px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-amber-500 text-white shadow-xs';
+          const dot = stepWaiting.querySelector('span:first-child');
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-white animate-pulse';
+        }
+
+        if (validateActionBtn) {
+          validateActionBtn.className = 'h-8 px-3.5 bg-amber-600 hover:bg-amber-700 active:scale-[0.98] text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5 transition-all cursor-pointer';
+          if (validateActionLabel) validateActionLabel.textContent = 'Waiting for Stock';
+        }
+        if (submitBtnLabel) submitBtnLabel.textContent = 'Confirm as Waiting';
+
+        return { isReady: false, hasWaiting: true, shortCount };
+      } else {
+        if (alertBanner) alertBanner.classList.add('hidden');
+        if (readyBanner) readyBanner.classList.remove('hidden');
+
+        if (stepReady) {
+          stepReady.className = 'px-2.5 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 bg-primary text-white shadow-xs';
+          const dot = stepReady.querySelector('span:first-child');
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-white animate-pulse';
+        }
+
+        if (validateActionBtn) {
+          validateActionBtn.className = 'h-8 px-3.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5 transition-all cursor-pointer';
+          if (validateActionLabel) validateActionLabel.textContent = 'Validate';
+        }
+        if (submitBtnLabel) submitBtnLabel.textContent = 'Validate & Confirm';
+
+        return { isReady: true, hasWaiting: false, shortCount: 0 };
+      }
+    }
+
+    async function submitNewDelivery(targetStatus = null) {
+      const addressInput = document.getElementById('deliveryAddressInput');
+      const dateInput = document.getElementById('deliveryScheduleDateInput');
+      const respInput = document.getElementById('deliveryResponsibleInput');
+      const opTypeSelect = document.getElementById('deliveryOperationTypeSelect');
+
+      const addressVal = addressInput ? addressInput.value.trim() : '';
+      const dateVal = dateInput && dateInput.value ? dateInput.value : new Date().toISOString().split('T')[0];
+      const respVal = respInput ? respInput.value.trim() : 'Marcus Vance';
+      const opTypeVal = opTypeSelect ? opTypeSelect.value : 'Delivery Order';
+
+      if (!addressVal) {
+        alert('Please enter a Delivery Address.');
+        addressInput?.focus();
+        return;
+      }
+
+      const lineRows = document.querySelectorAll('#deliveryLinesTableBody tr');
+      if (lineRows.length === 0) {
+        alert('Please add at least one product line item.');
+        return;
+      }
+
+      const items = [];
+      lineRows.forEach(row => {
+        const rawProduct = row.querySelector('.line-product')?.value.trim() || '[FUR-001] Office Chair Ergonomic';
+        const qty = parseInt(row.querySelector('.line-qty')?.value, 10) || 1;
+        let sku = 'SKU-001';
+        let productName = rawProduct;
+        const match = rawProduct.match(/^\[([^\]]+)\]\s*(.*)$/);
+        if (match) {
+          sku = match[1].trim();
+          productName = match[2].trim() || rawProduct;
+        }
+        items.push({ product_name: productName, sku, quantity: qty, unit: 'Units' });
+      });
+
+      const check = checkDeliveryStockAvailability();
+      let finalStatus = targetStatus;
+      if (!finalStatus) {
+        finalStatus = check.isReady ? 'ready' : 'waiting';
+      }
+
+      const ref = document.getElementById('deliveryAutoRef')?.textContent?.trim() || undefined;
+
+      const payload = {
+        type: 'delivery',
+        reference: ref,
+        vendor_from: 'WH/Stock',
+        destination_to: addressVal,
+        contact: respVal,
+        scheduled_date: dateVal,
+        source_document: opTypeVal,
+        status: finalStatus,
+        items
+      };
+
+      const token = getAuthToken();
+      try {
+        const res = await fetch('/api/operations/deliveries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to create delivery.');
+        }
+
+        closeNewDeliveryModal();
+        loadOperations('delivery');
+        loadDashboardStats();
+
+        if (finalStatus === 'waiting') {
+          showToastNotification(`Delivery ${data.data?.reference || ''} saved in Waiting stage (insufficient stock)`);
+        } else if (finalStatus === 'ready') {
+          showToastNotification(`Delivery ${data.data?.reference || ''} created in Ready stage`);
+        } else if (finalStatus === 'done') {
+          showToastNotification(`Delivery ${data.data?.reference || ''} validated & dispatched!`);
+        } else {
+          showToastNotification(`Delivery ${data.data?.reference || ''} saved as Draft`);
+        }
+      } catch (err) {
+        alert('Error creating delivery: ' + err.message);
+      }
+    }
+
+    async function handleDeliveryValidate() {
+      const check = checkDeliveryStockAvailability();
+      if (!check.isReady) {
+        alert(`Cannot validate to Done yet: ${check.shortCount} item(s) are short of available warehouse stock. This delivery is marked as "Waiting" until stock is replenished.`);
+        submitNewDelivery('waiting');
+        return;
+      }
+
+      const confirmed = confirm('All items are in stock! Validate and dispatch this delivery now? (This will mark status as Done and deduct stock)');
+      if (confirmed) {
+        submitNewDelivery('done');
+      } else {
+        submitNewDelivery('ready');
+      }
+    }
+
+    function handleDeliveryPrint() {
+      window.print();
+    }
+
+    // Track known waiting delivery IDs so we can detect backend-side promotions
+    let _knownWaitingDeliveryIds = new Set();
+
+    async function checkAndPromoteWaitingDeliveriesClient() {
+      try {
+        // First, fetch current state from backend (which may have already promoted some)
+        const [stockRes, delivRes] = await Promise.all([
+          fetch('/api/stock'),
+          fetch('/api/operations/deliveries?status=waiting')
+        ]);
+
+        if (!stockRes.ok || !delivRes.ok) return;
+
+        const stockData = await stockRes.json();
+        const delivData = await delivRes.json();
+
+        const currentWaitingList = Array.isArray(delivData.data) ? delivData.data : [];
+        const currentWaitingIds = new Set(currentWaitingList.map(d => d.id));
+
+        // Detect if any previously-known waiting deliveries have disappeared 
+        // (they were promoted by the backend before we got here)
+        let backendPromoted = false;
+        if (_knownWaitingDeliveryIds.size > 0) {
+          for (const prevId of _knownWaitingDeliveryIds) {
+            if (!currentWaitingIds.has(prevId)) {
+              backendPromoted = true;
+              console.log('[CLIENT PROMOTION] Backend already promoted delivery:', prevId);
+            }
+          }
+        }
+
+        // Build stock map for client-side promotion attempts
+        const stockMap = new Map();
+        if (Array.isArray(stockData.data)) {
+          stockData.data.forEach(s => {
+            if (s.sku) stockMap.set(s.sku.toLowerCase().trim(), s.on_hand || 0);
+            if (s.product_name) stockMap.set(s.product_name.toLowerCase().trim(), s.on_hand || 0);
+          });
+        }
+
+        const token = getAuthToken();
+        let anyPromoted = false;
+
+        for (const deliv of currentWaitingList) {
+          if (!deliv.items || deliv.items.length === 0) continue;
+          const allInStock = deliv.items.every(it => {
+            let s = (it.sku || '').toLowerCase().trim();
+            let n = (it.product_name || '').toLowerCase().trim();
+            const match = n.match(/^\[([^\]]+)\]\s*(.*)$/);
+            if (match) {
+              if (!s || s.startsWith('sku-')) s = match[1].toLowerCase().trim();
+              n = match[2].toLowerCase().trim();
+            }
+
+            let avail = 0;
+            if (s && stockMap.has(s)) {
+              avail = stockMap.get(s);
+            } else if (n && stockMap.has(n)) {
+              avail = stockMap.get(n);
+            } else {
+              for (const [key, qty] of stockMap.entries()) {
+                if (n && (key.includes(n) || n.includes(key))) {
+                  avail = qty;
+                  break;
+                }
+              }
+            }
+            return (Number(it.quantity) || 0) <= avail;
+          });
+
+          if (allInStock) {
+            const patchRes = await fetch(`/api/operations/deliveries/${deliv.id}/status`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+              },
+              body: JSON.stringify({ status: 'ready' })
+            });
+            if (patchRes.ok) {
+              anyPromoted = true;
+              showToastNotification(`🎉 Stock replenished! Delivery ${deliv.reference} is now Ready to dispatch.`);
+            }
+          }
+        }
+
+        // Update tracking set with current waiting IDs (minus any we just promoted)
+        _knownWaitingDeliveryIds = currentWaitingIds;
+
+        // Refresh UI if anything was promoted (either by backend or by us)
+        if (anyPromoted || backendPromoted) {
+          if (backendPromoted && !anyPromoted) {
+            showToastNotification('🎉 Waiting deliveries have been promoted to Ready — stock is now available!');
+          }
+          loadOperations(currentOperationType);
+          loadDashboardStats();
+          const deliveryModal = document.getElementById('newDeliveryModal');
+          if (deliveryModal && !deliveryModal.classList.contains('hidden')) {
+            await refreshProductCatalog();
+            checkDeliveryStockAvailability();
+          }
+        }
+      } catch (err) {
+        console.warn('Reactive delivery replenishment check:', err);
+      }
+    }
+
     // Modal Operations
     function openNewOperationModal(prefillItem = null) {
+      if (currentOperationType === 'delivery') {
+        openNewDeliveryModal(prefillItem);
+      } else {
+        openNewReceiptModal(prefillItem);
+      }
+    }
+
+    function openNewReceiptModal(prefillItem = null) {
       const modal = document.getElementById('newReceiptModal');
       if (!modal) return;
 
-      const isReceipt = currentOperationType === 'receipt';
       const titleEl = document.getElementById('modalOpTitle');
       const subEl = document.getElementById('modalOpSubtitle');
       const partnerLabel = document.getElementById('modalPartnerLabel');
@@ -4613,17 +5404,10 @@ Draft
       const dateLabel = document.getElementById('modalDateLabel');
       const respInput = document.getElementById('modalResponsibleInput');
 
-      if (isReceipt) {
-        if (titleEl) titleEl.textContent = 'New Incoming Receipt';
-        if (subEl) subEl.textContent = 'Draft status initialized • Auto-reference: WH/IN/...';
-        if (partnerLabel) partnerLabel.textContent = 'Receive From *';
-        if (partnerInput) partnerInput.placeholder = 'e.g., Gemini Furniture, Azure Interior';
-      } else {
-        if (titleEl) titleEl.textContent = 'New Outgoing Delivery';
-        if (subEl) subEl.textContent = 'Draft status initialized • Auto-reference: WH/OUT/...';
-        if (partnerLabel) partnerLabel.textContent = 'Delivery To *';
-        if (partnerInput) partnerInput.placeholder = 'e.g., Brandon Freeman, Anita Oliver';
-      }
+      if (titleEl) titleEl.textContent = 'New Incoming Receipt';
+      if (subEl) subEl.textContent = 'Draft status initialized • Auto-reference: WH/IN/...';
+      if (partnerLabel) partnerLabel.textContent = 'Receive From *';
+      if (partnerInput) partnerInput.placeholder = 'e.g., Gemini Furniture, Azure Interior';
 
       if (dateLabel) dateLabel.textContent = 'Schedule Date *';
 
@@ -4754,6 +5538,8 @@ Draft
         }
 
         closeNewOperationModal();
+        await refreshProductCatalog();
+        await checkAndPromoteWaitingDeliveriesClient();
         loadOperations(currentOperationType);
         loadDashboardStats();
       } catch (err) {
@@ -4794,10 +5580,15 @@ Draft
       if (locLabel) locLabel.textContent = isDelivery ? 'Source Location:' : 'Destination:';
 
       if (validateBtn) {
-        if ((status || '').toLowerCase() === 'done') {
+        const initStatus = (status || '').toLowerCase();
+        if (initStatus === 'done') {
           validateBtn.textContent = 'Already Validated';
           validateBtn.disabled = true;
           validateBtn.className = 'w-1/2 py-2.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg cursor-not-allowed text-center';
+        } else if (initStatus === 'waiting') {
+          validateBtn.textContent = 'Waiting for Stock';
+          validateBtn.disabled = true;
+          validateBtn.className = 'w-1/2 py-2.5 bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm rounded-lg cursor-not-allowed text-center';
         } else {
           validateBtn.textContent = 'Mark as Done';
           validateBtn.disabled = false;
@@ -4805,7 +5596,7 @@ Draft
         }
       }
 
-      renderDetailStepper(status || 'draft');
+      renderDetailStepper(status || 'draft', isDelivery);
 
       try {
         const res = await fetch(`/api/operations/${encodeURIComponent(currentDetailOperationId)}`);
@@ -4820,12 +5611,17 @@ Draft
             if (dateEl && data.scheduled_date) dateEl.textContent = data.scheduled_date;
             if (sourceEl) sourceEl.textContent = data.source_document || '—';
             renderDetailItems(data.items);
-            renderDetailStepper(data.status);
+            renderDetailStepper(data.status, isDelivery);
             if (validateBtn) {
-              if ((data.status || '').toLowerCase() === 'done') {
+              const opStatus = (data.status || '').toLowerCase();
+              if (opStatus === 'done') {
                 validateBtn.textContent = 'Already Validated';
                 validateBtn.disabled = true;
                 validateBtn.className = 'w-1/2 py-2.5 bg-slate-100 text-slate-400 font-semibold text-sm rounded-lg cursor-not-allowed text-center';
+              } else if (opStatus === 'waiting') {
+                validateBtn.textContent = 'Waiting for Stock';
+                validateBtn.disabled = true;
+                validateBtn.className = 'w-1/2 py-2.5 bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm rounded-lg cursor-not-allowed text-center';
               } else {
                 validateBtn.textContent = 'Mark as Done';
                 validateBtn.disabled = false;
@@ -4867,12 +5663,49 @@ Draft
       `;
     }
 
-    function renderDetailStepper(status) {
+    function renderDetailStepper(status, isDelivery = false) {
       const stepper = document.getElementById('detailStepper');
       if (!stepper) return;
       const s = (status || 'draft').toLowerCase();
+
+      if (isDelivery) {
+        const isDraft = s === 'draft';
+        const isWaiting = s === 'waiting';
+        const isReady = s === 'ready';
+        const isDone = s === 'done';
+
+        stepper.innerHTML = `
+          <div class="flex flex-col items-center gap-1.5 z-10 w-14">
+            <div class="w-7 h-7 rounded-full ${isDraft || isWaiting || isReady || isDone ? 'bg-indigo-600 text-white shadow-xs' : 'bg-slate-200 text-slate-500'} flex items-center justify-center font-bold text-xs">
+              ${isWaiting || isReady || isDone ? '✓' : '1'}
+            </div>
+            <span class="text-[11px] font-semibold ${isDraft ? 'text-indigo-600 font-bold' : 'text-slate-600'}">Draft</span>
+          </div>
+          <div class="flex flex-col items-center gap-1.5 z-10 w-14">
+            <div class="w-7 h-7 rounded-full ${isWaiting ? 'bg-amber-500 text-white shadow-xs ring-4 ring-amber-100 font-bold' : (isReady || isDone ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500')} flex items-center justify-center font-bold text-xs">
+              ${isReady || isDone ? '✓' : '2'}
+            </div>
+            <span class="text-[11px] font-semibold ${isWaiting ? 'text-amber-600 font-bold' : (isReady || isDone ? 'text-slate-600' : 'text-slate-400')}">Waiting</span>
+          </div>
+          <div class="flex flex-col items-center gap-1.5 z-10 w-14">
+            <div class="w-7 h-7 rounded-full ${isReady ? 'bg-indigo-600 text-white shadow-xs ring-4 ring-indigo-100' : (isDone ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500')} flex items-center justify-center font-bold text-xs">
+              ${isDone ? '✓' : '3'}
+            </div>
+            <span class="text-[11px] font-semibold ${isReady ? 'text-indigo-600 font-bold' : (isDone ? 'text-slate-600' : 'text-slate-400')}">Ready</span>
+          </div>
+          <div class="flex flex-col items-center gap-1.5 z-10 w-14">
+            <div class="w-7 h-7 rounded-full ${isDone ? 'bg-emerald-600 text-white shadow-xs ring-4 ring-emerald-200' : 'bg-slate-200 text-slate-500'} flex items-center justify-center font-bold text-xs">
+              ${isDone ? '✓' : '4'}
+            </div>
+            <span class="text-[11px] font-semibold ${isDone ? 'text-emerald-700 font-bold' : 'text-slate-400'}">Done</span>
+          </div>
+          <div class="absolute left-6 right-6 top-3.5 h-0.5 bg-slate-200 z-0"></div>
+        `;
+        return;
+      }
+
       const isDraft = s === 'draft';
-      const isReady = s === 'ready' || s === 'waiting';
+      const isReady = s === 'ready';
       const isDone = s === 'done';
 
       stepper.innerHTML = `
@@ -4912,6 +5745,8 @@ Draft
         });
         if (res.ok) {
           closeDetailsModal();
+          await refreshProductCatalog();
+          await checkAndPromoteWaitingDeliveriesClient();
           loadOperations(currentOperationType);
           loadDashboardStats();
         }

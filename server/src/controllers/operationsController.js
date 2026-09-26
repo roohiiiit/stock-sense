@@ -6,6 +6,9 @@ class OperationsController {
    * Helper to query operations by type ('receipt' | 'delivery' | all)
    */
   static _fetchOperations(type, query) {
+    // Proactively promote waiting deliveries whenever operations are queried
+    OperationsController._checkAndPromoteWaitingDeliveries();
+
     const { status, search } = query;
     let queryStr = `SELECT * FROM operations WHERE 1=1`;
     const params = [];
@@ -63,8 +66,82 @@ class OperationsController {
   }
 
   // --- DELIVERY HANDLERS ---
+  static _checkAndPromoteWaitingDeliveries() {
+    try {
+      const waiting = db.prepare("SELECT * FROM operations WHERE type = 'delivery' AND LOWER(status) = 'waiting'").all();
+      if (!waiting || waiting.length === 0) return [];
+
+      console.log(`[PROMOTION] Checking ${waiting.length} waiting deliveries...`);
+
+      const StockController = require('./stockController');
+      const stockItems = StockController._computeStock();
+      const stockMap = new Map();
+      stockItems.forEach(s => {
+        if (s.sku) stockMap.set(s.sku.toLowerCase().trim(), s.on_hand || 0);
+        if (s.product_name) stockMap.set(s.product_name.toLowerCase().trim(), s.on_hand || 0);
+      });
+
+      const getItems = db.prepare("SELECT * FROM operation_items WHERE operation_id = ?");
+      const updateStmt = db.prepare("UPDATE operations SET status = 'ready', updated_at = ? WHERE id = ?");
+      const now = new Date().toISOString();
+      const promoted = [];
+
+      for (const deliv of waiting) {
+        const items = getItems.all(deliv.id);
+        if (items.length === 0) continue;
+        
+        let allAvailable = true;
+        for (const it of items) {
+          let s = (it.sku || '').toLowerCase().trim();
+          let n = (it.product_name || '').toLowerCase().trim();
+          const match = n.match(/^\[([^\]]+)\]\s*(.*)$/);
+          if (match) {
+            if (!s || s.startsWith('sku-')) s = match[1].toLowerCase().trim();
+            n = match[2].toLowerCase().trim();
+          }
+
+          let avail = 0;
+          if (s && stockMap.has(s)) {
+            avail = stockMap.get(s);
+          } else if (n && stockMap.has(n)) {
+            avail = stockMap.get(n);
+          } else {
+            for (const [key, qty] of stockMap.entries()) {
+              if (n && (key.includes(n) || n.includes(key))) {
+                avail = qty;
+                break;
+              }
+            }
+          }
+          const needed = Number(it.quantity) || 0;
+          console.log(`[PROMOTION]   Item "${it.product_name}" (${it.sku}): need=${needed}, avail=${avail}, ok=${needed <= avail}`);
+          if (needed > avail) {
+            allAvailable = false;
+            break;
+          }
+        }
+
+        if (allAvailable) {
+          updateStmt.run(now, deliv.id);
+          promoted.push(deliv.id);
+          console.log(`[PROMOTION] ✅ Promoted delivery ${deliv.reference} (${deliv.id}) from WAITING → READY`);
+        } else {
+          console.log(`[PROMOTION] ⏳ Delivery ${deliv.reference} still waiting — insufficient stock`);
+        }
+      }
+      if (promoted.length > 0) {
+        console.log(`[PROMOTION] Total promoted: ${promoted.length}`);
+      }
+      return promoted;
+    } catch (err) {
+      console.warn('Error checking and promoting waiting deliveries:', err);
+      return [];
+    }
+  }
+
   static getDeliveries(req, res) {
     try {
+      OperationsController._checkAndPromoteWaitingDeliveries();
       const deliveries = OperationsController._fetchOperations('delivery', req.query);
       return res.json({
         success: true,
@@ -230,6 +307,8 @@ class OperationsController {
       const created = db.prepare('SELECT * FROM operations WHERE id = ?').get(id);
       created.items = db.prepare('SELECT * FROM operation_items WHERE operation_id = ?').all(id);
 
+      OperationsController._checkAndPromoteWaitingDeliveries();
+
       return res.status(201).json({
         success: true,
         message: `${opType === 'delivery' ? 'Delivery order' : 'Receipt order'} created successfully.`,
@@ -291,6 +370,8 @@ class OperationsController {
         }
       }
 
+      OperationsController._checkAndPromoteWaitingDeliveries();
+
       const updated = db.prepare('SELECT * FROM operations WHERE id = ?').get(existing.id);
       updated.items = db.prepare('SELECT * FROM operation_items WHERE operation_id = ?').all(existing.id);
 
@@ -333,6 +414,8 @@ class OperationsController {
         WHERE id = ?
       `);
       updateStmt.run(status.toLowerCase(), now, existing.id);
+
+      OperationsController._checkAndPromoteWaitingDeliveries();
 
       const updated = db.prepare('SELECT * FROM operations WHERE id = ?').get(existing.id);
       updated.items = db.prepare('SELECT * FROM operation_items WHERE operation_id = ?').all(existing.id);

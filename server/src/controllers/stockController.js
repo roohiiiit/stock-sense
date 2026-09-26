@@ -118,6 +118,9 @@ class StockController {
 
   static getStock(req, res) {
     try {
+      const OperationsController = require('./operationsController');
+      OperationsController._checkAndPromoteWaitingDeliveries();
+
       const { search, filter } = req.query;
       let result = StockController._computeStock(search);
 
@@ -184,6 +187,79 @@ class StockController {
     } catch (err) {
       console.error('Error fetching stock by SKU:', err);
       return res.status(500).json({ success: false, message: 'Could not fetch stock item.' });
+    }
+  }
+
+  static adjustStock(req, res) {
+    try {
+      const { sku, quantity, product_name, reason } = req.body;
+      const targetQty = Number(quantity);
+      if (isNaN(targetQty) || targetQty < 0) {
+        return res.status(400).json({ success: false, message: 'Valid quantity is required.' });
+      }
+
+      const allStock = StockController._computeStock();
+      const existing = allStock.find(s => (s.sku && sku && s.sku.toLowerCase() === sku.toLowerCase()) || 
+                                          (s.product_name && product_name && s.product_name.toLowerCase() === product_name.toLowerCase()));
+      const currentOnHand = existing ? (existing.on_hand || 0) : 0;
+      const delta = targetQty - currentOnHand;
+
+      if (delta !== 0) {
+        const crypto = require('node:crypto');
+        const opId = crypto.randomUUID();
+        const now = new Date().toISOString();
+        const refNum = Math.floor(1000 + Math.random() * 9000);
+        const ref = `WH/ADJ/${refNum}`;
+        const opType = delta > 0 ? 'receipt' : 'delivery';
+        const absQty = Math.abs(delta);
+        const resolvedSku = sku || (existing ? existing.sku : 'SKU-GEN');
+        const resolvedName = product_name || (existing ? existing.product_name : 'Warehouse Item');
+
+        db.prepare(`
+          INSERT INTO operations (id, reference, type, vendor_from, destination_to, contact, scheduled_date, source_document, status, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(
+          opId,
+          ref,
+          opType,
+          opType === 'receipt' ? 'Inventory Adjustment' : 'WH/Stock',
+          opType === 'receipt' ? 'WH/Stock' : 'Inventory Adjustment',
+          req.user ? req.user.name : 'Warehouse Operator',
+          now.split('T')[0],
+          reason || 'Physical Count Adjustment',
+          'done',
+          now,
+          now
+        );
+
+        db.prepare(`
+          INSERT INTO operation_items (id, operation_id, product_name, sku, quantity, unit)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `).run(
+          crypto.randomUUID(),
+          opId,
+          resolvedName,
+          resolvedSku,
+          absQty,
+          existing ? existing.unit : 'Units'
+        );
+      }
+
+      const OperationsController = require('./operationsController');
+      OperationsController._checkAndPromoteWaitingDeliveries();
+
+      const updatedStock = StockController._computeStock();
+      const updatedItem = updatedStock.find(s => (s.sku && sku && s.sku.toLowerCase() === sku.toLowerCase()) || 
+                                                (s.product_name && product_name && s.product_name.toLowerCase() === product_name.toLowerCase()));
+
+      return res.json({
+        success: true,
+        message: 'Stock adjusted successfully.',
+        data: updatedItem
+      });
+    } catch (err) {
+      console.error('Error adjusting stock:', err);
+      return res.status(500).json({ success: false, message: 'Could not adjust stock.' });
     }
   }
 }
