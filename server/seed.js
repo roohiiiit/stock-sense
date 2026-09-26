@@ -32,7 +32,7 @@ async function seed() {
 
   insertUser.run(
     crypto.randomUUID(),
-    'Rohit Fernandez',
+    'Alex Rivera',
     'operator@stocksense.io',
     passwordHash,
     'staff',
@@ -40,7 +40,17 @@ async function seed() {
     now
   );
 
-  console.log('✓ Users seeded: marcus.v@stocksense.io and operator@stocksense.io (Password: Password123!)');
+  insertUser.run(
+    crypto.randomUUID(),
+    'Alex Rivera',
+    'operator@logistics.corp',
+    passwordHash,
+    'staff',
+    now,
+    now
+  );
+
+  console.log('✓ Users seeded: marcus.v@stocksense.io, operator@stocksense.io, and operator@logistics.corp (Password: Password123!)');
 
   // 2. Seed Warehouse Receipts
   const receipts = [

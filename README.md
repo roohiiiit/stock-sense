@@ -62,15 +62,20 @@ You can log in right away using either of these pre-created accounts:
 
 > **Strong Password Requirement**: All new passwords (during account signup or password reset) require at least 8 characters, including at least one uppercase letter (A-Z), one lowercase letter (a-z), one digit (0-9), and one special symbol (`!@#$%^&*` etc.).
 >
-> **Forgot Password / OTP**: If you click *"Forgot Password"*, the system generates a 6-digit OTP code and displays it directly in your terminal console.
+> **OTP Password Reset**: 
+> * **Public Reset**: Click *"Forgot Password"* on the login page to initiate a 3-step recovery flow with a 6-digit OTP (valid for 10 minutes).
+> * **In-App Reset**: Click your profile avatar in the dashboard header and select *"Reset Password (OTP)"* to reset your password within an active session.
+> * **Demo / Dev Mode Display**: In development mode, the sent verification code appears in a prominent on-screen banner with an **Autofill** button for instant testing, as well as logged in the server console.
 
 ---
 
 ## ✨ Main Features
 
-### 1. Robust Authentication & Strong Password Security
-* Log in, sign up, and reset passwords with real-time strength validation and secure OTP verification.
-* Strict server-side and client-side password policy (minimum 8 characters, uppercase, lowercase, number, and special character).
+### 1. Robust Authentication & OTP Password Security
+* **Multi-Step OTP Password Reset**: Secure 6-digit one-time passcode verification with 10-minute expiry, rate-limiting, and single-use reset tokens.
+* **On-Screen Demo OTP Banner**: Convenient on-screen code display with 1-click Autofill for effortless demo and development testing.
+* **In-App & Public Reset Support**: Password reset available publicly via login recovery or in-app via the authenticated user profile dropdown.
+* **Strong Password Policy**: Strict server-side and client-side password policy (minimum 8 characters, uppercase, lowercase, number, and special character) with live strength meters.
 
 ### 2. Low Stock Alerts & Inventory Health
 * **Automated Low Stock Detection**: Automatically flags items when quantities drop to or below safety stock threshold ($\le 10$ units) or reach 0 (Out of Stock).

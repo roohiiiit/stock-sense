@@ -15,4 +15,8 @@ router.post('/forgot-password/reset-password', AuthController.resetPassword);
 // Protected session check
 router.get('/me', requireAuth, AuthController.me);
 
+// Authenticated Change Password Flow via OTP
+router.post('/change-password/send-otp', requireAuth, AuthController.sendChangePasswordOtp);
+router.post('/change-password/verify-and-update', requireAuth, AuthController.changePasswordWithOtp);
+
 module.exports = router;

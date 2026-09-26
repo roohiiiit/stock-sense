@@ -279,6 +279,74 @@ class AuthController {
       });
     }
   }
+
+  static sendChangePasswordOtp(req, res) {
+    try {
+      const email = req.user && req.user.email;
+      if (!email) {
+        return res.status(401).json({ success: false, message: 'Unauthorized session.' });
+      }
+
+      const { otpCode, expiresAt } = OtpService.generateOtp(email);
+      return res.json({
+        success: true,
+        message: `Verification code sent to ${email}`,
+        debugOtp: process.env.NODE_ENV === 'production' ? undefined : otpCode,
+        expiresAt
+      });
+    } catch (err) {
+      console.error('Error sending change password OTP:', err);
+      return res.status(500).json({ success: false, message: 'Could not generate reset code.' });
+    }
+  }
+
+  static async changePasswordWithOtp(req, res) {
+    try {
+      const email = req.user && req.user.email;
+      const { otpCode, newPassword } = req.body;
+
+      if (!email) {
+        return res.status(401).json({ success: false, message: 'Unauthorized session.' });
+      }
+      if (!otpCode || !newPassword) {
+        return res.status(400).json({ success: false, message: 'OTP code and new password are required.' });
+      }
+
+      const passCheck = validateStrongPassword(newPassword);
+      if (!passCheck.isValid) {
+        return res.status(400).json({
+          success: false,
+          message: passCheck.message,
+          errors: passCheck.errors
+        });
+      }
+
+      const verifyResult = OtpService.verifyOtp(email, otpCode.toString().trim());
+      if (!verifyResult.success) {
+        return res.status(400).json({ success: false, message: verifyResult.message });
+      }
+
+      OtpService.consumeResetToken(email, verifyResult.resetToken);
+
+      const passwordHash = await bcrypt.hash(newPassword, 10);
+      const now = new Date().toISOString();
+
+      const updateStmt = db.prepare(`
+        UPDATE users 
+        SET password_hash = ?, updated_at = ? 
+        WHERE email = ?
+      `);
+      updateStmt.run(passwordHash, now, email);
+
+      return res.json({
+        success: true,
+        message: 'Password successfully changed using OTP verification.'
+      });
+    } catch (err) {
+      console.error('Error changing password with OTP:', err);
+      return res.status(500).json({ success: false, message: 'Could not change password.' });
+    }
+  }
 }
 
 module.exports = AuthController;

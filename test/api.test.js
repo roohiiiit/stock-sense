@@ -105,6 +105,7 @@ async function runTests() {
     const signupJson = await signupRes.json();
     assert.strictEqual(signupJson.success, true);
     assert.strictEqual(signupJson.user.email, newEmail);
+    const newEmailToken = signupJson.token;
     console.log('     ✓ User registered and auto-signed JWT');
 
     // 7. Forgot Password: Step 1 (Send OTP)
@@ -370,7 +371,64 @@ async function runTests() {
     assert.strictEqual(deleteJson.success, true);
     console.log('     ✓ Operation deleted successfully');
 
-    console.log('\n🎉 ALL 26 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + LOW STOCK ALERTS + STRONG PASSWORDS + HISTORY + AUTH) PASSED SUCCESSFULLY!\n');
+    // 27. Authenticated Change Password Flow: Send OTP
+    console.log('  27. Testing POST /api/auth/change-password/send-otp (Protected)');
+    const authOtpRes = await fetch(`${baseUrl}/api/auth/change-password/send-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${newEmailToken}`
+      }
+    });
+    assert.strictEqual(authOtpRes.status, 200);
+    const authOtpJson = await authOtpRes.json();
+    assert.strictEqual(authOtpJson.success, true);
+    assert.ok(authOtpJson.debugOtp, 'Debug OTP should be returned for authenticated change');
+    const authOtpCode = authOtpJson.debugOtp;
+    console.log(`     ✓ Authenticated OTP generated for session: ${authOtpCode}`);
+
+    // 28. Authenticated Change Password Flow: Verify and Update Password
+    console.log('  28. Testing POST /api/auth/change-password/verify-and-update (validation + success)');
+    // Test weak password rejection
+    const weakAuthChangeRes = await fetch(`${baseUrl}/api/auth/change-password/verify-and-update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${newEmailToken}`
+      },
+      body: JSON.stringify({
+        otpCode: authOtpCode,
+        newPassword: 'weak'
+      })
+    });
+    assert.strictEqual(weakAuthChangeRes.status, 400);
+
+    // Test successful password update with strong password
+    const successAuthChangeRes = await fetch(`${baseUrl}/api/auth/change-password/verify-and-update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${newEmailToken}`
+      },
+      body: JSON.stringify({
+        otpCode: authOtpCode,
+        newPassword: 'ChangedPassword2026!'
+      })
+    });
+    assert.strictEqual(successAuthChangeRes.status, 200);
+    const successAuthChangeJson = await successAuthChangeRes.json();
+    assert.strictEqual(successAuthChangeJson.success, true);
+
+    // Verify login with the updated password
+    const verifyAuthLoginRes = await fetch(`${baseUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: newEmail, password: 'ChangedPassword2026!' })
+    });
+    assert.strictEqual(verifyAuthLoginRes.status, 200);
+    console.log('     ✓ In-app OTP password change verified with strong password enforcement');
+
+    console.log('\n🎉 ALL 28 TEST SUITE CHECKS (RECEIPTS + DELIVERIES + STOCK + LOW STOCK ALERTS + STRONG PASSWORDS + PUBLIC & IN-APP OTP RESET) PASSED SUCCESSFULLY!\n');
   } finally {
     server.close();
   }
